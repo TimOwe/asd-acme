@@ -15,6 +15,11 @@ The GitHub repository was linked to our slack server. This was configured by:
 1. Adding the Github application to slack
 2. Running the command `/github subscribe TimOwe/asd-acme` (Slack application must have relevant permissions on GitHub)
 
+The CI/CD pipeline was configured by:
+1. Creating a new codeship project and adding a deployment for the `master` branch
+2. Creating an application on Heroku and linking it to the github repository
+3. Configuring codeship with Heroku api key and deployment URL
+
 This allows the server to notify members of updates on the repository.
 
 # Commands
