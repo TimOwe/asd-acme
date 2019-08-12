@@ -3,7 +3,7 @@ Advanced Software Development 41026 project consisting of 3 releases.
 
 # Boilerplate
 Project is created using Vue Node.js library in tandem with the Vuetify material design component framework for views.
-1. Created repository with default `.gitignore` for Node.js projects 
+1. Created repository with default `.gitignore` for Node.js projects
 2. Installed vue: `npm install -g @vue/cli`
 3. Instantiate project in current directory: `vue create .`
 
@@ -15,12 +15,14 @@ The GitHub repository was linked to our slack server. This was configured by:
 1. Adding the Github application to slack
 2. Running the command `/github subscribe TimOwe/asd-acme` (Slack application must have relevant permissions on GitHub)
 
-The CI/CD pipeline was configured by:
-1. Creating a new codeship project and adding a deployment for the `master` branch
-2. Creating an application on Heroku and linking it to the github repository
-3. Configuring codeship with Heroku api key and deployment URL
-
 This allows the server to notify members of updates on the repository.
+
+The CI/CD pipeline was configured by:
+1. install firebase-tools
+2. firebase login
+3. firebase init
+4. build and firebase deploy
+
 
 # Commands
 Setup project: `npm install`
