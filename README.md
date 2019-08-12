@@ -22,6 +22,8 @@ The CI/CD pipeline was configured by:
 2. firebase login
 3. firebase init
 4. build and firebase deploy
+5. Add firebase api key as token to Codeship project as environment
+6. Add pipeline with custom deploy script
 
 
 # Commands
