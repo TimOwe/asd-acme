@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn"
   },
   "dependencies": {
     "core-js": "^2.6.5",
