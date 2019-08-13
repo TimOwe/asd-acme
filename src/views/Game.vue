@@ -2,6 +2,7 @@
   <v-app id="inspire">
     <v-content>
       <v-container fluid>
+        <!-- Enter game code box-->
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-6" :loading="loading" >
@@ -30,7 +31,7 @@
                 <v-form>
                   <v-text-field
                     label="Game code"
-                    name="copde"
+                    name="code"
                     type="text"
                   ></v-text-field>
                 </v-form>
@@ -42,8 +43,28 @@
             </v-card> 
           </v-col>
         </v-row>
+        <!-- Enter a nickname -->
+         <v-row align="center" justify="center">
+          <v-col cols="12" sm="8" md="4">
+            <v-card class="elevation-6" :loading="loading" >
+              <v-card-text>
+                <v-form>
+                  <v-text-field
+                    label="Nickname"
+                    name="guestname"
+                    type="text"
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions class="center">
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="fakeLoad">Go</v-btn>
+              </v-card-actions>
+            </v-card> 
+          </v-col>
+        </v-row>
+        <!-- Question Box -->
         <v-row justify="center">
-
             <v-col cols="12" sm="8">
             <v-card>
                 <v-card-title class="primary">
@@ -99,6 +120,42 @@
             </v-card>
             </v-col>
         </v-row>
+        <!-- Scoreboard Box -->
+        <template>
+            <v-card
+                class="mx-auto"
+                max-width="344"
+            >
+
+               <v-card-text>
+                    <span>Leaderboard</span><br>
+                    <span class="text--primary">
+                        <span>1st. Player name</span><br>
+                        <span>You are 3rd. (1400 points behind player name)</span>
+                    </span>
+                </v-card-text>
+                <v-spacer></v-spacer>
+                <v-card-actions>
+                    <v-btn
+                        icon
+                        @click="showFullLeaderboard = !showFullLeaderboard"
+                    >
+                        <v-icon>{{ showFullLeaderboard ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
+                    </v-btn>
+                </v-card-actions>
+
+                <v-expand-transition>
+                <div v-show="showFullLeaderboard">
+                    <v-card-text>
+                        <p>2nd. Player 2</p>
+                        <p>3rd. Player 3</p>
+                        <p>4th. Player 4</p>
+
+                    </v-card-text>
+                </div>
+                </v-expand-transition>
+            </v-card>
+        </template>
       </v-container>
     </v-content>
   </v-app>
@@ -110,7 +167,8 @@
       source: String,
     },
     data: () => ({
-      loading: false
+      loading: false,
+      showFullLeaderboard: false
     }),
     methods: {
         fakeLoad() {
