@@ -7,24 +7,18 @@
                         max-width="90%">
                     <v-toolbar flat>
                         <v-btn icon>
-                            <v-icon>arrow_back</v-icon>
+                            <v-icon>arrow-left</v-icon>
                         </v-btn>
-                        <v-toolbar-title>Albums</v-toolbar-title>
+                        <v-toolbar-title class="text-center, display-2">Quizzes</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn icon>
-                            <v-icon>search</v-icon>
+                            <v-icon>magnify</v-icon>
                         </v-btn>
                     </v-toolbar>
                     <v-subheader>May</v-subheader>
                     <v-container fluid>
                         <v-row>
-                            <v-col v-for="i in 6" :key="i" cols="4">
-                                <v-col
-                                        v-for="card in cards"
-                                        :key="card.title"
-                                        v-bind="{ [`xs${card.flex}`]: true }"
-                                >
-
+                            <v-col v-for="card in cards" :key="card" cols="4">
                                 <v-card>
                                     <v-img
                                             :src="card.src"
@@ -66,9 +60,6 @@
                                         </v-card-actions>
 
                                 </v-card>
-                            </v-col>
-
-
                             </v-col>
                         </v-row>
                     </v-container>
