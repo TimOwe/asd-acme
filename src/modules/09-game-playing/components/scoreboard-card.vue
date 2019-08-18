@@ -6,7 +6,7 @@
       <span class="text--primary">
         <span>1st. Player name</span>
         <br />
-        <span>You are 3rd. (1400 points behind player name)</span>
+        <span>You came 3rd. (1400 points behind player name)</span>
       </span>
     </v-card-text>
     <v-spacer></v-spacer>
