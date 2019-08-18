@@ -27,6 +27,9 @@
 <script>
 export default {
   name: 'App',
+  created(){
+
+    },
   data: () => ({
     //
   }),
