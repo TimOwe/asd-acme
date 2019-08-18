@@ -54,7 +54,7 @@
                 </v-card-title>
 
                 <v-list>
-                    <v-list-item @click="">
+                    <v-list-item>
                         <v-list-item-action>
                             <v-icon>mdi-alpha-a-circle-outline</v-icon>
                         </v-list-item-action>
@@ -65,7 +65,7 @@
 
                     <v-divider></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item>
                         <v-list-item-action>
                             <v-icon>mdi-alpha-b-circle-outline</v-icon>
                         </v-list-item-action>
@@ -76,7 +76,7 @@
 
                     <v-divider></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item>
                         <v-list-item-action>
                             <v-icon>mdi-alpha-c-circle-outline</v-icon>
                         </v-list-item-action>
@@ -87,7 +87,7 @@
 
                     <v-divider></v-divider>
 
-                    <v-list-item @click="">
+                    <v-list-item>
                         <v-list-item-action>
                             <v-icon>mdi-alpha-d-circle-outline</v-icon>
                         </v-list-item-action>
