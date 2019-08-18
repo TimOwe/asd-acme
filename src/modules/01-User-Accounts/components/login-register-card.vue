@@ -30,65 +30,45 @@
         </v-overlay>
 
         <v-dialog v-model="registerDialog" persistent max-width="600px">
-            <v-card>
-                <v-card-title>
-                    <v-layout class="headline justify-center align-center">Register New User</v-layout>
-                </v-card-title>
-                <v-card-text>
-                    <v-container grid-list-md>
-                        <v-layout wrap>
-                            <v-flex xs12 sm6 md6>
-                                <v-text-field v-model="fname" label="First name" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md6>
-                                <v-text-field  v-model="lname" label="Last name" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12>
-                                <v-text-field  v-model="email" label="Email" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12>
-                                <v-text-field  v-model="password" label="Password" type="password" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6>
-                                <v-select
-                                        v-model="age"
-                                        :items="['0-17', '18-29', '30-54', '54+']"
-                                        label="Age*"
-                                        required
-                                ></v-select>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="registerDialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" text @click="handleRegister()">Save</v-btn>
-                </v-card-actions>
-            </v-card>
+        <RegisterCard @close="Updatereg"></RegisterCard>
         </v-dialog>
     </div>
 </template>
 
 <script>
+    import RegisterCard from "../components/Register-Card";
     const md5 = require('md5');
+    var matched = [];
     export default {
         name: "login-card-vue",
+        components: {RegisterCard},
         methods:{
             handleLogin(){
                 var hash = md5(this.logPass);
-                if(hash == "098f6bcd4621d373cade4e832627b4f6" && this.logEmail == "test@test.com"){
+                this.auth(hash, this.logEmail);
+                if(matched.length != 0){
                     this.login ="Login Successful";
                     this.error = '';
+                    matched = [];
                 }
                 else {
                     this.error = "An error has occurred - User does not exist";
                     this.login='';
                 }
+
             },
 
-            handleRegister(){
+            auth(password, email){
+                this.testData.forEach(user => {
+                    if(user.email === email && user.password === password) {
+                        matched.push(user);
+                    }
+                })
+            },
 
+            //listener
+            Updatereg(e) {
+                this.registerDialog = e;
             }
         },
         data() {
@@ -97,12 +77,18 @@
                 loading:false,
                 logEmail: '',
                 logPass: '',
-                fname: '',
-                lname: '',
-                email: '',
-                password: '',
                 error: '',
-                login: ''
+                login: '',
+                testData: [{
+                    email: 'test@test.com',
+                    password: '098f6bcd4621d373cade4e832627b4f6'
+
+                },
+                 {
+                    email: 'dan@dan.com',
+                    password: '9180b4da3f0c7e80975fad685f7f134e'
+                 }
+                ]
             }
 
         }

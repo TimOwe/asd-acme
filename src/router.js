@@ -8,7 +8,7 @@ import Users from './modules/03-user-administration/views/Users.vue'
 import Results from './modules/11-user-results/views/Results';
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
-
+import Host from './modules/07-Host-Game/Views/Host';
 
 Vue.use(Router);
 
@@ -55,6 +55,11 @@ const router = new Router({
           path: '/leaderboard',
           name: 'leaderboard',
           component: Leaderboard
+      },
+      {
+          path: '/host',
+          name: 'Host',
+          component: Host
       }
   ]
 });
