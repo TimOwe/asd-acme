@@ -20,7 +20,6 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
 Vue.prototype.$db = db;
-
 Vue.config.productionTip = false;
 
 new Vue({
