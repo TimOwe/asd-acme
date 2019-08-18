@@ -12,7 +12,7 @@
                 <v-flex xs6>
                     {{results[0].q}}
                 </v-flex>
-                <v-flex xs6>
+                <v-flex>
                     {{results[0].a}}
                 </v-flex>
             </v-layout>

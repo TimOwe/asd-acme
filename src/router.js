@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import HelloWorld from './global/views/HelloWorld.vue';
 import Game from './modules/09-game-playing/views/Game.vue';
 import Results from './modules/11-user-results/views/Results';
+import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ const router = new Router({
         path: '/results',
         name: 'results',
         component: Results
+      },
+      {
+          path: '/leaderboard',
+          name: 'leaderboard',
+          component: Leaderboard
       }
   ]
 });
