@@ -28,6 +28,9 @@
         <v-btn to="/leaderboard">
           12 Leaderboard
         </v-btn>
+          <v-btn to="/host">
+            07 Host Game
+          </v-btn>
         </p>
       </v-flex>
     </v-layout>
@@ -37,7 +40,7 @@
 <script>
 export default {
     created(){
-        this.$db.ref('/Users').push('da')
+        // this.$db.ref('/Users').push('da')
     },
   data: () => ({
     ecosystem: [
