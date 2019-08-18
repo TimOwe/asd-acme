@@ -7,15 +7,14 @@
                         max-width="90%">
                     <v-toolbar flat>
                         <v-btn icon>
-                            <v-icon>arrow-left</v-icon>
+                            <v-icon>mdi-arrow-left</v-icon>
                         </v-btn>
                         <v-toolbar-title class="text-center, display-2">Quizzes</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn icon>
-                            <v-icon>magnify</v-icon>
+                            <v-icon>mdi-magnify</v-icon>
                         </v-btn>
                     </v-toolbar>
-                    <v-subheader>May</v-subheader>
                     <v-container fluid>
                         <v-row>
                             <v-col v-for="card in cards" :key="card" cols="4">

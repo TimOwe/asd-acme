@@ -18,6 +18,9 @@
         <v-btn to="/leaderboard">
           12 Leaderboard
         </v-btn>
+        <v-btn to="/quizcatalogue">
+          05 Quiz Management
+        </v-btn>
         </p>
       </v-flex>
     </v-layout>

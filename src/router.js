@@ -5,6 +5,8 @@ import Game from './modules/09-game-playing/views/Game.vue';
 import Login from './modules/01-User-Accounts/Views/Login';
 import Results from './modules/11-user-results/views/Results';
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
+import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
+
 
 Vue.use(Router);
 
