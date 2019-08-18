@@ -1,6 +1,15 @@
 # asd-acme
 Advanced Software Development 41026 project consisting of 3 releases.
 
+# Instructions
+To run the project in development mode: `npm run serve`
+
+To build and deploy to firebase: `npm run deploy`
+
+- Commiting to master branch on github will deploy via Codeship
+
+url: https://acme-asd.web.app/
+
 # Boilerplate
 Project is created using Vue Node.js library in tandem with the Vuetify material design component framework for views.
 1. Created repository with default `.gitignore` for Node.js projects
@@ -15,7 +24,7 @@ CI/CD pipeline.
 Code is updated on developer devices and then pushed to each developer's branch for their feature
 on the github repository.
 For code to be merged into the master branch (which is deployed via CI/CD pipeline) it must first
-be tested locally and then a pull request created. 
+be tested locally and then a pull request created.
 After this is reviewed by at least one other
 team member it may be merged.
 ### Communications
