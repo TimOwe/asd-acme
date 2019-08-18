@@ -6,13 +6,16 @@
       <span class="text--primary">
         <span>1st. Player name</span>
         <br />
-        <span>You are 3rd. (1400 points behind player name)</span>
+        <span>You came 3rd. (1400 points behind player name)</span>
       </span>
     </v-card-text>
     <v-spacer></v-spacer>
     <v-card-actions>
       <v-btn icon @click="showFullLeaderboard = !showFullLeaderboard">
         <v-icon>{{ showFullLeaderboard ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
+      </v-btn>
+      <v-btn icon to='/'>
+        <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-actions>
 
