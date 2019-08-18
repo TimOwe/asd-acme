@@ -14,7 +14,7 @@
         </v-card-text>
         <v-card-actions class="center">
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="setNick">Go</v-btn>
+          <v-btn color="primary" @click="addPlayer">Go</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -29,8 +29,14 @@ export default {
     nickname: ''
   }),
   methods: {
-    setNick() {
+    addPlayer() {
       this.loading = true;
+      let x = Math.floor(Math.random() * 100);
+      this.$db.ref('/Players').push({
+        nickname: this.nickname,
+        score: x,
+        user_id: null
+      });
       console.log(this.nickname);
       setTimeout(() => (this.loading = false), 2500);
     }
