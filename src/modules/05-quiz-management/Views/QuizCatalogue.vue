@@ -119,17 +119,17 @@
             getQuizzes(){
                 this.$db.ref('/Quizs').on('value', (snap) => {
                     // clear current results array each time method is called
-                    var results = [];
+
                     this.quizs = [];
                     // convert firebase data entries into json
                     snap.forEach(entry => {
                         var entryObj = entry.val();
                         entryObj.key = entry.key;
                         // push firebase data into results array
-                        results.push(entryObj);
+                        this.quizs.push(entryObj);
                     });
                     // sort results by ascending order of score
-                    this.quizs = results;
+
 
                 });
             },
