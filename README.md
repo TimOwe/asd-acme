@@ -10,6 +10,8 @@ To build and deploy to firebase: `npm run deploy`
 
 url: https://acme-asd.web.app/
 
+The backend database is visible on firebase.
+
 # Boilerplate
 Project is created using Vue Node.js library in tandem with the Vuetify material design component framework for views.
 1. Created repository with default `.gitignore` for Node.js projects
