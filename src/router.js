@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import HelloWorld from './global/views/HelloWorld.vue';
 import Game from './modules/09-game-playing/views/Game.vue';
 import Login from './modules/01-User-Accounts/Views/Login';
+import Host from './modules/07-Host-Game/Views/Host';
 
 Vue.use(Router);
 
@@ -24,7 +25,12 @@ const router = new Router({
         path: '/login',
         name: 'Login',
         component: Login
-    }
+    },
+      {
+          path: '/host',
+          name: 'Host',
+          component: Host
+      }
   ]
 });
 
