@@ -3,6 +3,9 @@ import Router from 'vue-router';
 import HelloWorld from './global/views/HelloWorld.vue';
 import Game from './modules/09-game-playing/views/Game.vue';
 import Login from './modules/01-User-Accounts/Views/Login';
+import Quizs from './modules/04-quiz-administration/views/ViewQuiz.vue'
+import Users from './modules/03-user-administration/views/Users.vue'
+
 
 Vue.use(Router);
 
@@ -24,7 +27,17 @@ const router = new Router({
         path: '/login',
         name: 'Login',
         component: Login
-    }
+    },
+    {
+      path: '/quizs',
+      name: 'quizs',
+      component: Quizs
+  },
+  {
+      path: '/users',
+      name: 'users',
+      component: Users
+  },
   ]
 });
 
