@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from './views/HelloWorld.vue';
-import Game from './views/Game.vue';
-import QuizCatalogue from "./views/QuizCatalogue";
+import HelloWorld from './global/views/HelloWorld.vue';
+import Game from './modules/09-game-playing/views/Game.vue';
 
 Vue.use(Router);
 
