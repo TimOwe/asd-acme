@@ -12,6 +12,10 @@
         <p class="subheading font-weight-regular">
          This is a prototype website for release 0
         </p>
+         <v-btn to="/game">
+           08 Game Playing
+        </v-btn>
+        </p>
       </v-flex>
     </v-layout>
   </v-container>

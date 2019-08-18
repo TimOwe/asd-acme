@@ -4,12 +4,17 @@
       <v-card class="elevation-6" :loading="loading">
         <v-card-text>
           <v-form>
-            <v-text-field label="Nickname" name="guestname" type="text"></v-text-field>
+            <v-text-field
+              placeholder="Nickname"
+              name="guestname"
+              type="text"
+              v-model="nickname">
+            </v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions class="center">
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="fakeLoad">Go</v-btn>
+          <v-btn color="primary" @click="setNick">Go</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -20,11 +25,13 @@
 export default {
   name: "nickname-entry-card",
   data: () => ({
-    loading: false
+    loading: false,
+    nickname: ''
   }),
   methods: {
-    fakeLoad() {
+    setNick() {
       this.loading = true;
+      console.log(this.nickname);
       setTimeout(() => (this.loading = false), 2500);
     }
   }
