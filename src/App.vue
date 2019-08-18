@@ -1,10 +1,16 @@
 <template>
   <v-app>
     <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>ACME</span>
-        <span class="font-weight-light">   Quiz Website</span>
-      </v-toolbar-title>
+      <span class="font-weight-light"> ACME</span>
+      <v-btn icon to="/">
+          <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn icon to="/game">
+          <v-icon>mdi-gamepad-square</v-icon>
+      </v-btn>
+        <v-btn icon to="/leaderboard">
+            <v-icon>mdi-trophy</v-icon>
+        </v-btn>
     </v-app-bar>
 
     <v-content>
