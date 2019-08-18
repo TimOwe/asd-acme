@@ -19,6 +19,9 @@
 
 <script>
 export default {
+    created(){
+        this.$db.ref('/Users').push('da')
+    },
   data: () => ({
     ecosystem: [
       {
