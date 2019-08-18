@@ -15,6 +15,9 @@
          <v-btn to="/game">
            08 Game Playing
         </v-btn>
+        <v-btn to="/leaderboard">
+          12 Leaderboard
+        </v-btn>
         </p>
       </v-flex>
     </v-layout>
