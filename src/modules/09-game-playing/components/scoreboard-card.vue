@@ -14,6 +14,9 @@
       <v-btn icon @click="showFullLeaderboard = !showFullLeaderboard">
         <v-icon>{{ showFullLeaderboard ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
       </v-btn>
+      <v-btn icon to='/'>
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </v-card-actions>
 
     <v-expand-transition>

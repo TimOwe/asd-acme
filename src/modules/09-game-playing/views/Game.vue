@@ -26,6 +26,8 @@
       score: 0,
       player: null,
       nick: null,
+      answer: null,
+      game: null
     }),
     methods: {
       newPlayer: (nickname) => {
