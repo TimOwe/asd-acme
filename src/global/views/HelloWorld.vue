@@ -22,15 +22,15 @@
         <v-btn to="/quizs">
            04 Quiz Administration
         </v-btn>
+        <v-btn to="/host">
+            07 Host Game
+          </v-btn>
         <v-btn to="/game">
-           08 Game Playing
+           09 Game Playing
         </v-btn>
         <v-btn to="/leaderboard">
           12 Leaderboard
         </v-btn>
-          <v-btn to="/host">
-            07 Host Game
-          </v-btn>
         </p>
       </v-flex>
     </v-layout>
