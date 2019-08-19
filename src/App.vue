@@ -11,7 +11,12 @@
         <v-btn icon to="/leaderboard">
             <v-icon>mdi-trophy</v-icon>
         </v-btn>
+        <v-btn icon to="/quizcatalogue">
+            <v-icon>mdi-format-list-bulleted-square</v-icon>
+        </v-btn>
     </v-app-bar>
+
+
 
     <v-content>
      <router-view></router-view>

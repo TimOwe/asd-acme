@@ -2,15 +2,23 @@
 Advanced Software Development 41026 project consisting of 3 releases.
 
 # Instructions
-To run the project in development mode: `npm run serve`
+1. Install Node.js
+2. Run `npm install`
+3. Start the development server 'npm run serve'
 
-To build and deploy to firebase: `npm run deploy`
+- To build and deploy to firebase: `npm run deploy`
 
 - Commiting to master branch on github will deploy via Codeship
 
-url: https://acme-asd.web.app/
+- url: https://acme-asd.web.app/
 
-The backend database is visible on firebase.
+- The backend database is visible on firebase.
+- tim demo
+- thai demo
+
+
+- Matt asd demo deployment
+- Alex demo deployment :)
 
 # Boilerplate
 Project is created using Vue Node.js library in tandem with the Vuetify material design component framework for views.
