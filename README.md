@@ -13,6 +13,8 @@ Advanced Software Development 41026 project consisting of 3 releases.
 - url: https://acme-asd.web.app/
 
 - The backend database is visible on firebase.
+- tim demo
+- thai demo
 
 
 - Matt asd demo deployment
