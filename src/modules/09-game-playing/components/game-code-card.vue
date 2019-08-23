@@ -4,49 +4,56 @@
       <v-card class="elevation-6" :loading="loading">
         <v-toolbar color="primary" dark flat>
           <v-toolbar-title>Join a game</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-tooltip right>
-            <template v-slot:activator="{ on }">
-              <v-btn icon large to="/login" v-on="on">
-                <v-icon>mdi-account</v-icon>
-              </v-btn>
-            </template>
-            <span>Login</span>
-          </v-tooltip>
         </v-toolbar>
         <v-card-text>
           <v-form>
-            <v-text-field
-              Placeholder="Game code"
-              name="code"
-              type="text"
-              v-model="code"
-              >
-            </v-text-field>
+            <v-text-field placeholder="Game code" name="code" type="text" v-model="code"></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="setCode">Join</v-btn>
+          <v-btn icon @click="showGames = !showGames">
+            <v-icon>{{ showGames ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
+          </v-btn>
+          <v-btn color="primary" @click="onClickButton">Join</v-btn>
         </v-card-actions>
+        <v-spacer></v-spacer>
+        <v-expand-transition>
+          <div v-show="showGames">
+            <v-card-text>
+              <template v-for="token in games">
+                <li v-bind:key="token">{{ token }}</li>
+              </template>
+            </v-card-text>
+          </div>
+        </v-expand-transition>
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-  export default {
-    name: "game-code-card",
-    data: () => ({
-      loading: false,
-      code: ''
-    }),
-    methods: {
-        setCode() {
-          this.loading = true;
-          console.log(this.code);
-          setTimeout(() => (this.loading = false), 2500);
-        }
+export default {
+  data: () => ({
+    loading: false,
+    code: "",
+    games: [],
+    showGames: false
+  }),
+  mounted: function() {
+    let self = this;
+    const ref = this.$db.ref("/Sessions");
+    ref.orderByValue().on("value", function(snapshot) {
+      snapshot.forEach(function(data) {
+        self.games.push(data.child("token").val());
+      });
+    });
+  },
+  name: "game-code-card",
+  methods: {
+    onClickButton(event) {
+      this.$emit("codeTry", this.code);
     }
   }
+};
 </script>
