@@ -25,7 +25,8 @@
             <scoreboard-card></scoreboard-card>
           </v-slide-x-transition>
         </div>
-
+        <p>{{this.player}}</p>
+        {{this.game}}
       </v-container>
     </v-content>
   </v-app>
@@ -50,28 +51,30 @@ export default {
     game: null
   }),
   methods: {
+    // Creates a player, pushes to db
     onNickEnter: function(nick) {
-      this.player = { nickname: nick };
-      this.$db.ref("/Players").push(this.player);
+      const p = { nickname: nick };
+      const ref = this.$db.ref("/Players");
+      this.player = ref.push(p).key;
       this.render = "code";
     },
     onCodeTry: function(code) {
       var sessions = [];
-      const ref = this.$db.ref("/Sessions");
-      ref.orderByValue().on("value", function(snapshot) {
+      const db = this.$db;
+      db.ref("/Sessions").orderByValue().on("value", function(snapshot) {
         snapshot.forEach(function(data) {
-          sessions.push(data.child("token").val());
+          sessions.push(data);
         });
       });
-      for (var token of sessions) {
-        if (code === token) {
-          console.log("y");
+      for (var session of sessions) {
+        if (code === session.child("token").val()) {
+          this.game = session.key;
+          db.ref("Sessions/" + this.game).child('players').push(this.player);
           this.render = "question";
-          return { valid: true, token };
+          return true;
         }
       }
-      console.log("n");
-      return { valid: false };
+      return false;
     }
   }
 };
