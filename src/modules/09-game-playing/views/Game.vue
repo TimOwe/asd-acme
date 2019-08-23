@@ -3,27 +3,27 @@
     <v-content>
       <v-container>
         <div v-if="render === 'name'">
-          <v-fade-transition >
+          <v-slide-x-transition mode="out-in">
             <nickname-entry-card @nickEnter="onNickEnter"></nickname-entry-card>
-          </v-fade-transition>
+          </v-slide-x-transition>
         </div>
 
         <div v-else-if="render === 'code'">
-          <v-fade-transition>
+          <v-slide-x-transition mode="out-in">
             <game-code-card @codeTry="onCodeTry"></game-code-card>
-          </v-fade-transition>
+          </v-slide-x-transition>
         </div>
 
         <div v-else-if="render === 'question'">
-          <v-fade-transition>
+          <v-slide-x-transition mode="out-in">
             <question-card></question-card>
-          </v-fade-transition>
+          </v-slide-x-transition>
         </div>
 
-        <div v-else-if="render === 'question'">
-          <v-fade-transition>
+        <div v-if="render === 'question'">
+          <v-slide-x-transition mode="out-in">
             <scoreboard-card></scoreboard-card>
-          </v-fade-transition>
+          </v-slide-x-transition>
         </div>
 
       </v-container>
@@ -43,7 +43,7 @@ export default {
     source: String
   },
   data: () => ({
-    render: 'name',
+    render: "name",
     score: 0,
     player: null,
     answer: null,
@@ -51,9 +51,9 @@ export default {
   }),
   methods: {
     onNickEnter: function(nick) {
-      this.player = { nickname: nick }
-      this.$db.ref('/Players').push(this.player);
-      this.render = 'code';
+      this.player = { nickname: nick };
+      this.$db.ref("/Players").push(this.player);
+      this.render = "code";
     },
     onCodeTry: function(code) {
       var sessions = [];
@@ -65,12 +65,12 @@ export default {
       });
       for (var token of sessions) {
         if (code === token) {
-          console.log('y');
-          this.render = 'question'
+          console.log("y");
+          this.render = "question";
           return { valid: true, token };
         }
       }
-      console.log('n');
+      console.log("n");
       return { valid: false };
     }
   }

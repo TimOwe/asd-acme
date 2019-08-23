@@ -13,7 +13,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn icon @click="showGames = !showGames">
-            <v-icon>{{ showGames ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
+            <v-icon>{{ showGames ? 'mdi-arrow-up' : 'mdi-playlist-play' }}</v-icon>
           </v-btn>
           <v-btn color="primary" @click="onClickButton">Join</v-btn>
         </v-card-actions>
@@ -21,6 +21,7 @@
         <v-expand-transition>
           <div v-show="showGames">
             <v-card-text>
+              Active sessions:
               <template v-for="token in games">
                 <li v-bind:key="token">{{ token }}</li>
               </template>
@@ -41,6 +42,7 @@ export default {
     showGames: false
   }),
   mounted: function() {
+    this.games=[];
     let self = this;
     const ref = this.$db.ref("/Sessions");
     ref.orderByValue().on("value", function(snapshot) {
