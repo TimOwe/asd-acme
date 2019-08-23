@@ -16,47 +16,8 @@
                     <v-container fluid>
                         <v-row>
                             <v-col v-for="quiz in quizs" cols="4">
-                                <v-card>
-                                    <v-img
-                                            :src="quiz.img"
-                                            class="white--text"
-                                            height="200px"
-                                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                                    >
-                                        <v-card-title class="align-end fill-height" v-text="quiz.quiz_title"></v-card-title>
-                                    </v-img>
+                                <quiz-card @click.native="showDialog(quiz)" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id"></quiz-card>
 
-
-                                        <v-card-text>
-                            <span class="text--primary">
-        <span class="body-1" v-text="quiz.owner_id"></span><br>
-        <span class="body-1" v-text="quiz.description"></span><br>
-        <span class="body-1"></span><br>
-      </span>
-                                        </v-card-text>
-
-                                        <v-card-actions>
-                                            <v-btn
-                                                    text
-                                                    color="green"
-                                            >
-                                                Play
-                                            </v-btn>
-                                            <v-btn
-                                                    text
-                                                    color="orange"
-                                            >
-                                                Edit
-                                            </v-btn>
-                                            <v-btn
-                                                    text
-                                                    color="red"
-                                            >
-                                                Delete
-                                            </v-btn>
-                                        </v-card-actions>
-
-                                </v-card>
                             </v-col>
                         </v-row>
                         <v-card class="elevation-6" :loading="loading">
@@ -102,9 +63,10 @@
 
 <script>
 
+    import QuizCard from "../Components/quiz-card";
     export default {
         name: "QuizCatalogue",
-
+        components: {QuizCard},
 
 
         // grabbing all data on page render
