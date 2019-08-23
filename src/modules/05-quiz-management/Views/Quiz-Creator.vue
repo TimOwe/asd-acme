@@ -29,21 +29,28 @@
                     </v-container>
                     <v-card-actions>
                         <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>fa-trash</v-icon></v-btn>
-                        <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="purple" @click="questionBank.push({q: '', a: []})"><v-icon>fa-plus</v-icon></v-btn>
-                        <v-btn v-if="index+1==questionBank.length" fab bottom right absolute color="green" @click="confirm=true"><v-icon>fa-check-circle</v-icon></v-btn>
+                        <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: []})"><v-icon>fa-plus</v-icon></v-btn>
+
                     </v-card-actions>
                 </v-card>
+                <v-container grid-list-md>
+                    <v-card-actions class="center">
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Publish Quiz</v-btn>
+                    </v-card-actions>
+                </v-container>
             </v-container>
         </v-flex>
+
 
         <v-dialog width=350 v-model="confirm">
             <v-card>
                 <v-card-title>
-                    Confirm final submission?
+                    Confirm Quiz Publish
                 </v-card-title>
                 <v-card-actions>
                     <v-layout>
-                        <v-btn color="green" @click="saveQuiz">Save</v-btn>
+                        <v-btn color="green" @click="saveQuiz">Publish</v-btn>
                         <v-btn color="red" @click="confirm = false">Cancel</v-btn>
                     </v-layout>
                 </v-card-actions>
@@ -51,11 +58,23 @@
         </v-dialog>
 
 
-
+        <v-dialog width=350 v-model="success">
+            <v-card>
+                <v-card-title>
+                    Success!
+                </v-card-title>
+                <v-card-text>Your new quiz has been successfully created! You can return to the quiz catalogue or create a new quiz</v-card-text>
+                <v-card-actions>
+                    <v-layout>
+                        <v-btn color="purple" to="/quizcatalogue">Go to Catalogue</v-btn>
+                        <v-btn color="green" @click="clearScreen">Create New Quiz</v-btn>
+                    </v-layout>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
-
     </div>
 </template>
 
@@ -66,17 +85,18 @@
                     this.loading = true;
                         this.newQuiz(this.quizTitle, this.questionBank, 'Test', 'yeet', this.description);
                         this.confirm = false;
-                        this.clearScreen();
                         setTimeout(() => {
                             this.loading = false
+                            this.success = true;
                         }, 2000);
-
                 },
                 removeQuestion(index){
                     this.questionBank.splice(index,1);
                 },
                 clearScreen(){
+                    this.success = false;
                     this.quizTitle = '';
+                    this.description = '';
                     this.questionBank = [{q: "", a: []}];
                 },
 
@@ -88,8 +108,6 @@
                         img,
                         description
                     }
-
-
                     var reciept = this.$db.ref('/Quizs').push(Quiz);
                     return reciept.key;
                 }
@@ -101,10 +119,6 @@
                 validation: false,
                 confirm: false
             }),
-
-
-
-
                     };
 </script>
 
