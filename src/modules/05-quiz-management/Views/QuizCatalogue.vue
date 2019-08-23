@@ -7,11 +7,13 @@
                         <v-btn icon>
                             <v-icon>mdi-arrow-left</v-icon>
                         </v-btn>
-                        <v-toolbar-title class="text-center, display-2">Quizzes</v-toolbar-title>
+                        <v-toolbar-title class="text-center, display-1">Quizzes</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn icon>
                             <v-icon>mdi-magnify</v-icon>
                         </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn to="/quiz-creator" color="green">Create Quiz</v-btn>
                     </v-toolbar>
                     <v-container fluid>
                         <v-row>

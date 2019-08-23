@@ -1,10 +1,19 @@
 <template>
-    <div>
-
+    <v-row>
+        <v-col>
+        <v-card class="mx-auto"
+                max-width="90%">
+            <v-toolbar flat>
+                <v-btn icon to="/quizcatalogue">
+                    <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+                <v-toolbar-title class="text-center, display-1">Create a New Quiz</v-toolbar-title>
+            </v-toolbar>
+            <div>
         <v-container grid-list-md>
-            <v-layout justify-center align-center class="headline pb-5">Create A New Quiz</v-layout>
             <v-layout justify-center align-center>
                 <v-flex xs7>
+
                     <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                     <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
                 </v-flex>
@@ -28,8 +37,8 @@
                         </v-layout>
                     </v-container>
                     <v-card-actions>
-                        <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>fa-trash</v-icon></v-btn>
-                        <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: []})"><v-icon>fa-plus</v-icon></v-btn>
+                        <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
+                        <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: []})"><v-icon>mdi-plus</v-icon></v-btn>
 
                     </v-card-actions>
                 </v-card>
@@ -44,14 +53,29 @@
 
 
         <v-dialog width=350 v-model="confirm">
+        <v-card>
+            <v-card-title>
+                Confirm Quiz Publish
+            </v-card-title>
+            <v-card-actions>
+                <v-layout>
+                    <v-btn color="green" @click="saveQuiz">Publish</v-btn>
+                    <v-btn color="red" @click="confirm = false">Cancel</v-btn>
+                </v-layout>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+        <v-dialog width=350 v-model="Cimage">
             <v-card>
                 <v-card-title>
-                    Confirm Quiz Publish
+                    Choose Image
                 </v-card-title>
                 <v-card-actions>
                     <v-layout>
-                        <v-btn color="green" @click="saveQuiz">Publish</v-btn>
-                        <v-btn color="red" @click="confirm = false">Cancel</v-btn>
+                        <v-col v-for="image in images" cols="4">
+                            <v-card><v-img :src="image.img"></v-img></v-card>
+                        </v-col>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -75,7 +99,10 @@
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
-    </div>
+            </div>
+        </v-card>
+        </v-col>
+    </v-row>
 </template>
 
 <script>
@@ -119,6 +146,24 @@
                 validation: false,
                 confirm: false
             }),
+            images: [
+                {
+
+                    img: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
+
+                },
+                {
+
+                    img: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
+
+                },
+                {
+
+                    img: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
+
+                },
+
+            ]
                     };
 </script>
 
