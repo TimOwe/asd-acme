@@ -8,6 +8,7 @@ import Users from './modules/03-user-administration/views/Users.vue'
 import Results from './modules/11-user-results/views/Results';
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
+import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
 import Host from './modules/07-Host-Game/Views/Host';
 
 Vue.use(Router);
@@ -31,6 +32,11 @@ const router = new Router({
         name: 'quizcatalogue',
         component: QuizCatalogue
     },
+      {
+          path: '/quiz-creator',
+          name: 'quiz-creator',
+          component: QuizCreator
+      },
     {
         path: '/login',
         name: 'Login',

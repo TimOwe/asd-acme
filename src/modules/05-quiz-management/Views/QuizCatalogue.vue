@@ -16,7 +16,7 @@
                     <v-container fluid>
                         <v-row>
                             <v-col v-for="quiz in quizs" cols="4">
-                                <quiz-card @click.native="showDialog(quiz)" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id"></quiz-card>
+                                <quiz-card @click.native="showDialog(quiz)" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions"></quiz-card>
 
                             </v-col>
                         </v-row>
