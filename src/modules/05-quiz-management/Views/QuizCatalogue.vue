@@ -20,36 +20,6 @@
 
                             </v-col>
                         </v-row>
-                        <v-card class="elevation-6" :loading="loading">
-                            <v-card-title class="align-end fill-height">Create Quiz</v-card-title>
-                            <v-card-text>
-                                <v-form ref="form">
-                                    <v-text-field
-                                        placeholder="Quiz Title"
-                                        name="quiz_title"
-                                        type="text"
-                                        v-model="quiz_title">
-                                </v-text-field>
-                                <v-text-field
-                                        placeholder="Owner ID"
-                                        name="user_id"
-                                        type="text"
-                                        v-model="owner_id">
-                                </v-text-field>
-                                <v-text-field
-                                        placeholder="Description"
-                                        name="user_id"
-                                        type="text"
-                                        v-model="description">
-                                </v-text-field>
-                                    <v-card-actions class="center">
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue" @click="addnewData">Publish</v-btn>
-                                    </v-card-actions>
-                                </v-form>
-                            </v-card-text>
-
-                        </v-card>
                         <v-btn color="primary" @click="addTestData()">Add Test Quizzes</v-btn>
                     </v-container>
                     <v-footer class="mt-12"></v-footer>

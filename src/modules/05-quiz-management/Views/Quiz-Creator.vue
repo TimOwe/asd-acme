@@ -50,18 +50,7 @@
             </v-card>
         </v-dialog>
 
-        <v-dialog width=350 v-model="validation">
-            <v-card>
-                <v-card-title>
-                    Please Fill Out All Fields Before Saving
-                </v-card-title>
-                <v-card-actions>
-                    <v-layout>
-                        <v-btn color="red" @click="validation = false">Close</v-btn>
-                    </v-layout>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+
 
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
