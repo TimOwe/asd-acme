@@ -3,11 +3,11 @@
     <v-col cols="12" sm="8" md="4">
       <v-card class="elevation-6" :loading="loading">
         <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Enter a Nickname or login</v-toolbar-title>
+          <v-toolbar-title>Enter a Nickname</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-tooltip right>
             <template v-slot:activator="{ on }">
-              <v-btn icon large to="/login" v-on="on">
+              <v-btn disabled icon large to="/login" v-on="on">
                 <v-icon>mdi-account</v-icon>
               </v-btn>
             </template>

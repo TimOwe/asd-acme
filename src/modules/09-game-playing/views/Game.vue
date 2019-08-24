@@ -16,7 +16,13 @@
 
         <div v-else-if="render === 'question'">
           <v-slide-x-transition mode="out-in">
-            <question-card></question-card>
+            <!-- -->
+            <question-card
+              v-for="question in questions"
+              v-bind:key="question.q"
+              v-bind:questionText="question.q"
+              v-bind:answers="question.a"
+            ></question-card>
           </v-slide-x-transition>
         </div>
 
@@ -25,8 +31,9 @@
             <scoreboard-card></scoreboard-card>
           </v-slide-x-transition>
         </div>
-        <p>{{this.player}}</p>
-        {{this.game}}
+        <p>player id:{{this.player}}</p>
+        <p>session id:{{this.game}}</p>
+        <p>quiz id: {{this.quiz}}</p>
       </v-container>
     </v-content>
   </v-app>
@@ -48,7 +55,9 @@ export default {
     score: 0,
     player: null,
     answer: null,
-    game: null
+    game: null,
+    quiz: null,
+    questions: null
   }),
   methods: {
     // Creates a player, pushes to db
@@ -61,20 +70,44 @@ export default {
     onCodeTry: function(code) {
       var sessions = [];
       const db = this.$db;
-      db.ref("/Sessions").orderByValue().on("value", function(snapshot) {
-        snapshot.forEach(function(data) {
-          sessions.push(data);
+      // Get a list of sessions
+      db.ref("/Sessions")
+        .orderByValue()
+        .on("value", function(snapshot) {
+          snapshot.forEach(function(data) {
+            sessions.push(data);
+          });
         });
-      });
+      // Check if entered code matches any existing session
       for (var session of sessions) {
         if (code === session.child("token").val()) {
           this.game = session.key;
-          db.ref("Sessions/" + this.game).child('players').push(this.player);
+          let quiz;
+          // If so, push the player to the session's document
+          db.ref("Sessions/" + this.game)
+            .child("players")
+            .push(this.player);
+          // Get the ID of the quiz in this session
+          db.ref("Sessions/" + this.game).once("value", function(snapshot) {
+            quiz = snapshot.val().quiz_id;
+          });
+          this.quiz = quiz;
           this.render = "question";
-          return true;
+          this.getQuestions();
+          return;
         }
       }
       return false;
+    },
+    getQuestions: function() {
+      let questions = [];
+      var ref = this.$db.ref(`/Quizs/${this.quiz}/questions`);
+      ref.once("value", function(snapshot) {
+        snapshot.forEach(function(data) {
+          questions.push({ q: data.val().q, a: data.val().a });
+        });
+      });
+      this.questions = questions;
     }
   }
 };
