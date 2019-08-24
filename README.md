@@ -15,9 +15,10 @@ Advanced Software Development 41026 project consisting of 3 releases.
 - The backend database is visible on firebase.
 - tim demo
 - thai demo
-- Dan demo
+
 
 - Matt asd demo deployment
+- Alex demo deployment :)
 
 # Boilerplate
 Project is created using Vue Node.js library in tandem with the Vuetify material design component framework for views.
