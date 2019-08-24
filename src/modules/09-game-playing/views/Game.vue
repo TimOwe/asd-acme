@@ -31,9 +31,6 @@
             <scoreboard-card></scoreboard-card>
           </v-slide-x-transition>
         </div>
-        <p>player id:{{this.player}}</p>
-        <p>session id:{{this.game}}</p>
-        <p>quiz id: {{this.quiz}}</p>
       </v-container>
     </v-content>
   </v-app>
