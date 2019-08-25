@@ -38,31 +38,54 @@
 <script>
     import RegisterCard from "../components/Register-Card";
     const md5 = require('md5');
-    var matched = [];
+
     export default {
         name: "login-card-vue",
         components: {RegisterCard},
         methods:{
-            handleLogin(){
-                var hash = md5(this.logPass);
-                this.auth(hash, this.logEmail);
-                if(matched.length != 0){
+            async handleLogin(){
+                var auth = await this.auth(this.logEmail, this.logPass)
+                if(auth.user !== undefined){
                     this.login ="Login Successful";
                     this.error = '';
-                    matched = [];
                 }
                 else {
                     this.error = "An error has occurred - User does not exist";
                     this.login='';
                 }
-
             },
 
-            auth(password, email){
-                this.testData.forEach(user => {
-                    if(user.email === email && user.password === password) {
+            async auth(email, password) {
+
+                var authObj = {},
+                    //Declaring an Object
+                    matched = [],
+                    //Declaring an Array
+                    users = await this.getUsers();
+
+                users.forEach((user) => {
+                    if (user.email === email && user.password === md5(password)) {
                         matched.push(user);
                     }
+                });
+                authObj.user = matched[0];
+                return authObj
+            },
+
+            getUsers(){
+                return new Promise(resolve => {
+                    var users = [];
+                    this.$db.ref('/Users').once('value', (snap) => {
+                    //Gets a snapshot of data, without listening for changes. 'Value' is an event.
+                        snap.forEach(user => {
+                            var userObj = user.val();
+                            //Extracts contents of 'user' in the snapshot
+                            userObj.key = user.key;
+                            //Sets the key (e.g. 1)
+                            users.push(userObj);
+                        });
+                        resolve(users);
+                    });
                 })
             },
 
@@ -79,16 +102,6 @@
                 logPass: '',
                 error: '',
                 login: '',
-                testData: [{
-                    email: 'test@test.com',
-                    password: '098f6bcd4621d373cade4e832627b4f6'
-
-                },
-                 {
-                    email: 'dan@dan.com',
-                    password: '9180b4da3f0c7e80975fad685f7f134e'
-                 }
-                ]
             }
 
         }
