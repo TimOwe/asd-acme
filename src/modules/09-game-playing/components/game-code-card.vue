@@ -53,7 +53,7 @@ export default {
   },
   name: "game-code-card",
   methods: {
-    onClickButton(event) {
+    onClickButton() {
       this.$emit("codeTry", this.code);
     }
   }

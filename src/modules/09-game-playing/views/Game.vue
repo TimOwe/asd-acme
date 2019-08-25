@@ -16,21 +16,32 @@
 
         <div v-else-if="render === 'question'">
           <v-slide-x-transition mode="out-in">
-            <!-- -->
             <question-card
+              @answer="onAnswer"
               v-for="question in questions"
               v-bind:key="question.q"
               v-bind:questionText="question.q"
               v-bind:answers="question.a"
+              v-bind:correct="question.c"
+              v-bind:score="question.score"
             ></question-card>
           </v-slide-x-transition>
         </div>
-
         <div v-if="render === 'question'">
+          <div class="text-center">
+            <v-slide-x-transition mode="out-in">
+              <v-btn class="ma-2" outlined color="indigo" @click="finishQuiz">Done</v-btn>
+            </v-slide-x-transition>
+          </div>
+        </div>
+        <v-snackbar v-model="showFeedback" :top="true" :timeout="1500">{{ feedbackText }}</v-snackbar>
+
+        <div v-if="render === 'scoreboard'" >
           <v-slide-x-transition mode="out-in">
-            <scoreboard-card></scoreboard-card>
+            <scoreboard-card v-bind:score="score"></scoreboard-card>
           </v-slide-x-transition>
         </div>
+
       </v-container>
     </v-content>
   </v-app>
@@ -54,12 +65,14 @@ export default {
     answer: null,
     game: null,
     quiz: null,
-    questions: null
+    questions: null,
+    showFeedback: false,
+    feedbackText: null
   }),
   methods: {
     // Creates a player, pushes to db
     onNickEnter: function(nick) {
-      const p = { nickname: nick };
+      const p = { nickname: nick, score: 0 };
       const ref = this.$db.ref("/Players");
       this.player = ref.push(p).key;
       this.render = "code";
@@ -101,10 +114,30 @@ export default {
       var ref = this.$db.ref(`/Quizs/${this.quiz}/questions`);
       ref.once("value", function(snapshot) {
         snapshot.forEach(function(data) {
-          questions.push({ q: data.val().q, a: data.val().a });
+          questions.push({
+            q: data.val().q,
+            a: data.val().a,
+            c: data.val().c,
+            score: data.val().score
+          });
         });
       });
       this.questions = questions;
+    },
+    onAnswer: function(correct, points) {
+      if (correct) {
+        this.score += points;
+        const ref = this.$db.ref("Players/" + this.player);
+        ref.update({ score: this.score });
+        this.feedbackText = this.feedbackText = `Correct! +${points} points!`;
+        this.showFeedback = true;
+        return;
+      }
+      this.feedbackText = this.feedbackText = "Incorrect!";
+      this.showFeedback = true;
+    },
+    finishQuiz: function() {
+      this.render = "scoreboard";
     }
   }
 };
