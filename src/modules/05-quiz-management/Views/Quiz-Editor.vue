@@ -13,6 +13,7 @@
                     <v-container grid-list-md>
                         <v-layout justify-center align-center>
                             <v-flex xs7>
+
                                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                                 <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
                                 <v-select :options="this.options" label="title">
@@ -24,6 +25,7 @@
                             </v-flex>
                         </v-layout>
                     </v-container>
+
                     <v-flex v-for="(question,index) in questionBank" :key="question.id">
                         <v-container>
                             <v-card>
@@ -37,26 +39,40 @@
                                     </v-layout>
                                     <v-layout justify-center>
                                         <v-flex xs2 v-for="(n,i) in 4" :key="n">
-                                            <v-radio-group xs2 v-model="question.c" >
-                                            <v-text-field v-model="question.a[i]" :label="'Answer #'+ n"></v-text-field>
-                                            <v-radio label="Correct?" :value="i"></v-radio>
-                                        </v-radio-group>
+                                            <v-text-field v-model="question.a[i]" :label="'Answer #'+ (i+1)"></v-text-field>
+                                            <v-checkbox v-model="question.c" label="Correct?" :value="n"></v-checkbox>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                                 <v-card-actions>
                                     <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
                                     <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: '', score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
+
                                 </v-card-actions>
                             </v-card>
                             <v-container grid-list-md>
                                 <v-card-actions class="center">
                                     <v-spacer></v-spacer>
-                                    <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Publish Quiz</v-btn>
+                                    <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Update Quiz</v-btn>
                                 </v-card-actions>
                             </v-container>
                         </v-container>
                     </v-flex>
+
+                    <v-dialog width=350 v-model="confirm">
+                        <v-card>
+                            <v-card-title>
+                                Confirm Quiz Publish
+                            </v-card-title>
+                            <v-card-actions>
+                                <v-layout>
+                                    <v-btn color="green" @click="updateQuiz">Publish</v-btn>
+                                    <v-btn color="red" @click="confirm = false">Cancel</v-btn>
+                                </v-layout>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
                     <v-dialog width=350 v-model="Cimage">
                         <v-card>
                             <v-card-title>
@@ -71,19 +87,7 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-                    <v-dialog width=350 v-model="confirm">
-                        <v-card>
-                            <v-card-title>
-                                Confirm Quiz Publish
-                            </v-card-title>
-                            <v-card-actions>
-                                <v-layout>
-                                    <v-btn color="green" @click="saveQuiz">Publish</v-btn>
-                                    <v-btn color="red" @click="confirm = false">Cancel</v-btn>
-                                </v-layout>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
+
 
                     <v-dialog width=350 v-model="success">
                         <v-card>
@@ -99,9 +103,6 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-                    <v-overlay :value="loading">
-                        <v-progress-circular indeterminate size="64"></v-progress-circular>
-                    </v-overlay>
                 </div>
             </v-card>
         </v-col>
@@ -112,11 +113,11 @@
     export default {
         methods:{
             saveQuiz(){
-                this.loading = true;
+                //this.loading = true;
                 this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', 'testimage.jpg', this.description);
                 this.confirm = false;
                 setTimeout(() => {
-                    this.loading = false;
+                    this.loading = false
                     this.success = true;
                 }, 2000);
             },
@@ -127,33 +128,30 @@
                 this.success = false;
                 this.quizTitle = '';
                 this.description = '';
-                this.questionBank = [{q: "", a: [], c: [0,0,0,0], score: ""}];
+                this.questionBank = [{q: "", a: [], c: "", score: ""}];
             },
-            newQuiz(quiz_title, questions, owner_id, img, description){
-                var Quiz = {
-                    quiz_title,
-                    questions,
-                    owner_id,
-                    img,
-                    description
-                };
-                var reciept = this.$db.ref('/Quizs').push(Quiz);
-                return reciept.key;
+
+            updateQuiz(quiz_title, questions, owner_id, img, description){
+
+
+                this.$db.ref('/Quisz/'+this.quiz.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
+
+
+
             },
+
             correct(n){
+
                 return n-1;
             }
         },
         data: () => ({
             questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
-            quizTitle: "",
+            quizTitle: this.updQuiz.quiz_title,
+            description: '',
             loading: false,
             validation: false,
             confirm: false,
-            success: false,
-            images: false,
-            Cimage: false,
-            description: "",
             options: [
                 {
                     dtitle: "Visa",
@@ -163,22 +161,41 @@
                     dtitle: "Mastercard",
                     cardImage: "https://cdn.vuetifyjs.com/images/cards/house.jpg"
                 }
-            ]
+            ],
+            props: {
+
+                updQuiz: Object,
+                //img: String,
+                // newquizTitle: String,
+                //description: String,
+                //owner: String,
+                // existingQuestions: Array,
+                ///key: String
+
+
+            }
         }),
+
         images: [
             {
                 dtitle: 'Yeet1',
                 img: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
+
             },
             {
                 title: 'Yeet3',
                 img: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
+
             },
             {
                 title: 'Yeet2',
                 img: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
+
             }
-        ]
+
+        ],
+
+
     };
 </script>
 

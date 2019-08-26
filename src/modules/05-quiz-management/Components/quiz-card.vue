@@ -12,15 +12,20 @@
         </v-card-text>
         <v-card-actions>
             <v-btn text color="green">Play</v-btn>
-            <v-btn text color="orange">Edit</v-btn>
+            <v-btn @click="edit=true" :quiz="quiz" img="quiz.img" :newquizTitle="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questionBank="quiz.questions">Edit</v-btn>
             <v-btn text color="red" @click="deleteQuiz(quiz.key)">Delete</v-btn>
         </v-card-actions>
+        <v-dialog width=auto v-model="edit">
+            <edit-card :quiz="quiz" img="quiz.img" :quizTitle="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questionBank="quiz.questions"></edit-card>
+        </v-dialog>
     </v-card>
 </template>
 
 <script>
+    import EditCard from "../Components/edit-card";
     export default {
         name: "quiz-card",
+        components: {EditCard},
         props: {
             quiz: Object,
             img: String,
@@ -28,13 +33,16 @@
             description: String,
             owner: String,
             questions: Array,
-            key: String
+            //key: String
         },
         methods: {
             deleteQuiz(quizKey) {
                 this.$db.ref('/Quizs/' + quizKey).remove();
             }
-        }
+        },
+        data: () => ({
+            edit: false
+        }),
     }
 </script>
 
