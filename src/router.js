@@ -39,11 +39,6 @@ const router = new Router({
           name: 'quiz-creator',
           component: QuizCreator
       },
-      {
-          path: '/quiz-editor',
-          name: 'quiz-editor',
-          component: QuizEditor
-      },
     {
         path: '/login',
         name: 'Login',

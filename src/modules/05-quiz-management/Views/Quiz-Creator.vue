@@ -113,7 +113,6 @@
         methods:{
             saveQuiz(){
                 this.loading = true;
-                this.questionBank.c = this.questionBank.c-1;
                 this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', 'testimage.jpg', this.description);
                 this.confirm = false;
                 setTimeout(() => {
