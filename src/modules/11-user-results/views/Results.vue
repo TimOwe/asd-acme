@@ -32,28 +32,16 @@
                 this.activeResults = results;
                 this.dialog = true;
             },
-            getQuizs(){
-                return [{
-                    name: 'Quiz1',
-                    img: 'https://images.pexels.com/photos/842339/pexels-photo-842339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-                    date: new Date(),
-                    results: [
-                        {q: "question 1", a: true},
-                        {q: "question 2", a: true},
-                        {q: "question 3", a: true}
-                    ]
-                },
-                    {
-                        name: 'Quiz2',
-                        img: 'https://images.pexels.com/photos/842339/pexels-photo-842339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-                        date: new Date(),
-                        results: [
-                            {q: "question 1", a: true},
-                            {q: "question 2", a: true},
-                            {q: "question 3", a: true}
-                        ]
-                    }]
-            }
+                getQuizs() {
+                    this.$db.ref('/Quizs').on('value', (snap) => {
+                        this.quizs = [];
+                        snap.forEach(entry => {
+                            var entryObj = entry.val();
+                            entryObj.key = entry.key;
+                            this.quizs.push(entryObj);
+                        });
+                    });
+                }
         },
         data: () => ({
             quizs:[],
