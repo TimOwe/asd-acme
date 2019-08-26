@@ -13,7 +13,6 @@
                     <v-container grid-list-md>
                         <v-layout justify-center align-center>
                             <v-flex xs7>
-
                                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                                 <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
                                 <v-select :options="this.options" label="title">
@@ -25,7 +24,6 @@
                             </v-flex>
                         </v-layout>
                     </v-container>
-
                     <v-flex v-for="(question,index) in questionBank" :key="question.id">
                         <v-container>
                             <v-card>
@@ -39,15 +37,16 @@
                                     </v-layout>
                                     <v-layout justify-center>
                                         <v-flex xs2 v-for="(n,i) in 4" :key="n">
-                                            <v-text-field v-model="question.a[i]" :label="'Answer #'+ (i+1)"></v-text-field>
-                                            <v-checkbox v-model="question.c" label="Correct?" :value="n"></v-checkbox>
+                                            <v-radio-group xs2 v-model="question.c" >
+                                            <v-text-field v-model="question.a[i]" :label="'Answer #'+ n"></v-text-field>
+                                            <v-radio label="Correct?" :value="i"></v-radio>
+                                        </v-radio-group>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                                 <v-card-actions>
                                     <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
                                     <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: '', score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
-
                                 </v-card-actions>
                             </v-card>
                             <v-container grid-list-md>
@@ -72,7 +71,6 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-
                     <v-dialog width=350 v-model="Cimage">
                         <v-card>
                             <v-card-title>
@@ -87,8 +85,6 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-
-
                     <v-dialog width=350 v-model="success">
                         <v-card>
                             <v-card-title>
@@ -117,10 +113,11 @@
         methods:{
             saveQuiz(){
                 this.loading = true;
+                this.questionBank.c = this.questionBank.c-1;
                 this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', 'testimage.jpg', this.description);
                 this.confirm = false;
                 setTimeout(() => {
-                    this.loading = false
+                    this.loading = false;
                     this.success = true;
                 }, 2000);
             },
@@ -131,9 +128,8 @@
                 this.success = false;
                 this.quizTitle = '';
                 this.description = '';
-                this.questionBank = [{q: "", a: [], c: "", score: ""}];
+                this.questionBank = [{q: "", a: [], c: [0,0,0,0], score: ""}];
             },
-
             newQuiz(quiz_title, questions, owner_id, img, description){
                 var Quiz = {
                     quiz_title,
@@ -141,22 +137,24 @@
                     owner_id,
                     img,
                     description
-                }
+                };
                 var reciept = this.$db.ref('/Quizs').push(Quiz);
                 return reciept.key;
             },
-
             correct(n){
-
-             return n-1;
+                return n-1;
             }
         },
         data: () => ({
-            questionBank:[{q: "", a: [], c: "", score: ""}],
+            questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
             quizTitle: "",
             loading: false,
             validation: false,
             confirm: false,
+            success: false,
+            images: false,
+            Cimage: false,
+            description: "",
             options: [
                 {
                     dtitle: "Visa",
@@ -168,26 +166,20 @@
                 }
             ]
         }),
-
         images: [
             {
                 dtitle: 'Yeet1',
                 img: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-
             },
             {
                 title: 'Yeet3',
                 img: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-
             },
             {
                 title: 'Yeet2',
                 img: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-
             }
-
         ]
-
     };
 </script>
 
