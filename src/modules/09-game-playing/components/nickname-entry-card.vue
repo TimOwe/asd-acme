@@ -2,6 +2,18 @@
   <v-row align="center" justify="center">
     <v-col cols="12" sm="8" md="4">
       <v-card class="elevation-6" :loading="loading">
+        <v-toolbar color="primary" dark flat>
+          <v-toolbar-title>Enter a Nickname</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-btn disabled icon large to="/login" v-on="on">
+                <v-icon>mdi-account</v-icon>
+              </v-btn>
+            </template>
+            <span>Login</span>
+          </v-tooltip>
+        </v-toolbar>
         <v-card-text>
           <v-form>
             <v-text-field
@@ -14,7 +26,7 @@
         </v-card-text>
         <v-card-actions class="center">
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="addPlayer">Go</v-btn>
+          <v-btn color="primary" @click="onClickButton">Go</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -26,19 +38,23 @@ export default {
   name: "nickname-entry-card",
   data: () => ({
     loading: false,
-    nickname: ''
+    nickname: '',
+    player: ''
   }),
   methods: {
     addPlayer() {
-      this.loading = true;
-      let x = Math.floor(Math.random() * 100);
-      this.$db.ref('/Players').push({
-        nickname: this.nickname,
-        score: x,
-        user_id: null
-      });
-      console.log(this.nickname);
-      setTimeout(() => (this.loading = false), 2500);
+        this.loading = true;
+        let x = Math.floor(Math.random() * 100);
+        this.$db.ref('/Players').push({
+            nickname: this.nickname,
+            score: x,
+            user_id: null
+        });
+        // console.log(this.nickname);
+        setTimeout(() => (this.loading = false), 2500);
+    },
+    onClickButton() {
+      this.$emit('nickEnter', this.nickname)
     }
   }
 };

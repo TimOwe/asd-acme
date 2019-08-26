@@ -7,10 +7,10 @@
                     Your Saved Quizes:<v-select v-model="selected" :items="names"  label="Quiz To Host" required></v-select>
                 </v-flex>
                 <v-flex xs4>
-                    Max Participants:<v-text-field suffix="# People"></v-text-field>
+                    Max Participants:<v-text-field v-model="maxppl" suffix="# People"></v-text-field>
                 </v-flex>
                 <v-flex xs4>
-                    Max Time Per Question:<v-text-field suffix="seconds"></v-text-field>
+                    Max Time Per Question:<v-text-field v-model="tlimit" suffix="seconds"></v-text-field>
                 </v-flex>
             </v-layout>
             <v-layout justify-center>
@@ -48,11 +48,13 @@
             })
         },
         methods:{
-            Session(quiz,host){
+            Session(quiz,host,meta){
                 this.lastToken = this.newToken();
                 return {
                     owner_id: host,
                     quiz_id: quiz,
+                    max_ppl: meta.max,
+                    max_time_pq: meta.tlimit,
                     timestart: new Date().toString(),
                     timeend: 'null',
                     token: this.lastToken,
@@ -61,15 +63,19 @@
             },
             handleStart(){
                 var index = this.names.indexOf(this.selected);
-                this.startSession(this.keys[index], this.host);
+                this.startSession(this.keys[index], this.host, {
+                    max: this.maxppl,
+                    tlimit: this.tlimit
+                });
                 this.dialog=true
             },
-            startSession(quiz,host){
-                var newSession = this.Session(quiz,host);
+            startSession(quiz,host, meta){
+                var newSession = this.Session(quiz,host,meta);
                 this.$db.ref('/Sessions').push(newSession)
             },
             newToken(){
-                return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(3, 5);
+                var token =Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(3, 15);
+                return token.substring(0,6)
             },
             addDummy(){
                 this.$db.ref('/Quizs').push({
@@ -87,7 +93,9 @@
                 names: [],
                 keys: [],
                 selected: '',
-                lastToken: ''
+                lastToken: '',
+                tlimit: 0,
+                maxppl: 0
             }
         }
     }
