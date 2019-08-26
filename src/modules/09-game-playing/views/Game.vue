@@ -2,26 +2,82 @@
   <v-app id="inspire">
     <v-content>
       <v-container>
-        <game-code-card></game-code-card>
-        <nickname-entry-card></nickname-entry-card>
-        <question-card></question-card>
-        <scoreboard-card></scoreboard-card>
+        <div v-if="render === 'name'">
+          <v-slide-x-transition mode="out-in">
+            <nickname-entry-card @nickEnter="onNickEnter"></nickname-entry-card>
+          </v-slide-x-transition>
+        </div>
+
+        <div v-else-if="render === 'code'">
+          <v-slide-x-transition mode="out-in">
+            <game-code-card @codeTry="onCodeTry"></game-code-card>
+          </v-slide-x-transition>
+        </div>
+
+        <div v-else-if="render === 'question'">
+          <v-slide-x-transition mode="out-in">
+            <question-card
+              @answer="onAnswer"
+              v-for="question in questions"
+              v-bind:key="question.q"
+              v-bind:questionText="question.q"
+              v-bind:answers="question.a"
+              v-bind:correct="question.c"
+              v-bind:score="question.score"
+            ></question-card>
+          </v-slide-x-transition>
+        </div>
+        <div v-if="render === 'question'">
+          <div class="text-center">
+            <v-slide-x-transition mode="out-in">
+              <v-btn class="ma-2" outlined color="indigo" @click="finishQuiz">Done</v-btn>
+            </v-slide-x-transition>
+          </div>
+        </div>
+        <v-snackbar v-model="showFeedback" :top="true" :timeout="1500">{{ feedbackText }}</v-snackbar>
+
+        <div v-if="render === 'scoreboard'" >
+          <v-slide-x-transition mode="out-in">
+            <scoreboard-card v-bind:score="score"></scoreboard-card>
+          </v-slide-x-transition>
+        </div>
+
       </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-  import GameCodeCard from "../components/game-code-card.vue";
-  import NicknameEntryCard from "../components/nickname-entry-card.vue";
-  import QuestionCard from "../components/question-card.vue";
-  import ScoreboardCard from "../components/scoreboard-card.vue";
+import GameCodeCard from "../components/game-code-card.vue";
+import NicknameEntryCard from "../components/nickname-entry-card.vue";
+import QuestionCard from "../components/question-card.vue";
+import ScoreboardCard from "../components/scoreboard-card.vue";
 
-  export default {
-    components: {GameCodeCard, NicknameEntryCard, QuestionCard, ScoreboardCard},
-    props: {
-      source: String,
+export default {
+  components: { GameCodeCard, NicknameEntryCard, QuestionCard, ScoreboardCard },
+  props: {
+    source: String
+  },
+  data: () => ({
+    render: "name",
+    score: 0,
+    player: null,
+    answer: null,
+    game: null,
+    quiz: null,
+    questions: null,
+    showFeedback: false,
+    feedbackText: null
+  }),
+  methods: {
+    // Creates a player, pushes to db
+    onNickEnter: function(nick) {
+      const p = { nickname: nick, score: 0 };
+      const ref = this.$db.ref("/Players");
+      this.player = ref.push(p).key;
+      this.render = "code";
     },
+<<<<<<< HEAD
     data: () =>  ({
       score: 0,
       player: null,
@@ -55,14 +111,70 @@
         if (a == answer) {
           // get player's current score, add points if correct
         return {result: true, points: 100}
+=======
+    onCodeTry: function(code) {
+      var sessions = [];
+      const db = this.$db;
+      // Get a list of sessions
+      db.ref("/Sessions")
+        .orderByValue()
+        .on("value", function(snapshot) {
+          snapshot.forEach(function(data) {
+            sessions.push(data);
+          });
+        });
+      // Check if entered code matches any existing session
+      for (var session of sessions) {
+        if (code === session.child("token").val()) {
+          this.game = session.key;
+          let quiz;
+          // If so, push the player to the session's document
+          db.ref("Sessions/" + this.game)
+            .child("players")
+            .push(this.player);
+          // Get the ID of the quiz in this session
+          db.ref("Sessions/" + this.game).once("value", function(snapshot) {
+            quiz = snapshot.val().quiz_id;
+          });
+          this.quiz = quiz;
+          this.render = "question";
+          this.getQuestions();
+          return;
+>>>>>>> d8f828255b5328592fa8be371bd7f2f8b6f18694
         }
-        // Return that they got it wrong, and the correct answer
-        return {result: false, correct: 'a'}
-      },
-      finalScore: () => {
-        // Some db call to get array of players and their scores
-        // Sorting algorithm, return to scoreboard component
       }
+      return false;
+    },
+    getQuestions: function() {
+      let questions = [];
+      var ref = this.$db.ref(`/Quizs/${this.quiz}/questions`);
+      ref.once("value", function(snapshot) {
+        snapshot.forEach(function(data) {
+          questions.push({
+            q: data.val().q,
+            a: data.val().a,
+            c: data.val().c,
+            score: data.val().score
+          });
+        });
+      });
+      this.questions = questions;
+    },
+    onAnswer: function(correct, points) {
+      if (correct) {
+        this.score += points;
+        const ref = this.$db.ref("Players/" + this.player);
+        ref.update({ score: this.score });
+        this.feedbackText = this.feedbackText = `Correct! +${points} points!`;
+        this.showFeedback = true;
+        return;
+      }
+      this.feedbackText = this.feedbackText = "Incorrect!";
+      this.showFeedback = true;
+    },
+    finishQuiz: function() {
+      this.render = "scoreboard";
     }
   }
+};
 </script>
