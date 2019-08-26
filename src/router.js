@@ -9,7 +9,6 @@ import Results from './modules/11-user-results/views/Results';
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
 import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
-import QuizEditor from "./modules/05-quiz-management/Views/Quiz-Editor";
 import Host from './modules/07-Host-Game/Views/Host';
 import Live from './modules/07-Host-Game/Views/Live'
 
