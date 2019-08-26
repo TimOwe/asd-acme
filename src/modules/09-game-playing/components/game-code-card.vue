@@ -44,7 +44,7 @@
     methods: {
         setCode() {
           this.loading = true;
-          console.log(this.code);
+          // console.log(this.code);
           setTimeout(() => (this.loading = false), 2500);
         }
     }

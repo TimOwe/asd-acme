@@ -37,7 +37,7 @@ export default {
         score: x,
         user_id: null
       });
-      console.log(this.nickname);
+      // console.log(this.nickname);
       setTimeout(() => (this.loading = false), 2500);
     }
   }

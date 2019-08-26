@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
 export default {
   name: "question-card",
   data: () => ({
@@ -71,7 +70,7 @@ export default {
   methods: {
         answer() {
           this.loading = true;
-          setTimeout(()=> console.log(this.selected), 1000);
+          // setTimeout(()=> console.log(this.selected), 1000);
         }
     }
 };

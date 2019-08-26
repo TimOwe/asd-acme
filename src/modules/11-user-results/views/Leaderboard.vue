@@ -11,7 +11,7 @@
         </thead>
         <tbody>
         <!-- display sortedresults array in table -->
-        <tr v-for="(result,index) in sortedResults">
+        <tr v-for="(result,index) in sortedResults" :key="index">
             <td>{{index + 1}}</td>
             <td>{{ result.user_key }}</td>
             <td>{{ result.score * 100 }}%</td>

@@ -36,6 +36,7 @@
         // Set player data object to be this player
         return nickname;
       },
+        // eslint-disable-next-line
       joinGame: (code, player) => {
         // get sessions from db (not yet connected)
         let sessions = [];

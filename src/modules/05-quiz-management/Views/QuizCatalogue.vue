@@ -15,7 +15,7 @@
                     </v-toolbar>
                     <v-container fluid>
                         <v-row>
-                            <v-col v-for="quiz in quizs" cols="4">
+                            <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
                                 <v-card>
                                     <v-img
                                             :src="quiz.img"
