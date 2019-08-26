@@ -18,10 +18,9 @@
                     <v-container fluid>
                         <v-row>
                             <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
-                                <quiz-card :quiz="quiz" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions" ></quiz-card>
+                                <quiz-card v-on:refresh="refresh" :quiz="quiz" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions" ></quiz-card>
                             </v-col>
                         </v-row>
-                        <v-btn color="primary" @click="addTestData()">Add Test Quizzes</v-btn>
                     </v-container>
                     <v-footer class="mt-12"></v-footer>
                 </v-card>
@@ -52,7 +51,6 @@
             getQuizzes(){
                 this.$db.ref('/Quizs').on('value', (snap) => {
                     // clear current results array each time method is called
-
                     this.quizs = [];
                     // convert firebase data entries into json
                     snap.forEach(entry => {
@@ -62,56 +60,17 @@
                         this.quizs.push(entryObj);
                     });
                     // sort results by ascending order of score
-
-
                 });
             },
             // function to push dummy data to firebase
-            edit(){
-                this.editpage = true;
-
+            refresh: function () {
+                this.getQuizzes();
             },
-            addTestData(){
-                this.testData.forEach(entry => {
-                    this.$db.ref('/Quizs').push(entry);
-                });
-            },
-            addnewData(){
-                //this.$refs.form.forEach(entry => {
-                    this.$db.ref('/Quizs').push(this.$refs.form);
-
-            }
-
         },
         // dummy data
         data(){
             return {
-                testData: [
-                {
-                    quiz_title: 'Ancient Greece Quiz',
-                    img: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-                    description: "A fun Quiz!",
-                    owner_id: 1212,
-                    flex: 12
-                },
-                {
-                    quiz_title: 'Ancient Egypt Quiz',
-                    img: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-                    description: "A decent Quiz!",
-                    owner_id: 3212,
-                    flex: 6
-                },
-                {
-                    quiz_title: 'Ancient China Quiz',
-                    img: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-                    description: "A not so fun Quiz!",
-                    owner_id: 512,
-                    flex: 6
-                },
-
-            ],
                 quizs: [],
-
             }
         },
         props: {

@@ -15,12 +15,11 @@
                             <v-flex xs7>
                                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                                 <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
-                                <v-select :options="this.options" label="title">
-                                    <template slot="option" slot-scope="option">
-                                        <img :src="option.cardImage" />
-                                        {{ option.title }}
-                                    </template>
-                                </v-select>
+                                <v-select v-model="img"
+                                        :items="items"
+                                        :menu-props="{ top: true, offsetY: true }"
+                                        label="Pick a Theme"
+                                ></v-select>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -39,7 +38,7 @@
                                         <v-flex xs2 v-for="(n,i) in 4" :key="n">
                                             <v-radio-group xs2 v-model="question.c" >
                                             <v-text-field v-model="question.a[i]" :label="'Answer #'+ n"></v-text-field>
-                                            <v-radio label="Correct?" :value="i"></v-radio>
+                                            <v-radio label="" :value="i"></v-radio>
                                         </v-radio-group>
                                         </v-flex>
                                     </v-layout>
@@ -57,20 +56,6 @@
                             </v-container>
                         </v-container>
                     </v-flex>
-                    <v-dialog width=350 v-model="Cimage">
-                        <v-card>
-                            <v-card-title>
-                                Choose Image
-                            </v-card-title>
-                            <v-card-actions>
-                                <v-layout>
-                                    <v-col v-for="image in images" cols="4">
-                                        <v-card><v-img :src="image.img"></v-img></v-card>
-                                    </v-col>
-                                </v-layout>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
                     <v-dialog width=350 v-model="confirm">
                         <v-card>
                             <v-card-title>
@@ -84,7 +69,6 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-
                     <v-dialog width=350 v-model="success">
                         <v-card>
                             <v-card-title>
@@ -113,7 +97,8 @@
         methods:{
             saveQuiz(){
                 this.loading = true;
-                this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', 'testimage.jpg', this.description);
+                this.img = this.img+".jpg";
+                this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img, this.description);
                 this.confirm = false;
                 setTimeout(() => {
                     this.loading = false;
@@ -140,11 +125,10 @@
                 var reciept = this.$db.ref('/Quizs').push(Quiz);
                 return reciept.key;
             },
-            correct(n){
-                return n-1;
-            }
         },
+
         data: () => ({
+            items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
             questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
             quizTitle: "",
             loading: false,
@@ -154,31 +138,15 @@
             images: false,
             Cimage: false,
             description: "",
-            options: [
-                {
-                    dtitle: "Visa",
-                    cardImage: "https://cdn.vuetifyjs.com/images/cards/plane.jpg"
-                },
-                {
-                    dtitle: "Mastercard",
-                    cardImage: "https://cdn.vuetifyjs.com/images/cards/house.jpg"
+            img: "",
+
+            data(){
+                return {
+                    quizs: [],
                 }
-            ]
+            },
         }),
-        images: [
-            {
-                dtitle: 'Yeet1',
-                img: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-            },
-            {
-                title: 'Yeet3',
-                img: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-            },
-            {
-                title: 'Yeet2',
-                img: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-            }
-        ]
+
     };
 </script>
 

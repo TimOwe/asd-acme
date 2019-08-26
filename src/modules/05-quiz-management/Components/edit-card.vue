@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-toolbar flat>
-            <v-btn @click="dialog=false" icon to="/quizcatalogue">
+            <v-btn icon @click="$emit('closeEdit')">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-toolbar-title class="text-center, display-1">Edit Quiz</v-toolbar-title>
@@ -43,7 +43,8 @@
                 <v-container grid-list-md>
                     <v-card-actions class="center">
                         <v-spacer></v-spacer>
-                        <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Publish Quiz</v-btn>
+                        <v-btn v-if="index+1==questionBank.length" color="white" @click="$emit('closeEdit')">Close</v-btn>
+                        <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Update Quiz</v-btn>
                     </v-card-actions>
                 </v-container>
             </v-container>
@@ -54,6 +55,7 @@
                 <v-card-title>
                     Confirm Quiz Update
                 </v-card-title>
+                <v-card-text>Would you like to update this quiz with these new details?</v-card-text>
                 <v-card-actions>
                     <v-layout>
                         <v-btn color="green" @click="saveQuiz">Update</v-btn>
@@ -63,15 +65,15 @@
             </v-card>
         </v-dialog>
 
-        <v-dialog width=350 v-model="success">
+        <v-dialog v-on:closeEdit="triggerClose" width=350 v-model="success">
             <v-card>
                 <v-card-title>
                     Success!
                 </v-card-title>
-                <v-card-text>Your new quiz has been successfully Updated! You can return to the quiz catalogue or create a new quiz</v-card-text>
+                <v-card-text>Your new quiz has been successfully updated! Click below to return to the catalogue.</v-card-text>
                 <v-card-actions>
-                    <v-layout>
-                        <v-btn color="purple" to="/quizcatalogue" @click="success = false">Go to Catalogue</v-btn>
+                    <v-layout justify="center">
+                        <v-btn color="purple" @click="$emit('closeEdit')">Go to Catalogue</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -93,8 +95,6 @@
             description: String,
             owner: String,
             questionBank: Array,
-            //key: String
-
         },
         methods: {
             deleteQuiz(quizKey) {
@@ -109,11 +109,14 @@
                     this.success = true;
                 }, 2000);
             },
+            updateQuiz(quiz_title, questions, owner_id, img, description){
+                this.$db.ref('/Quizs/'+this.quiz.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
+            },
             removeQuestion(index){
                 this.questionBank.splice(index,1);
             },
-            updateQuiz(quiz_title, questions, owner_id, img, description){
-                this.$db.ref('/Quisz/'+this.quiz.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
+            triggerClose(){
+                this.$emit('closeEdit');
             },
         },
         data: () => ({
