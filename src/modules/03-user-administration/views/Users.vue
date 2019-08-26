@@ -12,7 +12,6 @@
                             <v-btn large color="green">Save</v-btn>
                             <v-btn depressed large color="red" class="white--text" @click="deleteUser(user.key)">Delete</v-btn>
                             <v-btn large color="primary" @click="handleShowLogs(user.logs)">View Logs</v-btn>
-                            <v-btn large color="purple">Quiz's</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
