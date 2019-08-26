@@ -11,6 +11,7 @@ import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
 import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
 import QuizEditor from "./modules/05-quiz-management/Views/Quiz-Editor";
 import Host from './modules/07-Host-Game/Views/Host';
+import Live from './modules/07-Host-Game/Views/Live'
 
 Vue.use(Router);
 
@@ -72,6 +73,11 @@ const router = new Router({
           path: '/host',
           name: 'Host',
           component: Host
+      },
+      {
+          path: '/live/:id',
+          name: 'Live',
+          component: Live
       }
   ]
 });
