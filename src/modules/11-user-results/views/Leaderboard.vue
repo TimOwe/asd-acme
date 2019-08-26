@@ -38,7 +38,7 @@
             this.getLeaderBoard();
             },
         methods:{
-            // getting snapshot of data from firebase
+            // getting snapshot of data from firebase to populate leaderboard
             getLeaderBoard(){
                 this.$db.ref('/Leaderboard').on('value', (snap) => {
                     // clear current results array each time method is called
@@ -68,6 +68,13 @@
                 return type === 'asc' ? this.sortedResults.sort((a,b) => b.score-a.score) : this.sortedResults.sort((a,b) => a.score-b.score);
             }
         },
+
+        // Function that gets User Results from DB
+            getUserResults() {
+                this.$db.ref('').on('value', (snap) => {
+
+                });
+            },
         // dummy data
         data(){
             return {
