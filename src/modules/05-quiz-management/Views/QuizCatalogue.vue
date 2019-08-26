@@ -7,88 +7,20 @@
                         <v-btn icon>
                             <v-icon>mdi-arrow-left</v-icon>
                         </v-btn>
-                        <v-toolbar-title class="text-center, display-2">Quizzes</v-toolbar-title>
+                        <v-toolbar-title class="text-center, display-1">Quizzes</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn icon>
                             <v-icon>mdi-magnify</v-icon>
                         </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn to="/quiz-creator" color="green">Create Quiz</v-btn>
                     </v-toolbar>
                     <v-container fluid>
                         <v-row>
                             <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
-                                <v-card>
-                                    <v-img
-                                            :src="quiz.img"
-                                            class="white--text"
-                                            height="200px"
-                                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                                    >
-                                        <v-card-title class="align-end fill-height" v-text="quiz.quiz_title"></v-card-title>
-                                    </v-img>
-
-
-                                        <v-card-text>
-                            <span class="text--primary">
-        <span class="body-1" v-text="quiz.owner_id"></span><br>
-        <span class="body-1" v-text="quiz.description"></span><br>
-        <span class="body-1"></span><br>
-      </span>
-                                        </v-card-text>
-
-                                        <v-card-actions>
-                                            <v-btn
-                                                    text
-                                                    color="green"
-                                            >
-                                                Play
-                                            </v-btn>
-                                            <v-btn
-                                                    text
-                                                    color="orange"
-                                            >
-                                                Edit
-                                            </v-btn>
-                                            <v-btn
-                                                    text
-                                                    color="red"
-                                            >
-                                                Delete
-                                            </v-btn>
-                                        </v-card-actions>
-
-                                </v-card>
+                                <quiz-card @click.native="showDialog(quiz)" :quiz="quiz" img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions" :key="quiz.key"></quiz-card>
                             </v-col>
                         </v-row>
-                        <v-card class="elevation-6" :loading="loading">
-                            <v-card-title class="align-end fill-height">Create Quiz</v-card-title>
-                            <v-card-text>
-                                <v-form ref="form">
-                                    <v-text-field
-                                        placeholder="Quiz Title"
-                                        name="quiz_title"
-                                        type="text"
-                                        v-model="quiz_title">
-                                </v-text-field>
-                                <v-text-field
-                                        placeholder="Owner ID"
-                                        name="user_id"
-                                        type="text"
-                                        v-model="owner_id">
-                                </v-text-field>
-                                <v-text-field
-                                        placeholder="Description"
-                                        name="user_id"
-                                        type="text"
-                                        v-model="description">
-                                </v-text-field>
-                                    <v-card-actions class="center">
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue" @click="addnewData">Publish</v-btn>
-                                    </v-card-actions>
-                                </v-form>
-                            </v-card-text>
-
-                        </v-card>
                         <v-btn color="primary" @click="addTestData()">Add Test Quizzes</v-btn>
                     </v-container>
                     <v-footer class="mt-12"></v-footer>
@@ -102,9 +34,10 @@
 
 <script>
 
+    import QuizCard from "../Components/quiz-card";
     export default {
         name: "QuizCatalogue",
-
+        components: {QuizCard},
 
 
         // grabbing all data on page render
@@ -134,6 +67,10 @@
                 });
             },
             // function to push dummy data to firebase
+            edit(){
+                this.editpage = true;
+
+            },
             addTestData(){
                 this.testData.forEach(entry => {
                     this.$db.ref('/Quizs').push(entry);
