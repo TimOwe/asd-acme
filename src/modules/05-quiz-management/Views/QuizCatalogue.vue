@@ -17,9 +17,8 @@
                     </v-toolbar>
                     <v-container fluid>
                         <v-row>
-                            <v-col v-for="quiz in quizs" cols="4">
-                                <quiz-card @click.native="showDialog(quiz)" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions"></quiz-card>
-
+                            <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
+                                <quiz-card @click.native="showDialog(quiz)" :quiz="quiz" img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions" :key="quiz.key"></quiz-card>
                             </v-col>
                         </v-row>
                         <v-btn color="primary" @click="addTestData()">Add Test Quizzes</v-btn>
@@ -68,6 +67,10 @@
                 });
             },
             // function to push dummy data to firebase
+            edit(){
+                this.editpage = true;
+
+            },
             addTestData(){
                 this.testData.forEach(entry => {
                     this.$db.ref('/Quizs').push(entry);

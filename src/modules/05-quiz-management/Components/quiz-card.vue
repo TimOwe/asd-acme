@@ -12,8 +12,8 @@
         </v-card-text>
         <v-card-actions>
             <v-btn text color="green">Play</v-btn>
-            <v-btn text color="orange">Edit</v-btn>
-            <v-btn text color="red">Delete</v-btn>
+            <v-btn text color="orange"></v-btn>
+            <v-btn text color="red" @click="deleteQuiz(quiz.key)">Delete</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -22,11 +22,18 @@
     export default {
         name: "quiz-card",
         props: {
+            quiz: Object,
             img: String,
             title: String,
             description: String,
             owner: String,
-            questions: Array
+            questions: Array,
+            key: String
+        },
+        methods: {
+            deleteQuiz(quizKey) {
+                this.$db.ref('/Quizs/' + quizKey).remove();
+            }
         }
     }
 </script>
