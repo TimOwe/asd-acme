@@ -26,8 +26,8 @@
                 <v-card-text>Are you sure you want to delete this quiz?</v-card-text>
                 <v-card-actions>
                     <v-layout>
-                        <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
                         <v-btn color="red" @click="deleteQuiz(quiz.key)">Delete</v-btn>
+                        <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>

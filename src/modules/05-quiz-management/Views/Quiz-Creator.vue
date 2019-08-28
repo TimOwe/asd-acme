@@ -15,11 +15,15 @@
                             <v-flex xs7>
                                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                                 <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
-                                <v-select v-model="img"
+                                <v-select
+                                        v-model="img"
                                         :items="items"
-                                        :menu-props="{ top: true, offsetY: true }"
-                                        label="Pick a Theme"
-                                ></v-select>
+                                        item-text="name"
+                                        item-value="url"
+                                        label="Select"
+                                        return-object
+                                        single-line
+                                >{{items.url}}</v-select>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -97,8 +101,7 @@
         methods:{
             saveQuiz(){
                 this.loading = true;
-                this.img = this.img+".jpg";
-                this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img, this.description);
+                this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
                 this.confirm = false;
                 setTimeout(() => {
                     this.loading = false;
@@ -128,7 +131,11 @@
         },
 
         data: () => ({
-            items: ['Dark', 'Light', 'Colourful'],
+            items: [
+                { name: 'Dark', url: 'https://imgur.com/c7txWI3.png' },
+                { name: 'Light', url: 'https://imgur.com/taxTHeY.jpg' },
+                { name: 'Colourful', url: 'https://imgur.com/zmxFPdu.jpg' },
+            ],
             questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
             quizTitle: "",
             loading: false,
