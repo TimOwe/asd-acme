@@ -6,17 +6,15 @@
                     <v-toolbar-title class="text-center, display-1">Quizzes</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
-                    <v-container fluid>
-                        <v-row>
-                            <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
-                                <quiz-card @click.native="showDialog(quiz)" :quiz="quiz" img="quiz.img"
-                                           :title="quiz.quiz_title" :description="quiz.description"
-                                           :owner="quiz.owner_id" :questions="quiz.questions"
-                                           :key="quiz.key"></quiz-card>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-
+                <v-container fluid>
+                    <v-row>
+                        <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
+                            <quiz-card :quiz="quiz" img="quiz.img"
+                                       :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id"
+                                       :questions="quiz.questions" :key="quiz.key"></quiz-card>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-card>
         </v-col>
     </v-row>
@@ -32,18 +30,22 @@
         beforeMount() {
             this.getQuizzes();
         },
-        quizs: [],
+
+        data: () => ({
+            quizs: []
+        }),
 
         methods: {
             getQuizzes() {
+                let quizzes = [];
                 this.$db.ref('/Quizs').on('value', (snap) => {
-                    this.quizs = [];
                     snap.forEach(entry => {
                         var entryObj = entry.val();
                         entryObj.key = entry.key;
-                        this.quizs.push(entryObj);
+                        quizzes.push(entryObj);
                     });
                 });
+                this.quizs = quizzes;
             }
         }
     }

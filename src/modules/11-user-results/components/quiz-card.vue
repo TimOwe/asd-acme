@@ -11,7 +11,7 @@
             </span>
         </v-card-text>
         <v-card-actions>
-            <v-btn text color="red" @click="viewLeaderboard(quiz.key)">View Leaderboard</v-btn>
+            <v-btn text color="blue" @click="viewLeaderboard(quiz.key)">View Leaderboard</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -30,7 +30,10 @@
         },
         methods: {
             viewLeaderboard(quizKey) {
-                this.$db.ref('/Quizs/' + quizKey); // something to open up a new leaderboard
+                this.$db.ref('/Leaderboards' + quizKey);
+                // something to open up a new leaderboard
+                // find id of this quiz in the leaderboard
+                // render that leaderboard
             }
         }
     }
