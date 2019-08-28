@@ -24,7 +24,7 @@
     import QuizCard from "../components/quiz-card";
 
     export default {
-        name: "QuizResults",
+        name: "leaderboardselect",
         components: {QuizCard},
 
         beforeMount() {
