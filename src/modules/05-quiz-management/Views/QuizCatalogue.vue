@@ -43,8 +43,6 @@
         beforeMount(){
             this.getQuizzes();
         },
-        quizs: [],
-
 
         methods:{
             // getting snapshot of data from firebase

@@ -128,15 +128,13 @@
         },
 
         data: () => ({
-            items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+            items: ['Dark', 'Light', 'Colourful'],
             questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
             quizTitle: "",
             loading: false,
             validation: false,
             confirm: false,
             success: false,
-            images: false,
-            Cimage: false,
             description: "",
             img: "",
 
