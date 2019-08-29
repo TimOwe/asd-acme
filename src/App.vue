@@ -14,6 +14,8 @@
         <v-btn icon to="/quizcatalogue">
             <v-icon>mdi-format-list-bulleted-square</v-icon>
         </v-btn>
+        <div class="flex-grow-1"></div>
+        <span class="font-weight-light" style="font-size: large"> {{fname}} {{lname}}</span>
     </v-app-bar>
 
 
@@ -28,10 +30,12 @@
 export default {
   name: 'App',
   created(){
-
+      this.fname = (this.$cookies.get('user')).fname;
+      this.lname = (this.$cookies.get('user')).lname;
     },
   data: () => ({
-    //
+      fname: '',
+      lname: ''
   }),
 };
 </script>

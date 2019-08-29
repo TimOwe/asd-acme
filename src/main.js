@@ -19,9 +19,13 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
+var VueCookies = require('vue-cookies')
+
 Vue.prototype.$db = db;
 
 Vue.config.productionTip = false;
+
+Vue.use(VueCookies);
 
 export default new Vue({
   router,

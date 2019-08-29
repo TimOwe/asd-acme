@@ -48,6 +48,7 @@
                 if(auth.user !== undefined){
                     this.login ="Login Successful";
                     this.error = '';
+                    this.$cookies.set('user', auth.user, '1d');
                 }
                 else {
                     this.error = "An error has occurred - User does not exist";
