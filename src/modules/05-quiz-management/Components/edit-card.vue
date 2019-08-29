@@ -43,7 +43,7 @@
                 <v-container grid-list-md>
                     <v-card-actions class="center">
                         <v-spacer></v-spacer>
-                        <v-btn v-if="index+1==questionBank.length" color="white" @click="$emit('closeEdit')">Close</v-btn>
+                        <v-btn v-if="index+1==questionBank.length" color="white" @click="$emit('closeEdit')">Cancel</v-btn>
                         <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Update Quiz</v-btn>
                     </v-card-actions>
                 </v-container>

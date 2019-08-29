@@ -23,7 +23,7 @@
                                         label="Select"
                                         return-object
                                         single-line
-                                >{{items.url}}</v-select>
+                                ></v-select>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -35,7 +35,7 @@
                                     <v-layout justify-center>
                                         <v-flex xs8>
                                             <v-text-field v-model="question.q" label="Question:"></v-text-field>
-                                            <v-text-field v-model="question.score" label="Score:"></v-text-field>
+                                            <v-text-field v-model.number="question.score" label="Score:" type="number"></v-text-field>
                                         </v-flex>
                                     </v-layout>
                                     <v-layout justify-center>
@@ -49,12 +49,13 @@
                                 </v-container>
                                 <v-card-actions>
                                     <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
-                                    <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: '', score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
+                                    <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: [0,0,0,0], score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
                                 </v-card-actions>
                             </v-card>
                             <v-container grid-list-md>
                                 <v-card-actions class="center">
                                     <v-spacer></v-spacer>
+                                    <v-btn v-if="index+1==questionBank.length" color="white" to="/quizcatalogue">Cancel</v-btn>
                                     <v-btn v-if="index+1==questionBank.length" color="blue" @click="confirm=true">Publish Quiz</v-btn>
                                 </v-card-actions>
                             </v-container>
@@ -65,6 +66,7 @@
                             <v-card-title>
                                 Confirm Quiz Publish
                             </v-card-title>
+                            <v-card-text>Would you like to submit and publish your quiz?</v-card-text>
                             <v-card-actions>
                                 <v-layout>
                                     <v-btn color="green" @click="saveQuiz">Publish</v-btn>
@@ -87,6 +89,19 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+                    <v-dialog width=350 v-model="validation">
+                        <v-card>
+                            <v-card-title>
+                                Please Fill Out All Fields Before Publishing
+                            </v-card-title>
+                            <v-card-text>Please check and ensure that every field has been filled out before publishing</v-card-text>
+                            <v-card-actions>
+                                <v-layout>
+                                    <v-btn color="red" @click="validation = false">Close</v-btn>
+                                </v-layout>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                     <v-overlay :value="loading">
                         <v-progress-circular indeterminate size="64"></v-progress-circular>
                     </v-overlay>
@@ -97,16 +112,23 @@
 </template>
 
 <script>
+
     export default {
         methods:{
             saveQuiz(){
                 this.loading = true;
-                this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
-                this.confirm = false;
-                setTimeout(() => {
+                if(this.validCheck()) {
+                        this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
+                        this.confirm = false;
+                        setTimeout(() => {
+                            this.loading = false;
+                            this.success = true;
+                        }, 2000);
+                }else {
+                    this.confirm = false;
                     this.loading = false;
-                    this.success = true;
-                }, 2000);
+                    this.validation = true;
+                }
             },
             removeQuestion(index){
                 this.questionBank.splice(index,1);
@@ -116,6 +138,24 @@
                 this.quizTitle = '';
                 this.description = '';
                 this.questionBank = [{q: "", a: [], c: [0,0,0,0], score: ""}];
+            },
+            validCheck(){
+                var titleCheck = this.quizTitle !== '';
+                var imageCheck = this.img !== '';
+                var questionCheck = true;
+
+                this.questionBank.forEach(question => {
+                    if(question.q !== '' && question.c.length !== 4 && question.score !== ''){
+                        for(var i=0;i<4;i++){
+                            if(question.a[i] === '' || question.a[i] === undefined){
+                                questionCheck = false;
+                            }
+                        }
+                    } else {
+                        questionCheck = false;
+                    }
+                });
+                return titleCheck && questionCheck && imageCheck;
             },
             newQuiz(quiz_title, questions, owner_id, img, description){
                 var Quiz = {
@@ -140,6 +180,7 @@
             quizTitle: "",
             loading: false,
             validation: false,
+            scoreValidation: false,
             confirm: false,
             success: false,
             description: "",
