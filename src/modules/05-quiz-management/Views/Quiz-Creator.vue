@@ -13,35 +13,35 @@
                     <v-container grid-list-md>
                         <v-layout justify-center align-center>
                             <v-flex xs7>
-                                <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
-                                <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
-                                <v-select v-model="img" :items="items" item-text="name" item-value="url" label="Select" return-object single-line></v-select>
+                                <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle"></v-text-field>
+                                <v-text-field v-model="description" outlined shaped label="Quiz Description" name="quizdescription"></v-text-field>
+                                <v-select name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select" return-object single-line></v-select>
                             </v-flex>
                         </v-layout>
                     </v-container>
                     <v-flex v-for="(question,index) in questionBank" :key="question.id">
                         <v-container>
-                            <v-card>
+                            <v-card name="questioncard">
                                 <v-card-title class="justify-center">Question {{index+1}}</v-card-title>
                                 <v-container grid-md-list>
                                     <v-layout justify-center>
                                         <v-flex xs8>
-                                            <v-text-field v-model="question.q" label="Question:"></v-text-field>
-                                            <v-text-field v-model.number="question.score" label="Score:" type="number"></v-text-field>
+                                            <v-text-field v-model="question.q" label="Question:" :name="'q'+index+'questionname'"></v-text-field>
+                                            <v-text-field v-model.number="question.score" label="Score:" type="number" :name="'q'+index+'questionscore'"></v-text-field>
                                         </v-flex>
                                     </v-layout>
                                     <v-layout justify-center>
                                         <v-flex xs2 v-for="(n,i) in 4" :key="n">
-                                            <v-radio-group xs2 v-model="question.c" >
-                                            <v-text-field v-model="question.a[i]" :label="'Answer #'+ n"></v-text-field>
-                                            <v-radio label="" :value="i"></v-radio>
+                                            <v-radio-group xs2 v-model="question.c" name="radiogroup">
+                                            <v-text-field v-model="question.a[i]" :label="'Answer #'+ n" :name="'q'+index+'Answer #'+ n"></v-text-field>
+                                            <v-radio label="" :name="'q'+index+'checkAnswer #'+ n" :value="i">{{i}}</v-radio>
                                         </v-radio-group>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                                 <v-card-actions>
-                                    <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
-                                    <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: [0,0,0,0], score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
+                                    <v-btn v-if="index!=0" fab top right absolute color="red" :name="'q'+index+'delete'" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
+                                    <v-btn name="addQuestion" v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: [0,0,0,0], score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
                                 </v-card-actions>
                             </v-card>
                             <v-container grid-list-md>

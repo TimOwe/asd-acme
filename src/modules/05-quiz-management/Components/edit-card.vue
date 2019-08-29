@@ -150,7 +150,7 @@
             newimg(){
                 for(var i=0;i<3;i++) {
                     if (this.items[i].url === this.selectedImg) {
-                        this.img = this.selectedImg;
+                        this.img = this.items[i];
                     }
                 }
 
