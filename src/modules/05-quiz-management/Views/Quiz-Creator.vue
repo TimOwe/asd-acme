@@ -15,15 +15,7 @@
                             <v-flex xs7>
                                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                                 <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
-                                <v-select
-                                        v-model="img"
-                                        :items="items"
-                                        item-text="name"
-                                        item-value="url"
-                                        label="Select"
-                                        return-object
-                                        single-line
-                                ></v-select>
+                                <v-select v-model="img" :items="items" item-text="name" item-value="url" label="Select" return-object single-line></v-select>
                             </v-flex>
                         </v-layout>
                     </v-container>

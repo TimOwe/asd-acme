@@ -11,7 +11,7 @@
             <v-flex xs7>
                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
                 <v-text-field v-model="description" outlined shaped label="Quiz Description"></v-text-field>
-
+                <v-select v-model="img" :items="items" item-text="name" item-value="url" label="Select" return-object single-line></v-select>
             </v-flex>
         </v-layout>
         </v-container>
@@ -23,7 +23,7 @@
                         <v-layout justify-center>
                             <v-flex xs8>
                                 <v-text-field v-model="question.q" label="Question:"></v-text-field>
-                                <v-text-field v-model="question.score" label="Score:"></v-text-field>
+                                <v-text-field v-model.number="question.score" label="Score:" type="number"></v-text-field>
                             </v-flex>
                         </v-layout>
                         <v-layout justify-center>
@@ -37,7 +37,7 @@
                     </v-container>
                     <v-card-actions>
                         <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
-                        <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: '', score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
+                        <v-btn v-if="index+1==questionBank.length" fab bottom left absolute color="green" @click="questionBank.push({q: '', a: [], c: [0,0,0,0], score: ''})"><v-icon>mdi-plus</v-icon></v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-container grid-list-md>
@@ -78,6 +78,20 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog width=350 v-model="validation">
+            <v-card>
+                <v-card-title>
+                    Please Fill Out All Fields Before Publishing
+                </v-card-title>
+                <v-card-text>Please check and ensure that every field has been filled out before publishing</v-card-text>
+                <v-card-actions>
+                    <v-layout>
+                        <v-btn color="red" @click="validation = false">Close</v-btn>
+                    </v-layout>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
@@ -87,14 +101,18 @@
 
 <script>
     export default {
+
         name: "edit-card",
         props: {
             quiz: Object,
-            img: String,
+            selectedImg: String,
             quizTitle: String,
             description: String,
             owner: String,
             questionBank: Array,
+        },
+        beforeMount(){
+            this.newimg();
         },
         methods: {
             deleteQuiz(quizKey) {
@@ -102,18 +120,58 @@
             },
             saveQuiz(){
                 this.loading = true;
-                this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', 'testimage.jpg', this.description);
-                this.confirm = false;
-                setTimeout(() => {
+                if(this.validCheck()) {
+                    this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
+                    this.confirm = false;
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.success = true;
+                    }, 2000);
+                }else {
+                    this.confirm = false;
                     this.loading = false;
-                    this.success = true;
-                }, 2000);
+                    this.validation = true;
+                }
+            },
+            selectImg(){
+
+                for(var i=0;i<3;i++) {
+                    if (this.items[i].url === this.img) {
+                        this.selectedImg = this.img;
+                    }
+                }
             },
             updateQuiz(quiz_title, questions, owner_id, img, description){
                 this.$db.ref('/Quizs/'+this.quiz.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
             },
             removeQuestion(index){
                 this.questionBank.splice(index,1);
+            },
+            newimg(){
+                for(var i=0;i<3;i++) {
+                    if (this.items[i].url === this.selectedImg) {
+                        this.img = this.selectedImg;
+                    }
+                }
+
+            },
+            validCheck(){
+                var titleCheck = this.quizTitle !== '';
+                var imageCheck = this.img !== '';
+                var questionCheck = true;
+
+                this.questionBank.forEach(question => {
+                    if(question.q !== '' && question.c.length !== 4 && question.score !== ''){
+                        for(var i=0;i<4;i++){
+                            if(question.a[i] === '' || question.a[i] === undefined){
+                                questionCheck = false;
+                            }
+                        }
+                    } else {
+                        questionCheck = false;
+                    }
+                });
+                return titleCheck && questionCheck && imageCheck;
             },
             triggerClose(){
                 this.$emit('closeEdit');
@@ -123,6 +181,13 @@
             success: false,
             confirm: false,
             loading: false,
+            validation: false,
+            img: '',
+            items: [
+                { name: 'Dark', url: 'https://imgur.com/c7txWI3.png' },
+                { name: 'Light', url: 'https://imgur.com/taxTHeY.jpg' },
+                { name: 'Colourful', url: 'https://imgur.com/zmxFPdu.jpg' },
+            ],
         }),
     }
 </script>

@@ -16,7 +16,7 @@
             <v-btn text color="red" @click="deleteConfirm=true">Delete</v-btn>
         </v-card-actions>
         <v-dialog width=auto persistent v-model="edit">
-            <edit-card v-on:closeEdit="closeEdit" :quiz="quiz" img="quiz.img" :quizTitle="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questionBank="quiz.questions"></edit-card>
+            <edit-card v-on:closeEdit="closeEdit" :quiz="quiz" :selectedImg="quiz.img" :quizTitle="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questionBank="quiz.questions"></edit-card>
         </v-dialog>
         <v-dialog width=350 v-model="deleteConfirm">
             <v-card>
