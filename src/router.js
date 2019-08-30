@@ -8,11 +8,12 @@ import Users from './modules/03-user-administration/views/Users.vue'
 import Results from './modules/11-user-results/views/Results';
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
+import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
 import Host from './modules/07-Host-Game/Views/Host';
-import Live from './modules/07-Host-Game/Views/Live'
 import HostCL from './modules/07-Host-Game/Views/HostCL'
 import Join from './modules/07-Host-Game/Views/Join'
-
+import Live from './modules/07-Host-Game/Views/Live';
+import Logout from './modules/01-User-Accounts/Views/LogedOut';
 
 Vue.use(Router);
 
@@ -35,10 +36,20 @@ const router = new Router({
         name: 'quizcatalogue',
         component: QuizCatalogue
     },
+      {
+          path: '/quiz-creator',
+          name: 'quiz-creator',
+          component: QuizCreator
+      },
     {
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/logout',
+        name: 'Logout',
+        component: Logout
     },
     {
       path: '/quizs',

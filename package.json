@@ -17,6 +17,7 @@
     "js-md5": "^0.7.3",
     "md5": "^2.2.1",
     "vue": "^2.6.10",
+    "vue-cookies": "^1.5.13",
     "vue-router": "^3.1.2",
     "vuetify": "^2.0.0"
   },
@@ -25,6 +26,7 @@
     "@vue/cli-plugin-eslint": "^3.10.0",
     "@vue/cli-service": "^3.10.0",
     "babel-eslint": "^10.0.1",
+    "cypress": "^3.4.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.17.4",
