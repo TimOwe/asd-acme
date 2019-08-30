@@ -15,7 +15,14 @@
             <v-icon>mdi-format-list-bulleted-square</v-icon>
         </v-btn>
         <div class="flex-grow-1"></div>
-        <span class="font-weight-light" style="font-size: large"> {{fname}} {{lname}}</span>
+        <div v-if="this.$cookies.isKey('user')">
+                <v-btn text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
+        </div>
+        <div v-else>
+            <v-menu open-on-hover>
+                <v-btn to="/login" text class="font-weight-light" style="font-size: medium ">Login</v-btn>
+            </v-menu>
+        </div>
     </v-app-bar>
 
 
@@ -30,12 +37,8 @@
 export default {
   name: 'App',
   created(){
-      this.fname = (this.$cookies.get('user')).fname;
-      this.lname = (this.$cookies.get('user')).lname;
     },
   data: () => ({
-      fname: '',
-      lname: ''
   }),
 };
 </script>
