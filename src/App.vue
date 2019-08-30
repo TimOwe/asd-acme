@@ -35,3 +35,9 @@ export default {
   }),
 };
 </script>
+
+<style>
+    .v-dialog {
+        overflow-y: visible !important;
+    }
+</style>
