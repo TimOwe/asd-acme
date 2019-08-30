@@ -16,12 +16,13 @@
         </v-btn>
         <div class="flex-grow-1"></div>
         <div v-if="this.$cookies.isKey('user')">
-                <v-btn text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
+            <v-btn text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
+            <v-btn to="/logout" text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
         </div>
         <div v-else>
-            <v-menu open-on-hover>
-                <v-btn to="/login" text class="font-weight-light" style="font-size: medium ">Login</v-btn>
-            </v-menu>
+            <v-btn to="/login" text class="font-weight-light" style="font-size: medium ">Login</v-btn>
+        </div>
+        <div>
         </div>
     </v-app-bar>
 

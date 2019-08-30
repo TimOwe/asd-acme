@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire">
+    <v-app id="inspire" app>
         <v-content>
             <v-container>
                 <login-register-card></login-register-card>
