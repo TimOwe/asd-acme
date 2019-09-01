@@ -1,5 +1,5 @@
 import { createLocalVue, shallowMount } from "@vue/test-utils";
-import QCard from "../src/modules/09-game-playing/components/question-card.vue";
+import QCard from "../../src/modules/09-game-playing/components/question-card.vue";
 
 describe("Question Card", () => {
     it("Answer Questions correctly", () => {
