@@ -4,11 +4,11 @@
             <v-layout class="subheading font-weight-bold justify-center align-center pb-5">Sign In</v-layout>
             <v-layout row justify-center align-center>
                 <v-flex xs4>
-                    <v-text-field v-model="logEmail" label="Email"></v-text-field>
+                    <v-text-field name="logemail" v-model="logEmail" label="Email"></v-text-field>
                     <!-- v-model is data binding -->
                 </v-flex>
                 <v-flex xs4>
-                    <v-text-field v-model="logPass" label="Password" type="password"></v-text-field>
+                    <v-text-field name="logpass" v-model="logPass" label="Password" type="password"></v-text-field>
                 </v-flex>
             </v-layout>
             <v-layout row justify-center align-center>
@@ -21,13 +21,8 @@
             </v-layout>
             <v-layout row justify-center align-center>
                 <span style="font-size:16px; color: red">{{error}}</span>
-                <span style="font-size:16px; color: green">{{login}}</span>
             </v-layout>
         </v-container>
-
-        <v-overlay :value="loading">
-            <v-progress-circular indeterminate size="64"></v-progress-circular>
-        </v-overlay>
 
         <v-dialog v-model="registerDialog" persistent max-width="600px">
         <RegisterCard @close="Updatereg"></RegisterCard>
@@ -46,11 +41,11 @@
             async handleLogin(){
                 var auth = await this.auth(this.logEmail, this.logPass)
                 if(auth.user !== undefined){
-                    this.login ="Login Successful";
-                    this.error = '';
+                    this.$cookies.set('user', auth.user, '1d');
+                    this.$router.push('/')
                 }
                 else {
-                    this.error = "An error has occurred - User does not exist";
+                    this.error = "Username or Password is Incorrect";
                     this.login='';
                 }
             },
@@ -97,11 +92,9 @@
         data() {
             return {
                 registerDialog:false,
-                loading:false,
                 logEmail: '',
                 logPass: '',
                 error: '',
-                login: '',
             }
 
         }

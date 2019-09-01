@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "npm run build && firebase --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn && firebase deploy --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn"
+    "deploy": "npm run build && firebase --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn && firebase deploy --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn",
+    "test:unit": "vue-cli-service test:unit --silent"
   },
   "dependencies": {
     "core-js": "^2.6.5",
@@ -17,14 +18,19 @@
     "js-md5": "^0.7.3",
     "md5": "^2.2.1",
     "vue": "^2.6.10",
+    "vue-cookies": "^1.5.13",
     "vue-router": "^3.1.2",
     "vuetify": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-plugin-unit-jest": "^3.11.0",
     "@vue/cli-service": "^3.10.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
     "cypress": "^3.4.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -46,7 +52,17 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "postcss": {
     "plugins": {
