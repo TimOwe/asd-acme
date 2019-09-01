@@ -19,9 +19,9 @@ describe('Register', function () {
         cy.get('button').contains('Log-In').click();
     })
     it('Delete user', function () {
-        cy.wait(500);
+        cy.wait(1000);
         cy.get('[name="settings"]').click();
-        cy.wait(500);
+        cy.wait(1000);
         cy.get('button').contains('Delete Account').click();
         cy.url().should('eq', 'http://localhost:8080/')
     })
