@@ -14,7 +14,7 @@
                 this.$cookies.remove('user')
                 setTimeout(()=>{
                     this.$router.push('/')
-                },4000)
+                },3000)
             }
            else{
                 this.$router.push('/')
