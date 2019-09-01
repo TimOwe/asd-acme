@@ -1,11 +1,9 @@
 <template>
-    <v-app id="inspire" app>
         <v-content>
             <v-container>
                 <login-register-card></login-register-card>
             </v-container>
         </v-content>
-    </v-app>
 </template>
 
 <script>

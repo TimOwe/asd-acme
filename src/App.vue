@@ -18,6 +18,9 @@
         <div v-if="this.$cookies.isKey('user')">
             <v-btn text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
             <v-btn to="/logout" text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
+            <v-btn icon to="/settings">
+                <v-icon>mdi-settings</v-icon>
+            </v-btn>
         </div>
         <div v-else>
             <v-btn to="/login" text class="font-weight-light" style="font-size: medium ">Login</v-btn>

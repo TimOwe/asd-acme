@@ -12,6 +12,7 @@ import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
 import Host from './modules/07-Host-Game/Views/Host';
 import Live from './modules/07-Host-Game/Views/Live';
 import Logout from './modules/01-User-Accounts/Views/LogedOut';
+import Settings from './modules/01-User-Accounts/Views/Settings';
 
 Vue.use(Router);
 
@@ -48,6 +49,11 @@ const router = new Router({
         path: '/logout',
         name: 'Logout',
         component: Logout
+    },
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: Settings
     },
     {
       path: '/quizs',

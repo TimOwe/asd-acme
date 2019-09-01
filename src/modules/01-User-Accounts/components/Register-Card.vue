@@ -31,7 +31,7 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeRegister()">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="closePasswordChange()">Close</v-btn>
             <v-btn color="blue darken-1" text @click="handleRegister()">Save</v-btn>
         </v-card-actions>
 
@@ -85,7 +85,7 @@
                 this.password = '';
             },
 
-            closeRegister(){
+            closePasswordChange(){
                 this.$emit('close')
             },
 
