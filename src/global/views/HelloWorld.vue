@@ -9,9 +9,6 @@
         <h1 class="display-2 font-weight-bold mb-3">
           Welcome to Acme!
         </h1>
-        <p class="subheading font-weight-regular">
-         This is a prototype website for release 0
-        </p>
         <p>
         <v-btn to="/login">
           01 User Accounts

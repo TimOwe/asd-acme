@@ -27,6 +27,9 @@
                 <v-card-text>
                     <v-layout justify-center class="headline pt-3">{{lastToken}}</v-layout>
                 </v-card-text>
+                <v-card-actions>
+                    <v-btn fab absolute bottom right @click="$router.push('/host/'+lastToken)"><v-icon>mdi-arrow-right</v-icon></v-btn>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>
@@ -48,11 +51,16 @@
             })
         },
         methods:{
-            Session(quiz,host,meta){
+            Session(quizkey,host,meta){
                 this.lastToken = this.newToken();
+                var quiz;
+                this.$db.ref('/Quizs/'+quizkey).once('value', (snap) => {
+                    quiz = snap.val();
+                });
                 return {
                     owner_id: host,
-                    quiz_id: quiz,
+                    quiz_id: quizkey,
+                    quiz: quiz,
                     max_ppl: meta.max,
                     max_time_pq: meta.tlimit,
                     timestart: new Date().toString(),
@@ -69,8 +77,8 @@
                 });
                 this.dialog=true
             },
-            startSession(quiz,host, meta){
-                var newSession = this.Session(quiz,host,meta);
+            startSession(quizkey,host, meta){
+                var newSession = this.Session(quizkey,host,meta);
                 this.$db.ref('/Sessions').push(newSession)
             },
             newToken(){

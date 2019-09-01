@@ -45,7 +45,7 @@ export default {
     colourStyle: "blue",
     feedbackBar: true,
     feedbackText: "",
-    isAnswered: false,
+    isAnswered: false
   }),
   methods: {
     answer: function(a) {
@@ -57,7 +57,7 @@ export default {
       }
       this.colourStyle = "red";
       this.$emit("answer", false, 0);
-      this.feedbackText = `Incorrect!`;
+      this.feedbackText = "Incorrect!";
     },
     add: function(i) {
       return i + 1;
