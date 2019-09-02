@@ -107,7 +107,9 @@
 
     export default {
         methods:{
-            saveQuiz(){
+            saveQuiz: function () {
+
+
                 this.loading = true;
                 if(this.validCheck()) {
                         this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
