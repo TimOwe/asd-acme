@@ -92,6 +92,16 @@ Core.Session = function(quizkey,host,meta){
 
 };
 
+Core.getQuizFromSession = function(token){
+    return {
+        'quiz_title': 'test',
+        'questions': [1,2,3]
+    }
+};
+Core.getSessions = function(){
+    return [1,2,3]
+};
+
 Core.startSession = function(quizkey,host, meta){
     var newSession = this.Session(quizkey,host,meta);
     this.$db.ref('/Sessions').push(newSession)
@@ -110,16 +120,6 @@ Core.getSessionCodes = function(){
 };
 
 
-Core.getQuizFromSession = function(token){
-    return {
-        'quiz_title': 'test',
-        'questions': [1,2,3]
-    }
-};
-Core.getSessions = function(){
-    return [1,2,3]
-};
-
 var sessionsPopulatedTest = new $Test;
 var getQuizFromSessionTest = new $Test;
 var createNewSessionTest = new $Test;
@@ -129,7 +129,7 @@ sessionsPopulatedTest
     .whenI('Check if exisiting sessions are being populated')
     .using(Core.getSessions)
     .IShouldGet((array) => {
-        return array.length > 0
+        return array.length > 0;
     })
     .print();
 
