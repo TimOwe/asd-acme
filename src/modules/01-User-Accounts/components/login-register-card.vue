@@ -39,17 +39,22 @@
         components: {RegisterCard},
         methods:{
             async handleLogin(){
-                var auth = await this.auth(this.logEmail, this.logPass)
+                var auth = await this.auth(this.logEmail, this.logPass);
                 if(auth.user !== undefined){
                     this.$cookies.set('user', auth.user, '1d');
-                    this.$router.push('/')
-                }
-                else {
+                    this.addLog(auth.user.key,'Log In');
+                    this.$router.push('/');
+                } else {
                     this.error = "Username or Password is Incorrect";
                     this.login='';
                 }
             },
-
+            addLog(userKey,logType){
+                this.$db.ref('/Users/'+userKey+'/Logs').push({
+                    time: new Date().toISOString(),
+                    type: logType
+                })
+            },
             async auth(email, password) {
 
                 var authObj = {},
@@ -64,6 +69,7 @@
                     }
                 });
                 authObj.user = matched[0];
+
                 return authObj
             },
 

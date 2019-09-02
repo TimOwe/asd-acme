@@ -11,7 +11,7 @@
     export default {
         created() {
             if(this.$cookies.isKey('user')){
-                this.$cookies.remove('user')
+                this.$cookies.remove('user');
                 setTimeout(()=>{
                     this.$router.push('/')
                 },3000)
