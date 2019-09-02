@@ -37,16 +37,14 @@
     export default {
         name: "QuizCatalogue",
         components: {QuizCard},
-
-
         // grabbing all data on page render
-        beforeMount(){
+        beforeMount: function(){
             this.getQuizzes();
         },
 
         methods:{
             // getting snapshot of data from firebase
-            getQuizzes(){
+            getQuizzes: function(){
                 this.$db.ref('/Quizs').on('value', (snap) => {
                     // clear current results array each time method is called
                     this.quizs = [];

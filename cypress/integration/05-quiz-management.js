@@ -52,6 +52,7 @@ describe('Creating a Quiz', function() {
   })
 
   it('Delete third question', function() {
+    cy.wait(800)
     cy.get('[name="q2delete"]').click()
     cy.wait(500)
   })

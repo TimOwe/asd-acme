@@ -108,8 +108,6 @@
     export default {
         methods:{
             saveQuiz: function () {
-
-
                 this.loading = true;
                 if(this.validCheck()) {
                         this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
@@ -124,16 +122,16 @@
                     this.validation = true;
                 }
             },
-            removeQuestion(index){
+            removeQuestion: function(index){
                 this.questionBank.splice(index,1);
             },
-            clearScreen(){
+            clearScreen: function(){
                 this.success = false;
                 this.quizTitle = '';
                 this.description = '';
                 this.questionBank = [{q: "", a: [], c: [0,0,0,0], score: ""}];
             },
-            validCheck(){
+            validCheck: function(){
                 var titleCheck = this.quizTitle !== '';
                 var imageCheck = this.img !== '';
                 var questionCheck = true;
@@ -151,7 +149,7 @@
                 });
                 return titleCheck && questionCheck && imageCheck;
             },
-            newQuiz(quiz_title, questions, owner_id, img, description){
+            newQuiz: function(quiz_title, questions, owner_id, img, description){
                 var Quiz = {
                     quiz_title,
                     questions,

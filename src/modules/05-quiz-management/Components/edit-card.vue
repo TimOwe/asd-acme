@@ -1,12 +1,14 @@
 <template>
-    <v-card>
+    <v-row>
+        <v-col>
+    <v-card class="mx-auto">
         <v-toolbar flat>
             <v-btn icon @click="$emit('closeEdit')">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-toolbar-title class="text-center, display-1">Edit Quiz</v-toolbar-title>
         </v-toolbar>
-        <v-container>
+        <v-container grid-list-md>
         <v-layout justify-center align-center>
             <v-flex xs7>
                 <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title"></v-text-field>
@@ -49,7 +51,6 @@
                 </v-container>
             </v-container>
         </v-flex>
-
         <v-dialog width=350 v-model="confirm">
             <v-card>
                 <v-card-title>
@@ -95,8 +96,9 @@
         <v-overlay :value="loading">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
-
     </v-card>
+        </v-col>
+    </v-row>
 </template>
 
 <script>
@@ -111,14 +113,11 @@
             owner: String,
             questionBank: Array,
         },
-        beforeMount(){
-            this.newimg();
+        beforeMount: function(){
+            this.newImg();
         },
         methods: {
-            deleteQuiz(quizKey) {
-                this.$db.ref('/Quizs/' + quizKey).remove();
-            },
-            saveQuiz(){
+            saveQuiz: function(){
                 this.loading = true;
                 if(this.validCheck()) {
                     this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
@@ -133,21 +132,13 @@
                     this.validation = true;
                 }
             },
-            selectImg(){
-
-                for(var i=0;i<3;i++) {
-                    if (this.items[i].url === this.img) {
-                        this.selectedImg = this.img;
-                    }
-                }
-            },
-            updateQuiz(quiz_title, questions, owner_id, img, description){
+            updateQuiz: function(quiz_title, questions, owner_id, img, description){
                 this.$db.ref('/Quizs/'+this.quiz.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
             },
-            removeQuestion(index){
+            removeQuestion: function(index){
                 this.questionBank.splice(index,1);
             },
-            newimg(){
+            newImg: function(){
                 for(var i=0;i<3;i++) {
                     if (this.items[i].url === this.selectedImg) {
                         this.img = this.items[i];
@@ -155,7 +146,7 @@
                 }
 
             },
-            validCheck(){
+            validCheck: function(){
                 var titleCheck = this.quizTitle !== '';
                 var imageCheck = this.img !== '';
                 var questionCheck = true;
@@ -173,7 +164,7 @@
                 });
                 return titleCheck && questionCheck && imageCheck;
             },
-            triggerClose(){
+            triggerClose: function(){
                 this.$emit('closeEdit');
             },
         },

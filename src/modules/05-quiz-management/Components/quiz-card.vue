@@ -50,10 +50,9 @@
             description: String,
             owner: String,
             questions: Array,
-            //key: String
         },
         methods: {
-            deleteQuiz(quizKey) {
+            deleteQuiz: function(quizKey) {
                 this.deleteConfirm = false;
                 this.loading = true;
                 setTimeout(() => {
@@ -61,7 +60,7 @@
                     this.$db.ref('/Quizs/' + quizKey).remove();
                 }, 2000);
             },
-            closeEdit(){
+            closeEdit: function(){
                 this.edit=false;
                 this.$emit('refresh');
             },
