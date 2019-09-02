@@ -15,11 +15,12 @@
         </div>
 
         <div v-else-if="render === 'question'">
-          <v-slide-x-transition mode="out-in">
+          <v-slide-x-transition group mode="out-in">
             <question-card
               @answer="onAnswer"
-              v-for="question in questions"
-              v-bind:key="question.q"
+              v-for="(question, i) in questions"
+              v-bind:key="add(i)"
+              v-bind:index="i"
               v-bind:questionText="question.q"
               v-bind:answers="question.a"
               v-bind:correct="question.c"
@@ -63,9 +64,11 @@ export default {
     answer: null,
     game: null,
     quiz: null,
-    questions: null,
+    questions: [],
     showFeedback: false,
-    feedbackText: null
+    feedbackText: null,
+    sTime: null,
+    eTime: null
   }),
   methods: {
     // Creates a player, pushes to db
@@ -95,6 +98,8 @@ export default {
         if (code === session.child("token").val()) {
           this.game = session.key;
           let quiz;
+          let sTime;
+          let eTime;
           // If so, push the player to the session's document
           db.ref("Sessions/" + this.game)
             .child("players")
@@ -102,7 +107,11 @@ export default {
           // Get the ID of the quiz in this session
           db.ref("Sessions/" + this.game).once("value", function(snapshot) {
             quiz = snapshot.val().quiz_id;
+            sTime = snapshot.val().timestart;
+            eTime = snapshot.val().timeend;
           });
+          this.sTime = sTime;
+          this.eTIme = eTime;
           this.quiz = quiz;
           this.render = "question";
           this.getQuestions();
@@ -120,13 +129,21 @@ export default {
             q: data.val().q,
             a: data.val().a,
             c: data.val().c,
-            score: data.val().score
+            score: data.val().score,
+            selected: ''
           });
         });
       });
       this.questions = questions;
     },
-    onAnswer: function(correct, points) {
+    onAnswer: function(correct, points, qText, ans) {
+      var newQuestions = this.questions.map(q => {
+                  if((q.q == qText) && (q.c == correct))
+                     return Object.assign({}, q, {selected:ans})
+                  return q
+              });
+      this.questions = newQuestions;
+
       if (correct) {
         this.score += points;
         const ref = this.$db.ref("Players/" + this.player);
@@ -140,6 +157,24 @@ export default {
     },
     finishQuiz: function() {
       this.render = "scoreboard";
+      if (this.$cookies.isKey("user")) {
+        this.pushResults();
+      }
+    },
+    pushResults: function() {
+      const ref = this.$db.ref(
+        "Users/" + this.$cookies.get("user").key + "/results/"
+      );
+      ref.push({
+        quizId: this.quiz,
+        questions: this.questions,
+        time_start: this.sTime,
+        time_end: this.eTime,
+        score: this.score
+      });
+    },
+    add: function(i) {
+      return i + 1;
     }
   }
 };
