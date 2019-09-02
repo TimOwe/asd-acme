@@ -8,7 +8,7 @@
       <v-btn icon to="/game">
           <v-icon>mdi-gamepad-square</v-icon>
       </v-btn>
-        <v-btn icon to="/leaderboard">
+        <v-btn icon to="/leaderboardselect">
             <v-icon>mdi-trophy</v-icon>
         </v-btn>
         <v-btn icon to="/quizcatalogue">

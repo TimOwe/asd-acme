@@ -9,7 +9,7 @@
                 <v-container fluid>
                     <v-row>
                         <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
-                            <quiz-card :quiz="quiz" img="quiz.img"
+                            <quiz-card :quiz="quiz" :img="quiz.img"
                                        :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id"
                                        :questions="quiz.questions" :key="quiz.key"></quiz-card>
                         </v-col>
@@ -22,19 +22,15 @@
 
 <script>
     import QuizCard from "../components/quiz-card";
-
     export default {
         name: "leaderboardselect",
         components: {QuizCard},
-
         beforeMount() {
             this.getQuizzes();
         },
-
         data: () => ({
             quizs: []
         }),
-
         methods: {
             getQuizzes() {
                 let quizzes = [];

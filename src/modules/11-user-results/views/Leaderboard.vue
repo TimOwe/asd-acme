@@ -16,13 +16,12 @@
         </tr>
         </thead>
         <tbody>
-        <!-- display sortedresults array in table -->
-        <tr v-for="result in sortedResults">
+        <tr v-for="result in sortedResults" v-bind:key="result.rank">
             <td>{{ result.rank }}</td>
             <td>{{ result.user_key }}</td>
             <td>{{ result.calculatedName }}</td>
             <td>{{ result.score * 100 }}%</td>
-            <td>{{new Date(result.timeend - result.timestart).getSeconds()}}</td>
+            <td>{{ new Date(result.timeend - result.timestart).getSeconds() }}</td>
         </tr>
         </tbody>
     </v-simple-table>
@@ -39,24 +38,19 @@
         methods:{
             getLeaderboard: function(){
                 this.$db.ref('/Leaderboard').on('value', (snap) => {
-                    // clear current results array each time method is called
                     var results = [];
                     this.sortedResults = [];
-                    // convert firebase data entries into json
                     snap.forEach(entry => {
                         var entryObj = entry.val();
                         entryObj.key = entry.key;
-                        // push firebase data into results array
                         results.push(entryObj);
                     });
-                    // sort results by ascending order of score
                     this.sortedResults = results.sort((a,b) => b.score - a.score)
                     for(var i=0; i<this.sortedResults.length;i++){
                         this.sortedResults[i].rank = i+1;
                     }
                 });
             },
-            // function to push dummy data to firebase
             addTestData(){
                 this.testData.forEach(entry => {
                     this.$db.ref('/Leaderboard').push(entry);
@@ -66,14 +60,6 @@
                 return type === 'asc' ? this.sortedResults.sort((a,b) => b.score-a.score) : this.sortedResults.sort((a,b) => a.score-b.score);
             }
         },
-
-        // Function that gets User Results from DB
-            getUserResults() {
-                this.$db.ref('').on('value', (snap) => {
-
-                });
-            },
-        // dummy data
         data(){
             return {
                 testData: [{
@@ -106,9 +92,6 @@
                 sortedResults: [],
             }
         },
-        props: {
-
-        }
     }
 </script>
 
