@@ -8,7 +8,6 @@
              <v-layout justify-center class="pt-12">
                  <v-flex xs8>
                 <v-text-field v-model="code" label="Token Here"></v-text-field>
-                     {{sessions}}
                  </v-flex>
              </v-layout>
              <v-card-actions>
@@ -66,7 +65,13 @@
                         this.$router.push('/live/'+this.code);
                     },1500)
                 } else {
-                    setTimeout(() => {this.invalid = true;this.loading=false},2000)
+                    setTimeout(() => {
+                        this.invalid = true;
+                        setTimeout(() => {
+                            this.invalid = false;
+                        },1200);
+                        this.loading=false
+                    },2000)
                 }
             }
         }
