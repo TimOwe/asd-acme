@@ -7,22 +7,23 @@
             <v-container grid-list-md>
                 <v-layout wrap>
                     <v-flex xs12 sm6 md6>
-                        <v-text-field v-model="fname" label="First name" required></v-text-field>
+                        <v-text-field name="fname" v-model="fname" label="First name" required></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6 md6>
-                        <v-text-field  v-model="lname" label="Last name" required></v-text-field>
+                        <v-text-field name="lname" v-model="lname" label="Last name" required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field  v-model="email" label="Email" required></v-text-field>
+                        <v-text-field name="email" v-model="email" label="Email" required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field  v-model="password" label="Password" type="password" required></v-text-field>
+                        <v-text-field name="pass" v-model="password" label="Password" type="password" required></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-select
                                 v-model="age"
                                 :items="['0-17', '18-29', '30-54', '54+']"
-                                label="Age*"
+                                label="Age"
+                                name="age"
                                 required
                         ></v-select>
                     </v-flex>

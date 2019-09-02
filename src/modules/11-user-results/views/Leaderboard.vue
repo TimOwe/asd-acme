@@ -33,13 +33,11 @@
 <script>
     export default {
         name: "leaderboard",
-        // grabbing all data on page render
         beforeMount(){
-            this.getLeaderBoard();
+            this.getLeaderboard();
             },
         methods:{
-            // getting snapshot of data from firebase to populate leaderboard
-            getLeaderBoard(){
+            getLeaderboard: function(){
                 this.$db.ref('/Leaderboard').on('value', (snap) => {
                     // clear current results array each time method is called
                     var results = [];
