@@ -20,7 +20,7 @@
                 </v-flex>
             </v-layout>
             <v-layout row justify-center align-center>
-                <span style="font-size:16px; color: red">{{error}}</span>
+                <span name="error" style="font-size:16px; color: red">{{error}}</span>
             </v-layout>
         </v-container>
 
