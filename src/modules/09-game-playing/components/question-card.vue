@@ -10,7 +10,7 @@
           <v-icon dark large>mdi-alarm</v-icon>-->
         </v-card-title>
         <v-list>
-          <v-list-item-group v-model="selected">
+          <v-list-item-group>
             <div v-for="(ans, i) in answers" v-bind:key="ans">
               <v-divider></v-divider>
 
@@ -37,7 +37,8 @@ export default {
     questionText: String,
     answers: Array,
     correct: Number,
-    score: Number
+    score: Number,
+    index: Number
   },
   data: () => ({
     selected: null,
@@ -51,12 +52,12 @@ export default {
     answer: function(a) {
       this.isAnswered = true;
       if (a == this.correct) {
-        this.$emit("answer", true, this.score);
+        this.$emit("answer", true, this.score, this.questionText, a);
         this.colourStyle = "light-green";
         return;
       }
       this.colourStyle = "red";
-      this.$emit("answer", false, 0);
+      this.$emit("answer", false, 0, this.questionText, a);
       this.feedbackText = "Incorrect!";
     },
     add: function(i) {
