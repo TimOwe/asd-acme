@@ -1,8 +1,18 @@
 <template>
     <div>
-        <v-card>
-            <v-img :src="img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
-                <v-card-title class="align-end fill-height">{{quizTitle}}</v-card-title>
+        <v-container>
+            <v-toolbar flat>
+                <v-btn icon @click="onBackButton"><v-icon>mdi-arrow-left</v-icon></v-btn>
+                <v-toolbar-title class="text-center, headline">Quizzes</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn text color="grey darken-2"><v-icon size="35">mdi-play</v-icon></v-btn>
+                <v-btn text color="grey darken-2" @click.stop="edit=true" :quiz="quiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
+                <v-btn text color="grey darken-2" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
+            </v-toolbar>
+            <v-img :src="img" :aspect-ratio="16/9" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
+                <v-container align="end" class="lightbox white--text pa-2 fill-height">
+                <div class="display-4">{{quizTitle}}</div>
+                </v-container>
             </v-img>
 
             <v-card-text>
@@ -13,12 +23,14 @@
                 </span>
             </v-card-text>
 
-            <v-card-actions>
-                <v-btn text color="grey darken-2" @click="onViewButton"><v-icon>mdi-play</v-icon></v-btn>
-            </v-card-actions>
-        </v-card>
+            <v-card v-for="(question,index) in questions" :key="question.id">
+                <v-layout justify-center class="headline">Question {{index+1}}</v-layout>
+                <v-layout justify-center class="subtitle-1">{{question.q}}</v-layout>
 
-        <v-dialog persistent scrollable v-model="edit">
+            </v-card>
+        </v-container>
+
+        <v-dialog persistent scrollable fullscreen hide-overlay transition="dialog-bottom-transition" v-model="edit">
             <edit-card v-on:closeEdit="closeEdit" :quiz="quiz" ></edit-card>
         </v-dialog>
 
@@ -29,7 +41,7 @@
                 </v-card-title>
                 <v-card-text>Are you sure you want to delete this quiz?</v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout>
                         <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
                         <v-btn color="red" @click="deleteQuiz(quiz.key)">Delete</v-btn>
                     </v-layout>
@@ -66,15 +78,18 @@
                 setTimeout(() => {
                     this.loading = false;
                     this.$db.ref('/Quizs/' + quizKey).remove();
+                    this.$emit("catalogueView")
                 }, 2000);
+
             },
             closeEdit: function(){
                 this.edit=false;
                 this.$emit('refresh');
             },
-            onViewButton() {
-                this.$emit("quizView", this.quiz);
+            onBackButton() {
+                this.$emit("catalogueView");
             },
+
         },
         data: () => ({
             edit: false,
