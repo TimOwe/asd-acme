@@ -49,6 +49,6 @@ export default {
 
 <style>
     .v-dialog {
-        overflow-y: visible !important;
+        overflow-y: auto !important
     }
 </style>
