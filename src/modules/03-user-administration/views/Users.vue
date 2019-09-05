@@ -11,16 +11,14 @@
                         <v-card-actions>
                             <v-btn large color="green">Save</v-btn>
                             <v-btn depressed large color="red" class="white--text" @click="deleteUser(user.key)">Delete</v-btn>
-                            <v-btn large color="primary" @click="handleShowLogs(user.logs)">View Logs</v-btn>
-                            <v-btn large color="purple">Quiz's</v-btn>
+                            <v-btn large color="primary" @click="handleShowLogs(user.key)">View Logs</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
-                <v-btn @click="addTestData()">Add Dummy User</v-btn>
             </v-layout>
         </v-container>
         <v-dialog width="350" v-model="LogsDialog">
-            <LogTable :logs="activeLogs"></LogTable>
+            <LogTable :user-key="active" :logs="activeLogs"></LogTable>
         </v-dialog>
     </v-flex>
 </template>
@@ -37,9 +35,6 @@
                 })
             })
 
-            // this.users.forEach(user => {
-            //         this.$db.ref('/Users/'+user.key+'/logs').set([{time:'Monday',type: 'log in'}])
-            // })
         },
         name: "log-table",
         components: {LogTable},
@@ -50,39 +45,33 @@
                 done: false,
                 confirm: false,
                 activeLogs: [],
-                users: []
+                users: [],
+                active: ''
             }
         },
 
-
-        /*data() {
-            return {
-                testUsers: [{
-                    key: "-Lfhjsgvkjhadfaiofhsnl",
-                    fname: 'Matt',
-                    lname: "MATTTTTT",
-                    email: "jvhjk@ggjvhb.net"
-                }, {
-                    key: "-Lfhjsgv896986faiofhsnl",
-                    fname: 'FIRST',
-                    lname: "last",
-                    email: "j894267k@ggjvhb.net"
-                }],
-                users: []
-            }
-        },*/
         methods: {
             deleteUser(userKey){
                 this.$db.ref('/Users/'+userKey).remove();
             },
-            addTestData(){
-                this.testUsers.forEach(user => {
-                    this.$db.ref('/Users').push(user)
-                });
-            },
-            handleShowLogs(logs){
+          async handleShowLogs(userKey){
+                this.active = userKey;
+                var logs = await this.getUserLogs(userKey);
                 this.activeLogs = logs;
                 this.LogsDialog = true;
+            },
+            getUserLogs(userkey){
+                return new Promise((resolve) => {
+                    var logs = [];
+                    this.$db.ref('/Users/'+userkey+'/Logs').once('value', (snap) => {
+                        snap.forEach(log => {
+                           var logObj = log.val();
+                           logObj.key = log.key;
+                           logs.push(logObj);
+                        });
+                        resolve(logs);
+                    })
+                })
             }
         }
     }
