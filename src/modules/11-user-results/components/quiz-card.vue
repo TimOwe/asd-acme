@@ -32,7 +32,6 @@
             viewLeaderboard(quizKey) {
                 this.$router.push({path: `/leaderboard/${quizKey}`});
                 // something to open up a new leaderboard
-                // find id of this quiz in the leaderboard
                 // render that leaderboard
             }
         }

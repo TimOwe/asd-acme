@@ -20,7 +20,7 @@
             <td>{{ result.rank }}</td>
             <td>{{ result.user_key }}</td>
             <td>{{ result.calculatedName }}</td>
-            <td>{{ result.score * 100 }}%</td>
+            <td>{{ result.score }}</td>
             <td>{{ new Date(result.timeend - result.timestart).getSeconds() }}</td>
         </tr>
         </tbody>
