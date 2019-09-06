@@ -1,40 +1,35 @@
 <template>
-  <v-container>
-    <v-layout
-      text-center
-      wrap
-    >
+  <v-layout>
+    <v-container grid-md-list>
+      <v-layout class="display-2 justify-center font-weight-bold mb-3 mt-4">Welcome to Acme!</v-layout>
 
-      <v-flex mb-4>
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Acme!
-        </h1>
-        <p>
-        <v-btn to="/login">
-          01 User Accounts
-        </v-btn>
-        <v-btn to="/users">
-           03 User Administration
-        </v-btn>
-        <v-btn to="/quizs">
-           04 Quiz Administration
-        </v-btn>
-        <v-btn to="/host">
-            07 Host Game
-          </v-btn>
-        <v-btn to="/game">
-           09 Game Playing
-        </v-btn>
-        <v-btn to="/leaderboard">
-          12 Leaderboard
-        </v-btn>
-        <v-btn to="/quizcatalogue">
-          05 Quiz Management
-        </v-btn>
-        </p>
-      </v-flex>
-    </v-layout>
-  </v-container>
+
+      <v-layout row wrap class="pt-4">
+        <flex xs4 class="mr-4 mb-4">
+          <v-btn to="/login">01 User Accounts</v-btn>
+        </flex>
+        <flex xs4 class="mr-4">
+          <v-btn to="/users">03 User Administration</v-btn>
+        </flex>
+        <flex xs4 class="mr-4">
+          <v-btn to="/quizs">04 Quiz Administration</v-btn>
+        </flex>
+        <flex xs3 class="mr-4">
+          <v-btn to="/host">07 Host Game</v-btn>
+        </flex>
+        <flex xs3 class="mr-4">
+          <v-btn to="/game">09 Game Playing</v-btn>
+        </flex>
+        <flex xs3 class="mr-4">
+          <v-btn to="/leaderboard">12 Leaderboard</v-btn>
+        </flex>
+        <flex xs3 class="mr-4">
+          <v-btn to="/quizcatalogue">05 Quiz Management</v-btn>
+        </flex>
+      </v-layout>
+
+    </v-container>
+  </v-layout>
 </template>
 
 <script>
