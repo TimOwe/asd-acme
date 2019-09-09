@@ -1,8 +1,8 @@
 <template>
     <div>
-        <v-card>
+        <v-container>
             <v-toolbar flat>
-                <v-btn icon @click="$emit('closeEdit')">
+                <v-btn icon @click="closeEdit()">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title class="text-center, display-1">Edit Quiz</v-toolbar-title>
@@ -18,9 +18,11 @@
                 </v-layout>
             </v-container>
 
-            <v-card-text>
+            <v-container grid-list-md>
+                <v-layout justify-center align-center>
+                    <v-flex xs9>
                 <v-card v-for="(question,index) in questionBank" :key="question.id">
-                        <v-layout justify-center class="headline">Question {{index+1}}</v-layout>
+                        <v-layout justify-center pt-4 class="headline">Question {{index+1}}</v-layout>
 
                         <v-container grid-md-list>
                             <v-layout justify-center>
@@ -40,6 +42,7 @@
                             </v-layout>
                         </v-container>
 
+
                     <v-card-actions>
                         <v-container>
                             <v-btn v-if="index!=0" fab top right absolute color="red" @click="removeQuestion(index)"><v-icon>mdi-delete</v-icon></v-btn>
@@ -47,14 +50,18 @@
                         </v-container>
                     </v-card-actions>
                 </v-card>
-            </v-card-text>
-            <v-card-actions>
-                <v-layout justify-center>
-                    <v-btn color="white" @click="$emit('closeEdit')">Cancel</v-btn>
-                    <v-btn color="blue" @click="confirm=true">Update Quiz</v-btn>
+                    </v-flex>
                 </v-layout>
-            </v-card-actions>
-        </v-card>
+            </v-container>
+
+            <v-container>
+                <v-layout justify-center>
+                    <v-btn class="ma-2" color="white" @click="closeEdit()">Cancel</v-btn>
+                    <v-btn class="ma-2" color="primary" @click="confirm=true">Update Quiz</v-btn>
+                </v-layout>
+            </v-container>
+
+        </v-container>
 
         <v-dialog width=350 v-model="confirm">
             <v-card>
@@ -64,8 +71,8 @@
                 <v-card-text>Would you like to update this quiz with these new details?</v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn color="green" @click="saveQuiz">Update</v-btn>
-                        <v-btn color="red" @click="confirm = false">Cancel</v-btn>
+                        <v-btn color="white" @click="confirm = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="saveQuiz">Update</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -79,7 +86,7 @@
                 <v-card-text>Your new quiz has been successfully updated! Click below to see your updated quiz!.</v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn color="blue" @click="$emit('closeEdit')">Go to Quiz</v-btn>
+                        <v-btn color="primary" @click="closeEdit()">Go to Quiz</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -173,6 +180,11 @@
             triggerClose: function(){
                 this.$emit('closeEdit');
             },
+            closeEdit: function(){
+                this.$emit("refresh", this.quiz);
+            },
+
+
         },
         data: () => ({
             success: false,

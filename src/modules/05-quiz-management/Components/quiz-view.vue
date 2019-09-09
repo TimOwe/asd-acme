@@ -6,18 +6,16 @@
                 <v-toolbar-title class="text-center, headline">Quizzes</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn text color="grey darken-2"><v-icon size="35">mdi-play</v-icon></v-btn>
-                <v-btn text color="grey darken-2" @click.stop="edit=true" :quiz="quiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
+                <v-btn text color="grey darken-2" @click="triggerEdit()" :quiz="quiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
                 <v-btn text color="grey darken-2" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
             </v-toolbar>
             <v-img :src="img" :aspect-ratio="16/9" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
             </v-img>
 
             <v-container>
-                <span class="text--primary">
-                    <span class="display-2">{{quizTitle}}</span><br>
-                    <span class="headline">{{description}}</span><br>
-                    <span class="subtitle-1"><b>Created by: </b>{{owner}}</span><br>
-                </span>
+                    <v-layout pt-5 class="display-2">{{quizTitle}}</v-layout>
+                    <v-layout pt-5 class="headline">{{description}}</v-layout>
+                    <v-layout pt-5 class="subtitle-1"><b>Created by: </b>{{owner}}</v-layout>
             </v-container>
 
             <v-expansion-panels>
@@ -53,10 +51,10 @@
 
         </v-container>
 
-        <v-dialog persistent scrollable fullscreen hide-overlay transition="dialog-bottom-transition" v-model="edit">
+       <!-- <v-dialog persistent scrollable fullscreen hide-overlay transition="dialog-bottom-transition" v-model="edit">
             <edit-card @closeEdit="onCloseEdit" :quiz="quiz" ></edit-card>
         </v-dialog>
-
+-->
         <v-dialog width=350 v-model="deleteConfirm">
             <v-card>
                 <v-card-title>
@@ -105,10 +103,9 @@
                 }, 2000);
 
             },
-            onCloseEdit: function(){
-                this.edit=false;
-                this.$emit("refresh", this.quiz);
-            },
+            triggerEdit: function(){
+                this.$emit("quizEdit");
+                },
             answerCheck: function(c, a){
                 return parseInt(c)===parseInt(a);
             },

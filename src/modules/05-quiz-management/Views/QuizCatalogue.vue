@@ -8,14 +8,15 @@
 
                 <v-spacer></v-spacer>
 
-                <v-text-field hide-details prepend-icon="mdi-magnify" single-line></v-text-field>
+                <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line v-model="searchTerm" placeholder="Search for a Quiz"></v-text-field>
+                <v-btn icon x-small @click="resetSearch()"><v-icon>mdi-close-circle</v-icon></v-btn>
                 <v-spacer></v-spacer>
                 <v-btn to="/quiz-creator" color="blue">Create Quiz</v-btn>
             </v-toolbar>
 
             <v-container>
                 <v-row>
-                    <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
+                    <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4">
                         <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
                     </v-col>
                 </v-row>
@@ -23,13 +24,24 @@
         </div>
 
         <div v-if="render === 'quizView'">
+            <v-scroll-x-reverse-transition  mode="out-in">
             <v-container>
-                <quiz-view @catalogueView="onCatalogueView" @refresh="onRefresh" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
+                <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
             </v-container>
+            </v-scroll-x-reverse-transition>
+        </div>
+
+        <div v-if="render === 'editView'">
+            <v-scroll-x-reverse-transition  mode="out-in">
+            <v-container>
+                <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
+            </v-container>
+            </v-scroll-x-reverse-transition>
         </div>
 
         <v-footer class="mt-12"></v-footer>
     </v-container>
+
 </template>
 
 
@@ -38,9 +50,10 @@
 
     import quizCard from "../Components/quiz-card";
     import quizView from "../Components/quiz-view";
+    import editCard from "../Components/edit-card";
     export default {
         name: "QuizCatalogue",
-        components: {quizCard, quizView},
+        components: {quizCard, quizView, editCard},
         // grabbing all data on page render
         beforeMount: function(){
             this.getQuizzes();
@@ -68,7 +81,7 @@
                 for (var i=0; i<this.quizs.length;i++){
                     if(this.quizs[i].key===updQuiz.key){
                         this.viewingQuiz = this.quizs[i];
-                        this.forceRerender();
+                        this.render = "quizView";
                     }
                 }
             },
@@ -77,9 +90,18 @@
                 this.render = "quizView";
 
             },
+            onQuizEdit: function() {
+                //this.viewingQuiz = quiz;
+                this.render = "editView";
+
+            },
             onCatalogueView: function() {
                 this.viewingQuiz = '';
                 this.render = "quizCatalogue";
+
+            },
+            resetSearch: function() {
+                this.searchTerm = '';
 
             },
             forceRerender() {
@@ -101,6 +123,7 @@
             viewingQuiz:'',
             quizs: [],
             editKey: 0,
+            searchTerm: '',
 
             data(){
                 return {
@@ -111,6 +134,13 @@
         }),
         props: {
 
+        },
+        computed: {
+            filteredList() {
+                return this.quizs.filter(quiz => {
+                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())
+                })
+            }
         }
 
     }
