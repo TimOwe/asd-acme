@@ -16,7 +16,7 @@
             <v-container>
                 <v-row>
                     <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
-                        <quiz-card @quizView="onQuizView" v-on:refresh="refresh" :quiz="quiz" ></quiz-card>
+                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
                     </v-col>
                 </v-row>
             </v-container>
@@ -24,7 +24,7 @@
 
         <div v-if="render === 'quizView'">
             <v-container>
-                <quiz-view @catalogueView="onCatalogueView" :quiz="this.viewingQuiz"></quiz-view>
+                <quiz-view @catalogueView="onCatalogueView" @refresh="onRefresh" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
             </v-container>
         </div>
 
@@ -63,8 +63,14 @@
                 });
             },
             // function to push dummy data to firebase
-            refresh: function () {
+            onRefresh: function (updQuiz) {
                 this.getQuizzes();
+                for (var i=0; i<this.quizs.length;i++){
+                    if(this.quizs[i].key===updQuiz.key){
+                        this.viewingQuiz = this.quizs[i];
+                        this.forceRerender();
+                    }
+                }
             },
             onQuizView: function(quiz) {
                 this.viewingQuiz = quiz;
@@ -76,6 +82,9 @@
                 this.render = "quizCatalogue";
 
             },
+            forceRerender() {
+                this.editKey += 1;
+            }
         },
         // dummy data
         data: () => ({
@@ -91,10 +100,12 @@
             key: '',
             viewingQuiz:'',
             quizs: [],
+            editKey: 0,
 
             data(){
                 return {
                     quizs: [],
+                    editKey: 0,
                 }
             },
         }),

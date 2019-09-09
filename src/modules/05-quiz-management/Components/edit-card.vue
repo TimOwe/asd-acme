@@ -76,10 +76,10 @@
                 <v-card-title>
                     Success!
                 </v-card-title>
-                <v-card-text>Your new quiz has been successfully updated! Click below to return to the catalogue.</v-card-text>
+                <v-card-text>Your new quiz has been successfully updated! Click below to see your updated quiz!.</v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn color="blue" @click="$emit('closeEdit')">Go to Catalogue</v-btn>
+                        <v-btn color="blue" @click="$emit('closeEdit')">Go to Quiz</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>

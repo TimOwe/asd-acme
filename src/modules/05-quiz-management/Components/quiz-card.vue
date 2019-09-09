@@ -14,13 +14,9 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-btn text color="grey darken-2" @click="onViewButton"><v-icon>mdi-play</v-icon></v-btn>
+                <v-btn text color="grey darken-2" @click="onViewButton" ><v-icon>mdi-play</v-icon></v-btn>
             </v-card-actions>
         </v-card>
-
-        <v-dialog persistent scrollable v-model="edit">
-            <edit-card v-on:closeEdit="closeEdit" :quiz="quiz" ></edit-card>
-        </v-dialog>
 
         <v-dialog width=350 v-model="deleteConfirm">
             <v-card>
@@ -67,10 +63,6 @@
                     this.loading = false;
                     this.$db.ref('/Quizs/' + quizKey).remove();
                 }, 2000);
-            },
-            closeEdit: function(){
-                this.edit=false;
-                this.$emit('refresh');
             },
             onViewButton() {
                 this.$emit("quizView", this.quiz);
