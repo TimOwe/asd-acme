@@ -18,33 +18,13 @@
             </v-card-actions>
         </v-card>
 
-        <v-dialog width=350 v-model="deleteConfirm">
-            <v-card>
-                <v-card-title>
-                    Confirm Quiz Delete
-                </v-card-title>
-                <v-card-text>Are you sure you want to delete this quiz?</v-card-text>
-                <v-card-actions>
-                    <v-layout justify-center>
-                        <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
-                        <v-btn color="red" @click="deleteQuiz(quiz.key)">Delete</v-btn>
-                    </v-layout>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-
-        <v-overlay :value="loading">
-            <v-progress-circular indeterminate size="64"></v-progress-circular>
-        </v-overlay>
-
     </div>
 </template>
 
 <script>
-    import EditCard from "../Components/edit-card";
     export default {
         name: "quiz-card",
-        components: {EditCard},
+        components: {},
         props: {
             quiz: Object
         },

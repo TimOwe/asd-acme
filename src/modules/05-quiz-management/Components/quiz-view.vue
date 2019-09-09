@@ -9,7 +9,7 @@
                 <v-btn text color="grey darken-2" @click="triggerEdit()" :quiz="quiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
                 <v-btn text color="grey darken-2" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
             </v-toolbar>
-            <v-img :src="img" :aspect-ratio="16/9" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
+            <v-img :src="img" :aspect-ratio="50/13" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
             </v-img>
 
             <v-container>
@@ -78,10 +78,9 @@
 </template>
 
 <script>
-    import EditCard from "../Components/edit-card";
     export default {
         name: "quiz-card",
-        components: {EditCard},
+        components: {},
         props: {
             quiz: Object
         },
