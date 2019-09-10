@@ -4,23 +4,17 @@
         <div v-if="render === 'quizCatalogue'">
             <v-container grid-list-md>
                 <v-layout justify-center align-center>
-                    <v-flex xs4>
-                        <div align="center">
-                        <v-layout justify-center align-center>
-                        <v-layout class="text-center, display-1">Quizzes</v-layout>
-                        </v-layout>
-                        </div>
-                    </v-flex>
-                    <v-flex xs4>
-                        <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
-                    </v-flex>
-                    <v-flex xs4>
-                        <v-container grid-list-md>
-                        <v-layout >
-                        <v-layout class="text-right, display-1"><v-btn to="/quiz-creator" color="primary">Create Quiz</v-btn></v-layout>
-                        </v-layout>
-                        </v-container>
-                    </v-flex>
+                    <v-row>
+                        <v-col>
+                            <v-layout pl-10 justify-start align-start class="text-center, display-1">Quizzes</v-layout>
+                        </v-col>
+                        <v-col  >
+                            <v-text-field  hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-layout pr-10 justify-end align-center class="text-right, display-1"><v-btn to="/quiz-creator" color="primary">Create Quiz</v-btn></v-layout>
+                        </v-col>
+                    </v-row>
                 </v-layout>
             </v-container>
 
