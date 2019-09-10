@@ -6,35 +6,62 @@
                 <v-btn icon to="/quizcatalogue">
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
-                <v-toolbar-title class="text-center, display-1">Create a New Quiz</v-toolbar-title>
+                <v-layout pb-2 justify-center class="display-1">Create a New Quiz</v-layout>
             </v-toolbar>
+
 
             <v-container grid-list-md>
                 <v-layout justify-center align-center>
                     <v-flex xs7>
-                        <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle"></v-text-field>
-                        <v-text-field v-model="description" outlined shaped label="Quiz Description" name="quizdescription"></v-text-field>
-                        <v-select name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select" return-object single-line></v-select>
+                        <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[rules.required, rules.titleMinimum, rules.titleMaximum]" counter="40"></v-text-field>
+                        <v-text-field v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[rules.required, rules.descMinimum, rules.descMaximum]" counter="80"></v-text-field>
+                        <v-select name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[rules.required]"></v-select>
+                            <v-layout>
+                                <v-flex xs6>
+                                    <v-text-field v-model="questionTime" outlined shaped label="Seconds Per Question" type="number" name="questiontime" :rules="[rules.required, rules.timeMinimum, rules.timeMaximum]"></v-text-field>
+                                </v-flex>
+                                <v-flex xs2></v-flex>
+                                <v-flex xs4>
+                                    <v-btn-toggle :rules="[rules.required]" v-model="score_decay">
+                                        <v-btn color="green" value="0.1">
+                                            <v-icon>mdi-format-align-left</v-icon>
+                                        </v-btn>
+                                        <v-btn color="orange" value="0.2">
+                                            <v-icon>mdi-format-align-center</v-icon>
+                                        </v-btn>
+                                        <v-btn color="red" value="0.3">
+                                            <v-icon>mdi-format-align-right</v-icon>
+                                        </v-btn>
+                                    </v-btn-toggle>
+
+                                </v-flex>
+                            </v-layout>
                     </v-flex>
                 </v-layout>
             </v-container>
-
+            <v-container grid-list-md>
+                <v-layout justify-center align-center>
+                    <v-flex xs7>
             <v-card-text>
-                <v-card v-for="(question,index) in questionBank" :key="question.id">
-                    <v-layout justify-center class="headline">Question {{index+1}}</v-layout>
+                <v-container v-for="(question,index) in questionBank" :key="question.id">
+                <v-card>
+                    <v-toolbar color="primary" dark flat>
+                        <v-layout justify-center class="headline">Question {{index+1}}</v-layout>
+                    </v-toolbar>
+
 
                     <v-container grid-md-list>
                         <v-layout justify-center>
                             <v-flex xs8>
-                                <v-text-field v-model="question.q" label="Question:" :name="'q'+index+'questionname'"></v-text-field>
-                                <v-text-field v-model.number="question.score" label="Score:" type="number" :name="'q'+index+'questionscore'"></v-text-field>
+                                <v-text-field v-model="question.q" label="Question:" :name="'q'+index+'questionname'" :rules="[rules.required, rules.questMinimum, rules.questMaximum]" counter="80"></v-text-field>
+                                <v-text-field v-model.number="question.score" label="Score:" type="number" :name="'q'+index+'questionscore'" :rules="[rules.required, rules.scoreMinimum, rules.scoreMaximum]" counter="40"></v-text-field>
                             </v-flex>
                         </v-layout>
 
                         <v-layout justify-center>
                             <v-flex xs2 v-for="(n,i) in 4" :key="n">
-                                <v-radio-group xs2 v-model="question.c" name="radiogroup">
-                                    <v-text-field v-model="question.a[i]" :label="'Answer #'+ n" :name="'q'+index+'Answer #'+ n"></v-text-field>
+                                <v-radio-group xs2 v-model="question.c" name="radiogroup" :rules="[rules.required]">
+                                    <v-text-field v-model="question.a[i]" :label="'Answer #'+ n" :name="'q'+index+'Answer #'+ n" :rules="[rules.required, rules.answerMinimum, rules.answerMaximum]"></v-text-field>
                                     <v-radio label="" :name="'q'+index+'checkAnswer #'+ n" :value="i">{{i}}</v-radio>
                                 </v-radio-group>
                             </v-flex>
@@ -48,14 +75,19 @@
                         </v-container>
                     </v-card-actions>
                 </v-card>
+                </v-container>
             </v-card-text>
-
-            <v-card-actions>
-                <v-layout justify-center>
-                    <v-btn color="white" to="/quizcatalogue">Cancel</v-btn>
-                    <v-btn color="blue" @click="confirm=true">Publish Quiz</v-btn>
+                        </v-flex>
                 </v-layout>
+            </v-container>
+            <v-container grid-md-list>
+                <v-layout justify-center pb-4>
+            <v-card-actions>
+                    <v-btn color="white" to="/quizcatalogue">Cancel</v-btn>
+                    <v-btn color="primary" @click="confirm=true">Publish Quiz</v-btn>
             </v-card-actions>
+                </v-layout>
+            </v-container>
         </v-card>
         </v-container>
 
@@ -66,9 +98,9 @@
                 </v-card-title>
                 <v-card-text>Would you like to submit and publish your quiz?</v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout  justify-center>
                         <v-btn color="white" @click="confirm = false">Cancel</v-btn>
-                        <v-btn color="blue" @click="saveQuiz">Publish</v-btn>
+                        <v-btn color="primary" @click="saveQuiz">Publish</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -84,7 +116,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn color="blue" to="/quizcatalogue">Go to Catalogue</v-btn>
+                        <v-btn color="primary" to="/quizcatalogue">Go to Catalogue</v-btn>
                         <!--<v-btn color="blue" @click="clearScreen">Create New Quiz</v-btn>-->
                     </v-layout>
                 </v-card-actions>
@@ -119,7 +151,7 @@
             saveQuiz: function () {
                 this.loading = true;
                 if(this.validCheck()) {
-                    this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
+                    this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, this.questionTime, this.score_decay);
                     this.confirm = false;
                     setTimeout(() => {
                         this.loading = false;
@@ -144,6 +176,7 @@
                 var titleCheck = this.quizTitle !== '';
                 var imageCheck = this.img !== '';
                 var questionCheck = true;
+                var decayCheck = this.score_decay !=='';
 
                 this.questionBank.forEach(question => {
                     if(question.q !== '' && question.c.length !== 4 && question.score !== ''){
@@ -156,7 +189,7 @@
                         questionCheck = false;
                     }
                 });
-                return titleCheck && questionCheck && imageCheck;
+                return titleCheck && questionCheck && imageCheck &&decayCheck;
             },
             newQuiz: function(quiz_title, questions, owner_id, img, description){
                 var Quiz = {
@@ -177,8 +210,11 @@
                 { name: 'Light', url: 'https://imgur.com/taxTHeY.jpg' },
                 { name: 'Colourful', url: 'https://imgur.com/zmxFPdu.jpg' },
             ],
+            toggle: undefined,
             questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
             quizTitle: "",
+            questionTime: '',
+            score_decay: '',
             loading: false,
             validation: false,
             scoreValidation: false,
@@ -186,10 +222,50 @@
             success: false,
             description: "",
             img: "",
+            rules: {
+                required: value => !!value || 'Required.',
+                timeMinimum: value => value >= 5 || 'Please enter a time longer than 5 seconds',
+                timeMaximum: value => value < 45 || 'Please enter a time less than 45 seconds',
+
+                titleMinimum: value => value.length > 4 || 'Please enter a title longer than 4 characters',
+                titleMaximum: value => value.length < 40 || 'Please enter a title shorter than 40 characters',
+
+                descMinimum: value => value.length > 4 || 'Please enter a description longer than 4 characters',
+                descMaximum: value => value.length <= 80 || 'Please enter a description shorter than 80 characters',
+
+                questMinimum: value => value.length > 4 || 'Please enter a question longer than 4 characters',
+                questMaximum: value => value.length <= 80 || 'Please enter a question shorter than 80 characters',
+
+                scoreMinimum: value => value >= 100 || 'Please enter a score higher than 100 points',
+                scoreMaximum: value => value < 10000 || 'Please enter a score lower than 9999 points',
+
+                answerMinimum: value => value.length > 4 || 'Please enter an answer longer than 4 characters',
+                answerMaximum: value => value.length <= 40 || 'Please enter an answer shorter than 40 characters',
+            },
 
             data(){
                 return {
                     quizs: [],
+                    rules: {
+                        required: value => !!value || 'Required.',
+                        timeMinimum: value => value >= 5 || 'Please enter a time longer than 5 seconds',
+                        timeMaximum: value => value < 45 || 'Please enter a time less than 45 seconds',
+
+                        titleMinimum: value => value.length > 4 || 'Please enter a title longer than 4 characters',
+                        titleMaximum: value => value.length < 40 || 'Please enter a title shorter than 40 characters',
+
+                        descMinimum: value => value.length > 4 || 'Please enter a description longer than 4 characters',
+                        descMaximum: value => value.length <= 80 || 'Please enter a description shorter than 80 characters',
+
+                        questMinimum: value => value.length > 4 || 'Please enter a question longer than 4 characters',
+                        questMaximum: value => value.length <= 80 || 'Please enter a question shorter than 80 characters',
+
+                        scoreMinimum: value => value >= 100 || 'Please enter a score higher than 100 points',
+                        scoreMaximum: value => value < 10000 || 'Please enter a score lower than 9999 points',
+
+                        answerMinimum: value => value.length > 4 || 'Please enter an answer longer than 4 characters',
+                        answerMaximum: value => value.length <= 40 || 'Please enter an answer shorter than 40 characters',
+                    },
                 }
             },
         }),

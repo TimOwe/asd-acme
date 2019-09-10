@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-container>
+            <v-card>
             <v-toolbar flat>
                 <v-btn icon @click="onBackButton"><v-icon>mdi-arrow-left</v-icon></v-btn>
                 <v-toolbar-title class="text-center, headline">Quizzes</v-toolbar-title>
@@ -48,7 +49,7 @@
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
-
+            </v-card>
         </v-container>
 
        <!-- <v-dialog persistent scrollable fullscreen hide-overlay transition="dialog-bottom-transition" v-model="edit">

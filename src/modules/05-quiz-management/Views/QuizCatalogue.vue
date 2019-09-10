@@ -8,8 +8,7 @@
 
                 <v-spacer></v-spacer>
 
-                <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line v-model="searchTerm" placeholder="Search for a Quiz"></v-text-field>
-                <v-btn icon x-small @click="resetSearch()"><v-icon>mdi-close-circle</v-icon></v-btn>
+                <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
                 <v-spacer></v-spacer>
                 <v-btn to="/quiz-creator" color="blue">Create Quiz</v-btn>
             </v-toolbar>
@@ -23,20 +22,20 @@
             </v-container>
         </div>
 
-        <div v-if="render === 'quizView'">
-            <v-scroll-x-reverse-transition  mode="out-in">
-            <v-container>
+        <div v-else-if="render === 'quizView'">
+            <v-scroll-y-transition>
+
                 <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
-            </v-container>
-            </v-scroll-x-reverse-transition>
+
+            </v-scroll-y-transition>
         </div>
 
         <div v-if="render === 'editView'">
-            <v-scroll-x-reverse-transition  mode="out-in">
-            <v-container>
+            <v-scroll-y-reverse-transition>
+
                 <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
-            </v-container>
-            </v-scroll-x-reverse-transition>
+
+                </v-scroll-y-reverse-transition>
         </div>
 
         <v-footer class="mt-12"></v-footer>
@@ -102,7 +101,6 @@
             },
             resetSearch: function() {
                 this.searchTerm = '';
-
             },
             forceRerender() {
                 this.editKey += 1;
