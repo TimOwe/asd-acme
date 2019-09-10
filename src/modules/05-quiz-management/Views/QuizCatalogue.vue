@@ -2,16 +2,28 @@
     <v-container grid-list-md>
 
         <div v-if="render === 'quizCatalogue'">
-            <v-toolbar flat>
-                <v-btn icon><v-icon>mdi-arrow-left</v-icon></v-btn>
-                <v-toolbar-title class="text-center, display-1">Quizzes</v-toolbar-title>
+            <v-container grid-list-md>
+                <v-layout justify-center align-center>
+                    <v-flex xs4>
+                        <div align="center">
+                        <v-layout justify-center align-center>
+                        <v-layout class="text-center, display-1">Quizzes</v-layout>
+                        </v-layout>
+                        </div>
+                    </v-flex>
+                    <v-flex xs4>
+                        <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                    </v-flex>
+                    <v-flex xs4>
+                        <v-container grid-list-md>
+                        <v-layout >
+                        <v-layout class="text-right, display-1"><v-btn to="/quiz-creator" color="primary">Create Quiz</v-btn></v-layout>
+                        </v-layout>
+                        </v-container>
+                    </v-flex>
+                </v-layout>
+            </v-container>
 
-                <v-spacer></v-spacer>
-
-                <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
-                <v-spacer></v-spacer>
-                <v-btn to="/quiz-creator" color="blue">Create Quiz</v-btn>
-            </v-toolbar>
 
             <v-container>
                 <v-row>
@@ -24,17 +36,13 @@
 
         <div v-else-if="render === 'quizView'">
             <v-scroll-y-transition>
-
                 <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
-
             </v-scroll-y-transition>
         </div>
 
         <div v-if="render === 'editView'">
             <v-scroll-y-reverse-transition>
-
                 <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
-
                 </v-scroll-y-reverse-transition>
         </div>
 

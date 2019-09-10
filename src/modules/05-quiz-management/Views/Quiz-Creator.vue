@@ -1,14 +1,10 @@
 <template>
     <div>
         <v-container grid-list-md>
-        <v-card>
-            <v-toolbar flat>
                 <v-btn icon to="/quizcatalogue">
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
                 <v-layout pb-2 justify-center class="display-1">Create a New Quiz</v-layout>
-            </v-toolbar>
-
 
             <v-container grid-list-md>
                 <v-layout justify-center align-center>
@@ -16,24 +12,20 @@
                         <v-text-field v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[rules.required, rules.titleMinimum, rules.titleMaximum]" counter="40"></v-text-field>
                         <v-text-field v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[rules.required, rules.descMinimum, rules.descMaximum]" counter="80"></v-text-field>
                         <v-select name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[rules.required]"></v-select>
-                            <v-layout>
-                                <v-flex xs6>
-                                    <v-text-field v-model="questionTime" outlined shaped label="Seconds Per Question" type="number" name="questiontime" :rules="[rules.required, rules.timeMinimum, rules.timeMaximum]"></v-text-field>
+                            <v-layout justify-center>
+                                <v-flex  pt-3 xs6>
+                                    <v-text-field v-model.number="time_limit" outlined shaped label="Seconds Per Question" type="number" name="questiontime" :rules="[rules.required, rules.timeMinimum, rules.timeMaximum]"></v-text-field>
                                 </v-flex>
-                                <v-flex xs2></v-flex>
-                                <v-flex xs4>
-                                    <v-btn-toggle :rules="[rules.required]" v-model="score_decay">
-                                        <v-btn color="green" value="0.1">
-                                            <v-icon>mdi-format-align-left</v-icon>
-                                        </v-btn>
-                                        <v-btn color="orange" value="0.2">
-                                            <v-icon>mdi-format-align-center</v-icon>
-                                        </v-btn>
-                                        <v-btn color="red" value="0.3">
-                                            <v-icon>mdi-format-align-right</v-icon>
-                                        </v-btn>
-                                    </v-btn-toggle>
-
+                                <v-flex xs3></v-flex>
+                                <v-flex xs6>
+                                    <v-layout justify-center align-center class="body-1">Quiz Difficulty</v-layout>
+                                    <v-layout justify-center align-center >
+                                        <v-btn-toggle :rules="[rules.required]" v-model.number="score_decay" class="justify-center">
+                                            <v-btn tile outlined color="green" value="0.1">Easy</v-btn>
+                                            <v-btn tile color="orange" outlined value="0.2">Medium</v-btn>
+                                            <v-btn tile outlined color="red" value="0.3">Hard</v-btn>
+                                        </v-btn-toggle>
+                                    </v-layout>
                                 </v-flex>
                             </v-layout>
                     </v-flex>
@@ -42,7 +34,6 @@
             <v-container grid-list-md>
                 <v-layout justify-center align-center>
                     <v-flex xs7>
-            <v-card-text>
                 <v-container v-for="(question,index) in questionBank" :key="question.id">
                 <v-card>
                     <v-toolbar color="primary" dark flat>
@@ -60,7 +51,7 @@
 
                         <v-layout justify-center>
                             <v-flex xs2 v-for="(n,i) in 4" :key="n">
-                                <v-radio-group xs2 v-model="question.c" name="radiogroup" :rules="[rules.required]">
+                                <v-radio-group xs2 v-model="question.c" name="radiogroup" :rules="[rules.ansRequired]">
                                     <v-text-field v-model="question.a[i]" :label="'Answer #'+ n" :name="'q'+index+'Answer #'+ n" :rules="[rules.required, rules.answerMinimum, rules.answerMaximum]"></v-text-field>
                                     <v-radio label="" :name="'q'+index+'checkAnswer #'+ n" :value="i">{{i}}</v-radio>
                                 </v-radio-group>
@@ -76,19 +67,15 @@
                     </v-card-actions>
                 </v-card>
                 </v-container>
-            </v-card-text>
                         </v-flex>
                 </v-layout>
             </v-container>
             <v-container grid-md-list>
                 <v-layout justify-center pb-4>
-            <v-card-actions>
-                    <v-btn color="white" to="/quizcatalogue">Cancel</v-btn>
-                    <v-btn color="primary" @click="confirm=true">Publish Quiz</v-btn>
-            </v-card-actions>
+                    <v-btn class="ma-1" color="white" to="/quizcatalogue">Cancel</v-btn>
+                    <v-btn class="ma-1" color="primary" @click="confirm=true">Publish Quiz</v-btn>
                 </v-layout>
             </v-container>
-        </v-card>
         </v-container>
 
         <v-dialog width=350 v-model="confirm">
@@ -151,7 +138,7 @@
             saveQuiz: function () {
                 this.loading = true;
                 if(this.validCheck()) {
-                    this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, this.questionTime, this.score_decay);
+                    this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, this.time_limit, this.score_decay);
                     this.confirm = false;
                     setTimeout(() => {
                         this.loading = false;
@@ -191,13 +178,15 @@
                 });
                 return titleCheck && questionCheck && imageCheck &&decayCheck;
             },
-            newQuiz: function(quiz_title, questions, owner_id, img, description){
+            newQuiz: function(quiz_title, questions, owner_id, img, description, time_limit, score_decay){
                 var Quiz = {
                     quiz_title,
                     questions,
                     owner_id,
                     img,
-                    description
+                    description,
+                    time_limit,
+                    score_decay
                 };
                 var reciept = this.$db.ref('/Quizs').push(Quiz);
                 return reciept.key;
@@ -213,8 +202,8 @@
             toggle: undefined,
             questionBank:[{q: "", a: [], c: [0,0,0,0], score: ""}],
             quizTitle: "",
-            questionTime: '',
-            score_decay: '',
+            time_limit: "",
+            score_decay: "",
             loading: false,
             validation: false,
             scoreValidation: false,
@@ -224,6 +213,7 @@
             img: "",
             rules: {
                 required: value => !!value || 'Required.',
+                ansRequired: value => value!=undefined || 'Required.',
                 timeMinimum: value => value >= 5 || 'Please enter a time longer than 5 seconds',
                 timeMaximum: value => value < 45 || 'Please enter a time less than 45 seconds',
 

@@ -14,7 +14,7 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-btn text color="grey darken-2" @click="onViewButton" ><v-icon>mdi-play</v-icon></v-btn>
+                <v-btn text color="grey darken-2" @click="onViewButton"><v-icon large>mdi-view-headline</v-icon>  View Quiz</v-btn>
             </v-card-actions>
         </v-card>
 
