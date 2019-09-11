@@ -65,7 +65,7 @@
         methods: {
             handleRegister(){
                 if(this.isValid()){
-                    this.newUser(this.fname ,this.lname,this.age,this.password,this.email);
+                    this.newUser((this.fname).replace(/^\w/, c => c.toUpperCase()), (this.lname).replace(/^\w/, c => c.toUpperCase()), this.age, this.password, this.email);
                     this.done = true;
                 } else {
                     this.validation = true;

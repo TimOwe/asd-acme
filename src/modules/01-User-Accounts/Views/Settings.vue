@@ -15,6 +15,9 @@
                            <v-card-title style="color: royalblue; font-size: 25px">Update Details:</v-card-title>
                         </v-row>
                         <v-row>
+                            <v-text style="margin-left: 16px; margin-top:15px; font-size: 18px; color: green">{{updated}}</v-text>
+                        </v-row>
+                        <v-row>
                             <v-card-text style="font-size: 22px; padding-left: 16px">First Name:</v-card-text>
                         </v-row>
                         <v-row>
@@ -79,28 +82,41 @@
 
             save(){
                 this.clearWarnings();
-                if(this.fname !== '' && this.testName(this.fname)){
-                    this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/fname').set(this.fname);
+                this.updated = '';
+                if(this.setWarnings()){
+                    if(this.fname !== '' && this.testName(this.fname)){
+                        this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/fname').set((this.fname).replace(/^\w/, c => c.toUpperCase()));
+                        this.storeUser.fname = this.fname;
+                    }
+                    if(this.lname !== '' && this.testName(this.lname)){
+                        this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/lname').set((this.lname).replace(/^\w/, c => c.toUpperCase()));
+                        this.storeUser.lname = this.lname;
+                    }
+                    if(this.email !== '' && this.testEmail()){
+                        this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/email').set(this.email);
+                        this.storeUser.email = this.email;
+                    }
+                    this.$cookies.remove('user');
+                    this.$cookies.set('user', this.storeUser, '1d');
+                    this.updated = 'Your details have been updated.'
                 }
-                if(this.lname !== '' && this.testName(this.lname)){
-                    this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/lname').set(this.lname);
-                }
-                if(this.email !== '' && this.testEmail()){
-                    this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/email').set(this.email);
-                }
-                this.setWarnings();
             },
 
             setWarnings(){
-                if(!this.testName(this.fname)){
+                var val = true;
+                if(!(this.fname === '') && !this.testName(this.fname)){
                     this.fNameWarning = 'Invalid Entry';
+                    val = false;
                 }
-                if(!this.testName(this.lname)){
+                if(!(this.lname === '') && !this.testName(this.lname)){
                     this.lNameWarning = 'Invalid Entry';
+                    val = false;
                 }
-                if(!this.testName(this.email)){
+                if(!(this.email === '') && !this.testEmail(this.email)){
                     this.emailWarning = 'Invalid Entry';
+                    val = false;
                 }
+                return val;
             },
 
             clearWarnings(){
@@ -132,6 +148,8 @@
                 fNameWarning: '',
                 lNameWarning: '',
                 emailWarning: '',
+                updated: '',
+                storeUser: this.$cookies.get('user')
             }
         }
     }
