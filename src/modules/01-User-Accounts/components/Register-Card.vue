@@ -28,6 +28,18 @@
                         ></v-select>
                     </v-flex>
                 </v-layout>
+                <div v-if="userExists !== ''">
+                    <span style="font-size: 16px; color: red">{{userExists}}</span>
+                </div>
+                <div v-if="validationEmail !== ''">
+                    <span style="font-size: 16px; color: red">{{validationEmail}}</span>
+                </div>
+                <div v-if="validationName !== ''">
+                    <span style="font-size: 16px; color: red">{{validationName}}</span>
+                </div>
+                <div v-if="validationPass !== ''">
+                    <span style="font-size: 16px; color: red">{{validationPass}}</span>
+                </div>
             </v-container>
         </v-card-text>
         <v-card-actions>
@@ -63,13 +75,54 @@
         name: "Register-Card",
         components: {CreatedCard, ValidationCard},
         methods: {
-            handleRegister(){
-                if(this.isValid()){
-                    this.newUser((this.fname).replace(/^\w/, c => c.toUpperCase()), (this.lname).replace(/^\w/, c => c.toUpperCase()), this.age, this.password, this.email);
-                    this.done = true;
-                } else {
-                    this.validation = true;
+           async handleRegister(){
+                this.clearWarnings()
+                if(await this.checkUserExist()){
+                    this.userExists = "A user with this email already exists."
                 }
+                else {
+                    if (this.isValid()) {
+                        this.newUser((this.fname).replace(/^\w/, c => c.toUpperCase()), (this.lname).replace(/^\w/, c => c.toUpperCase()), this.age, this.password, this.email);
+                        this.done = true;
+                    } else {
+                        this.validation = true;
+                    }
+                }
+            },
+
+            async checkUserExist(){
+               var users = await this.getUsers();
+               var exists = false;
+                users.forEach((user) => {
+                    if (user.email === this.email) {
+                        exists = true;
+                    }
+                });
+                return exists;
+            },
+
+            getUsers(){
+                return new Promise(resolve => {
+                    var users = [];
+                    this.$db.ref('/Users').once('value', (snap) => {
+                        //Gets a snapshot of data, without listening for changes. 'Value' is an event.
+                        snap.forEach(user => {
+                            var userObj = user.val();
+                            //Extracts contents of 'user' in the snapshot
+                            userObj.key = user.key;
+                            //Sets the key (e.g. 1)
+                            users.push(userObj);
+                        });
+                        resolve(users);
+                    });
+                })
+            },
+
+            clearWarnings(){
+                this.validationEmail = '';
+                this.validationName = '';
+                this.validationPass = '';
+                this.userExists = '';
             },
 
             newUser(fname,lname,dob,password,email){
@@ -92,8 +145,21 @@
 
             isValid(){
                 var isValidEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.email);
-                var isValidName = /^[^0-9]+$/.test(this.fname) && /^[^0-9]+$/.test(this.lname)
-                return isValidEmail && isValidName
+                var isValidName = /^[^0-9]+$/.test(this.fname) && /^[^0-9]+$/.test(this.lname);
+                var isValidPass = /^.{6,20}$/.test(this.password);
+                if(this.age !== ''){
+                    var isValidAge = true;
+                }
+                if(!isValidEmail){
+                    this.validationEmail = ('Please enter a valid Email Address');
+                }
+                if(!isValidName){
+                    this.validationName = ('Please enter a valid Name');
+                }
+                if(!isValidPass){
+                    this.validationPass = ("Password must be between 6-20 characters long");
+                }
+                return isValidEmail && isValidAge && isValidName && isValidPass;
             },
 
             closeVal(e){
@@ -114,6 +180,11 @@
                 lname: '',
                 email: '',
                 password: '',
+                age: '',
+                validationEmail: '',
+                validationName: '',
+                validationPass: '',
+                userExists: '',
             }
         }
     }
