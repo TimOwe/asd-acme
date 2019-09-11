@@ -4,7 +4,7 @@
             <v-card class="mx-auto"
                     max-width="70%">
                 <v-toolbar flat>
-                    <v-btn icon>
+                    <v-btn icon to="/">
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
                     <v-toolbar-title class="text-center, display-1">Settings</v-toolbar-title>
@@ -39,11 +39,11 @@
                             <v-text style="margin-left: 20px; margin-top:15px; font-size: 18px; color: red">{{emailWarning}}</v-text>
                         </v-row>
                         <v-row>
-                            <v-btn style="margin-left: 16px;" large depressed @click="changePasswordDialog = true">Change Password</v-btn>
+                            <v-btn style="margin-left: 16px;" large  @click="changePasswordDialog = true">Change Password</v-btn>
                         </v-row>
                         <br>
                         <v-row>
-                            <v-btn style="margin-left: 16px;"  color="primary" large depressed @click="save()">Save Changes</v-btn>
+                            <v-btn style="margin-left: 16px;"  color="primary" large  @click="save()">Save Changes</v-btn>
                         </v-row>
                         <br>
                     </v-container>
@@ -56,7 +56,7 @@
                         <v-card-text style="font-size: 18px; padding-left: 16px">If you no longer want your Acme account, you can permanently delete it. Deleting your account will remove all relevant user information from the database and you will not be able to log back into your account.</v-card-text>
                     </v-row>
                     <v-row>
-                        <v-btn style="margin-left: 16px; margin-top: 10px" class="white--text"  color="red" large depressed @click="deleteAct">Delete Account</v-btn>
+                        <v-btn style="margin-left: 16px; margin-top: 10px" class="white--text"  color="red" large  @click="deleteAct">Delete Account</v-btn>
                     </v-row>
                 </v-container>
                 <v-dialog v-model="changePasswordDialog" persistent max-width="600px">
@@ -81,24 +81,31 @@
             },
 
             save(){
+                var isUpdated = false;
                 this.clearWarnings();
                 this.updated = '';
                 if(this.setWarnings()){
                     if(this.fname !== '' && this.testName(this.fname)){
                         this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/fname').set((this.fname).replace(/^\w/, c => c.toUpperCase()));
                         this.storeUser.fname = this.fname;
+                        isUpdated = true;
                     }
                     if(this.lname !== '' && this.testName(this.lname)){
                         this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/lname').set((this.lname).replace(/^\w/, c => c.toUpperCase()));
                         this.storeUser.lname = this.lname;
+                        isUpdated = true;
                     }
                     if(this.email !== '' && this.testEmail()){
                         this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/email').set(this.email);
                         this.storeUser.email = this.email;
+                        isUpdated = true;
                     }
-                    this.$cookies.remove('user');
-                    this.$cookies.set('user', this.storeUser, '1d');
-                    this.updated = 'Your details have been updated.'
+                    if(isUpdated){
+                        this.$cookies.remove('user');
+                        this.$cookies.set('user', this.storeUser, '1d');
+                        this.updated = 'Your details have been updated.'
+                    }
+
                 }
             },
 
