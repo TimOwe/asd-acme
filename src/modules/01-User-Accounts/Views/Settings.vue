@@ -18,7 +18,7 @@
                             <span style="margin-left: 16px; margin-top:15px; font-size: 18px; color: green">{{updated}}</span>
                         </v-row>
                         <v-row>
-                            <v-card-text style="font-size: 22px; padding-left: 16px">First Name:</v-card-text>
+                            <v-card-text name="fname" style="font-size: 22px; padding-left: 16px">First Name:</v-card-text>
                         </v-row>
                         <v-row>
                             <v-text-field v-model="fname" style="padding-left: 16px; max-width: 600px;" label="First Name" single-line outlined></v-text-field>
@@ -95,12 +95,12 @@
                 if(this.setWarnings()){
                     if(this.fname !== '' && this.testName(this.fname)){
                         this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/fname').set((this.fname).replace(/^\w/, c => c.toUpperCase()));
-                        this.storeUser.fname = this.fname;
+                        this.storeUser.fname = (this.fname.replace(/^\w/, c => c.toUpperCase()));
                         isUpdated = true;
                     }
                     if(this.lname !== '' && this.testName(this.lname)){
                         this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/lname').set((this.lname).replace(/^\w/, c => c.toUpperCase()));
-                        this.storeUser.lname = this.lname;
+                        this.storeUser.lname = (this.lname.replace(/^\w/, c => c.toUpperCase()));
                         isUpdated = true;
                     }
                     if(this.email !== '' && this.testEmail()){
