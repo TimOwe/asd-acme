@@ -104,7 +104,7 @@
                         isUpdated = true;
                     }
                     if(this.email !== '' && this.testEmail()){
-                        this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/email').set(this.email);
+                        this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/email').set((this.email).toLowerCase());
                         this.storeUser.email = this.email;
                         isUpdated = true;
                     }
