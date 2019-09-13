@@ -26,8 +26,19 @@ describe('Register', function () {
         cy.wait(2000);
         cy.url().should('eq', 'http://localhost:8080/');;
     })
-    it('Delete user', function () {
+    it('Update Name', function () {
         cy.wait(2000);
+        cy.get(':nth-child(7) > .v-btn--fab > .v-btn__content > .v-icon').click();
+        cy.wait(2000);
+        cy.get('#input-101').type('mamamam');
+        cy.get('button').contains('Save Changes').click();
+        cy.wait(2000);
+        cy.get(':nth-child(3) > :nth-child(2) > span').should('have.text','Your details have been updated.')
+        cy.get('.v-app-bar > .v-toolbar__content > [href="/"] > .v-btn__content > .v-icon').click();
+        cy.wait(2000);
+        cy.get('button.font-weight-light > .v-btn__content').should('have.text','Mamamam Harthartharthart')
+    })
+    it('Delete user', function () {
         cy.get(':nth-child(7) > .v-btn--fab > .v-btn__content > .v-icon').click();
         cy.wait(2000);
         cy.get('button').contains('Delete Account').click();

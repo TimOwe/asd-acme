@@ -9,6 +9,12 @@
         <div class="flex-grow-1"></div>
 
         <div v-if="this.$cookies.isKey('user')">
+            <v-avatar v-if="this.$cookies.get('user').picture !== ''">
+                <img v-bind:src="this.$cookies.get('user').picture">
+            </v-avatar>
+            <v-avatar v-else>
+                <img src="https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg">
+            </v-avatar>
             <v-btn text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
             <v-btn to="/logout" text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
             <v-btn name="settings" icon to="/settings">
@@ -32,9 +38,13 @@
 export default {
   name: 'App',
   created(){
-    },
-  data: () => ({
-  }),
+
+  },
+
+  data() {
+      return {
+      }
+  }
 };
 </script>
 
