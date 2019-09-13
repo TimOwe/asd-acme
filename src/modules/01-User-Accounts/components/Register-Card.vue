@@ -68,6 +68,7 @@
         this.lname = lname;
         this.dob = dob;
         this.isAdmin = false;
+        this.picture = '';
         this.password = md5(password);
     };
 
