@@ -1,24 +1,10 @@
 <template>
   <v-app>
     <v-app-bar app>
-<<<<<<< HEAD
       <span class="font-weight-light"> ACME</span>
-      <v-btn icon to="/">
-          <v-icon>mdi-home</v-icon>
-      </v-btn>
-      <v-btn icon to="/game">
-          <v-icon>mdi-gamepad-square</v-icon>
-      </v-btn>
-        <v-btn icon to="/leaderboardselect">
-            <v-icon>mdi-trophy</v-icon>
-        </v-btn>
-        <v-btn icon to="/quizcatalogue">
-            <v-icon>mdi-format-list-bulleted-square</v-icon>
-        </v-btn>
-        <span class="font-weight-light"> ACME</span>
         <v-btn icon to="/"><v-icon>mdi-home</v-icon></v-btn>
         <v-btn icon to="/game"><v-icon>mdi-gamepad-square</v-icon></v-btn>
-        <v-btn icon to="/leaderboard"><v-icon>mdi-trophy</v-icon></v-btn>
+        <v-btn icon to="/leaderboardselect"><v-icon>mdi-trophy</v-icon></v-btn>
         <v-btn icon to="/quizcatalogue"><v-icon>mdi-format-list-bulleted-square</v-icon></v-btn>
         <div class="flex-grow-1"></div>
 
