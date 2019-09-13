@@ -1,100 +1,92 @@
 <template>
     <div>
-        <v-layout justify-center class="headline pt-5">Welcome to the Leaderboard</v-layout>
-        <v-layout justify-center class="pt-9 pb-5" >
-            <v-btn  color="primary" @click="sortResults('asc')"><v-icon>mdi-chevron-up</v-icon>Sort Ascending</v-btn>
-            <v-btn @click="sortResults('desc')"><v-icon>mdi-chevron-down</v-icon> Sort Descending</v-btn>
+        <v-layout justify-center fill-height class="pb-12 pt-12">
+            <v-card dark elevation="12" width=1000 height="500">
+                <v-card-title class="justify-center">{{quiz.quiz_title}} - Leaderboard</v-card-title>
+                <v-card-text>
+                    <v-layout justify-center class="subtitle-1 pb-10">{{quiz.description}}</v-layout>
+                    <v-simple-table fixed>
+                        <thead>
+                        <tr>
+                            <th class="text-center">Rank</th>
+                            <th class="text-center">First Name</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="result in results">
+                            <td class="text-center">{{ result.rank }}</td>
+                            <td class="text-center">{{ result.fname }}</td>
+                            <td class="text-center">{{ new Date(result.time_start).toDateString() }}</td>
+                            <td class="text-center">{{ result.score }}%</td>
+                        </tr>
+                        </tbody>
+                    </v-simple-table>
+                </v-card-text>
+                <v-card-actions>
+                    <v-layout justify-center>
+                        <v-btn text color="blue" @click="sortResults('asc')">Order Ascending</v-btn>
+                        <v-btn text color="blue" @click="sortResults('desc')">Order Descending</v-btn>
+                    </v-layout>
+                </v-card-actions>
+            </v-card>
         </v-layout>
-    <v-simple-table height="500px">
-        <thead>
-        <tr>
-            <th class="text-left">Rank #</th>
-            <th class="text-left">User ID</th>
-            <th class="text-left">User Name</th>
-            <th class="text-left">Score</th>
-            <th class="text-left">Time (mins)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="result in sortedResults" v-bind:key="result.rank">
-            <td>{{ result.rank }}</td>
-            <td>{{ result.user_key }}</td>
-            <td>{{ result.calculatedName }}</td>
-            <td>{{ result.score }}</td>
-            <td>{{ new Date(result.timeend - result.timestart).getSeconds() }}</td>
-        </tr>
-        </tbody>
-    </v-simple-table>
-        <v-btn color="primary" @click="addTestData()">Add Test Data</v-btn>
     </div>
 </template>
 
 <script>
     export default {
-        name: "leaderboard",
-        beforeMount(){
-            this.getLeaderboard();
-            },
-        methods:{
-            getLeaderboard: function(){
-                this.$db.ref('/Leaderboard').on('value', (snap) => {
-                    var results = [];
-                    this.sortedResults = [];
-                    snap.forEach(entry => {
-                        var entryObj = entry.val();
-                        entryObj.key = entry.key;
-                        results.push(entryObj);
-                    });
-                    this.sortedResults = results.sort((a,b) => b.score - a.score)
-                    for(var i=0; i<this.sortedResults.length;i++){
-                        this.sortedResults[i].rank = i+1;
-                    }
-                });
-            },
-            addTestData(){
-                this.testData.forEach(entry => {
-                    this.$db.ref('/Leaderboard').push(entry);
-                });
-            },
-            sortResults(type){
-                return type === 'asc' ? this.sortedResults.sort((a,b) => b.score-a.score) : this.sortedResults.sort((a,b) => a.score-b.score);
-            }
+        name: "Leaderboard",
+        async beforeMount() {
+            var quizId = this.$route.params.id;
+            this.$db.ref('/Quizs/').child(quizId).once('value', (snap) => {
+                this.quiz = snap.val();
+            });
+            this.results = await this.getResultsArrayFromQuiz(quizId);
         },
-        data(){
+        data() {
             return {
-                testData: [{
-                    key: '-L376r782kba',
-                    user_key: '-L783tgydiuab',
-                    calculatedName: 'Alex Blazevski',
-                    quiz_key: '111',
-                    score: 0.49,
-                    timestart: 1566105295428,
-                    timeend: 1566106140989
-                },
-                    {
-                        key: '-L3790uji9kba',
-                        user_key: '-L783hbsbkfuab',
-                        calculatedName: 'Daniel Hartshorne',
-                        quiz_key: '111',
-                        score: 0.87,
-                        timestart: 1566105295428,
-                        timeend: 1566105314583
-                    },
-                    {
-                        key: '-L377894gh9a',
-                        quiz_key: '222',
-                        calculatedName: 'Tim Owe',
-                        user_key: '-L783fhsiuab',
-                        score: 0.76,
-                        timestart: 1566105295428,
-                        timeend: 1566105314583
-                    }],
-                sortedResults: [],
+                results: [],
+                quiz: {}
             }
         },
+        methods: {
+            getResultsArrayFromQuiz(quizKey) {
+                var results = [];
+                return new Promise((resolve) => {
+                    this.$db.ref('/Users').once('value', (snap) => {
+                        snap.forEach(user => {
+                            var userObj = user.val();
+                            if (!!userObj.results) {
+                                var user_results = Object.values(userObj.results);
+                                user_results.forEach(result => {
+                                    if (result.quizId === quizKey) {
+                                        result.userKey = user.key;
+                                        result.fname = userObj.fname;
+                                        results.push(result);
+                                    }
+                                    this.results = results.sort((a,b) => b.score - a.score)
+                                    for(var i=0; i<this.results.length;i++){
+                                        this.results[i].rank = i+1;
+                                    }
+                                });
+                            }
+                        });
+                        resolve(results);
+                    })
+                })
+            },
+            sortResults(type) {
+                return type === 'asc' ? this.results.sort((a, b) => b.score - a.score) : this.results.sort((a, b) => a.score - b.score);
+            }
+        }
     }
 </script>
 
 <style scoped>
-
+    .v-sheet--offset {
+        top: -24px;
+        position: relative;
+    }
 </style>

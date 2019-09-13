@@ -15,7 +15,6 @@ import Join from './modules/07-Host-Game/Views/Join'
 import Live from './modules/07-Host-Game/Views/Live';
 import Logout from './modules/01-User-Accounts/Views/LogedOut';
 import Settings from './modules/01-User-Accounts/Views/Settings';
-import Quiz_Leaderboard from './modules/12-leaderboard-quiz/views/Quiz_Leaderboard'
 
 Vue.use(Router);
 
@@ -74,11 +73,6 @@ const router = new Router({
           component: LeaderboardSelect
       },
       {
-          path: '/leaderboard',
-          name: 'leaderboard',
-          component: Leaderboard
-      },
-      {
           path: '/host',
           name: 'Host',
           component: Host
@@ -99,8 +93,8 @@ const router = new Router({
       },
       {
           path:'/leaderboard/:id',
-          name: 'Quiz_Leaderboard',
-          component: Quiz_Leaderboard
+          name: 'Leaderboard',
+          component: Leaderboard
       }
   ]
 });
