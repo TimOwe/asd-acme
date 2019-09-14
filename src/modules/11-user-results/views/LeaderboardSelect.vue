@@ -3,7 +3,7 @@
         <v-col>
             <v-card class="mx-auto" max-width="90%">
                 <v-toolbar flat>
-                    <v-toolbar-title class="text-center, display-1">Quizzes</v-toolbar-title>
+                    <v-toolbar-title class="text-center, display-1">Select Quiz Leaderboard</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-container fluid>
@@ -33,6 +33,7 @@
             quizs: []
         }),
         methods: {
+            // get all quizzes from the database
             getQuizzes() {
                 let quizzes = [];
                 this.$db.ref('/Quizs').on('value', (snap) => {
