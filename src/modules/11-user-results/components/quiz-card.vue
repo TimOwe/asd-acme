@@ -29,6 +29,7 @@
             key: String
         },
         methods: {
+            // push to a new router with the quizID that is passed in
             viewLeaderboard(quizKey) {
                 this.$router.push({path: `/leaderboard/${quizKey}`});
             }
