@@ -64,9 +64,7 @@
             this.results = await this.getResultsArrayFromQuiz(quizId);
             this.$db.ref('/Quizs/').child(quizId).once('value', (snap) => {
                 this.quiz = snap.val();
-                setTimeout(() => {
-                    this.loading=false;
-                }, 1200)
+                this.loading=false;
             });
         },
         data(){

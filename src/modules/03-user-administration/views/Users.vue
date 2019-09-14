@@ -9,7 +9,6 @@
                             <v-layout class="v-subheader">Email: </v-layout> <v-text-field v-model="user.email"></v-text-field>
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn large color="green">Save</v-btn>
                             <v-btn depressed large color="red" class="white--text" @click="deleteUser(user.key)">Delete</v-btn>
                             <v-btn large color="primary" @click="handleShowLogs(user.key)">View Logs</v-btn>
                         </v-card-actions>
