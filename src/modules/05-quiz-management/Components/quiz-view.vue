@@ -2,21 +2,22 @@
     <div>
         <v-container>
             <v-card>
-            <v-toolbar flat>
-                <v-btn icon @click="onBackButton"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                <v-toolbar-title class="text-center, headline">Quizzes</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn text color="grey darken-2"><v-icon size="35">mdi-play</v-icon></v-btn>
-                <v-btn text color="grey darken-2" @click="triggerEdit()" :quiz="quiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
-                <v-btn text color="grey darken-2" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
-            </v-toolbar>
-            <v-img :src="img" :aspect-ratio="50/13" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
-            </v-img>
+                <v-toolbar flat color="primary">
+                    <v-btn color="white" icon @click="onBackButton"><v-icon>mdi-arrow-left</v-icon></v-btn>
+                    <v-layout class="white--text"><span class="headline">Quizzes</span></v-layout>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="white"><v-icon size="35">mdi-play</v-icon></v-btn>
+                    <v-btn text color="white" @click="triggerEdit()" :quiz="quiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
+                    <v-btn text color="white" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
+                </v-toolbar>
+                <v-container grid-list-md>
+
+            <v-img :src="img" :aspect-ratio="50/13" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"><!--Sets aspect ratio on image--></v-img>
 
             <v-container>
-                    <v-layout pt-5 class="display-2">{{quizTitle}}</v-layout>
-                    <v-layout pt-5 class="headline">{{description}}</v-layout>
-                    <v-layout pt-5 class="subtitle-1"><b>Created by: </b>{{owner}}</v-layout>
+                <v-layout pt-5 class="display-2">{{quizTitle}}</v-layout>
+                <v-layout pt-5 class="headline">{{description}}</v-layout>
+                <v-layout pt-5 class="subtitle-1"><b>Created by: </b>{{owner}}</v-layout>
             </v-container>
 
             <v-expansion-panels>
@@ -27,17 +28,17 @@
                             <v-checkbox v-model="readonly" label="Show Answers" align="end"></v-checkbox>
                         </div>
                         <v-list>
-                            <v-list-group v-for="(question, index) in questions" :key="question.q" sub-group>
+                            <v-list-group v-for="(question, index) in questions" :key="question.q" sub-group><!--Displays an list item for each question in the quiz-->
                                 <template v-slot:activator>
-                                        <v-list-item-title class="title">{{index+1}}. {{question.q}}</v-list-item-title>
-                                        <v-list-item-action-text>{{question.score}} Points</v-list-item-action-text>
+                                        <v-list-item-title class="title">{{index+1}}. {{question.q}}</v-list-item-title><!--Displays the question as a list item-->
+                                        <v-list-item-action-text>{{question.score}} Points</v-list-item-action-text><!--Displays its point score-->
                                 </template>
 
-                                <div v-if="readonly===true">
+                                <div v-if="readonly===true"><!--If the checkbox has been ticked, the option will become available-->
                                     <v-list-item-title class="body-1, pl-4">Answers</v-list-item-title>
                                     <v-list-item>
                                         <v-layout>
-                                            <v-flex xs2 v-for="(n,i) in 4" :key="n">
+                                            <v-flex xs2 v-for="(n,i) in 4" :key="n"><!--Displays each answer propvided, highlighting the correct answer in green if its index matches the index defined in the quiz creation-->
                                                 <v-container v-bind:class="{ 'green--text': answerCheck(question.c, i), 'black--text': answerCheck(question.c, i), 'body-1': true}" name="answer" v-model="question.a[i]" :label="'Answer #'+ n">{{n}}. {{question.a[i]}}</v-container>
                                             </v-flex>
                                         </v-layout>
@@ -49,13 +50,10 @@
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
+                </v-container>
             </v-card>
         </v-container>
 
-       <!-- <v-dialog persistent scrollable fullscreen hide-overlay transition="dialog-bottom-transition" v-model="edit">
-            <edit-card @closeEdit="onCloseEdit" :quiz="quiz" ></edit-card>
-        </v-dialog>
--->
         <v-dialog width=350 v-model="deleteConfirm">
             <v-card>
                 <v-card-title>
@@ -85,7 +83,7 @@
         props: {
             quiz: Object
         },
-        beforeMount: function(){
+        beforeMount: function(){//assigns all properties of the quiz object prop to computed properties declared in the component to avoid mutation
             this.img = this.quiz.img;
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
@@ -93,7 +91,7 @@
             this.questions = this.quiz.questions
         },
         methods: {
-            deleteQuiz: function(quizKey) {
+            deleteQuiz: function(quizKey) {//Deletes the quiz by locating it in firebase using its key
                 this.deleteConfirm = false;
                 this.loading = true;
                 setTimeout(() => {
@@ -104,16 +102,17 @@
 
             },
             triggerEdit: function(){
-                this.$emit("quizEdit");
+                this.$emit("quizEdit");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
                 },
             answerCheck: function(c, a){
-                return parseInt(c)===parseInt(a);
+                return parseInt(c)===parseInt(a);//Checks if the correct answer index printed is equal to the answer defined in the question
             },
             onBackButton() {
-                this.$emit("catalogueView");
+                this.$emit("catalogueView");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
             },
 
         },
+        //Computed properties
         data: () => ({
             edit: false,
             deleteConfirm: false,

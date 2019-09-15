@@ -1,14 +1,13 @@
 <template>
     <v-container grid-list-md>
-
-        <div v-if="render === 'quizCatalogue'">
+        <div v-if="render === 'quizCatalogue'"> <!--Displays if render is equal to quiCatalogue-->
             <v-container grid-list-md>
                 <v-layout justify-center align-center>
                     <v-row>
                         <v-col>
                             <v-layout pl-10 justify-start align-start class="text-center, display-1">Quizzes</v-layout>
                         </v-col>
-                        <v-col  >
+                        <v-col>
                             <v-text-field  hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
                         </v-col>
                         <v-col>
@@ -21,28 +20,23 @@
 
             <v-container>
                 <v-row>
-                    <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4">
+                    <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
                         <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
                     </v-col>
                 </v-row>
             </v-container>
         </div>
 
-        <div v-else-if="render === 'quizView'">
-            <v-scroll-y-transition>
-                <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
-            </v-scroll-y-transition>
+        <div v-else-if="render === 'quizView'"><!--Displays if render is equal to quizview-->
+            <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
         </div>
 
-        <div v-if="render === 'editView'">
-            <v-scroll-y-reverse-transition>
-                <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
-                </v-scroll-y-reverse-transition>
+        <div v-if="render === 'editView'"><!--Displays if render is equal to editview-->
+            <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
         </div>
 
         <v-footer class="mt-12"></v-footer>
     </v-container>
-
 </template>
 
 
@@ -55,6 +49,7 @@
     export default {
         name: "QuizCatalogue",
         components: {quizCard, quizView, editCard},
+
         // grabbing all data on page render
         beforeMount: function(){
             this.getQuizzes();
@@ -78,37 +73,38 @@
             },
             // function to push dummy data to firebase
             onRefresh: function (updQuiz) {
-                this.getQuizzes();
-                for (var i=0; i<this.quizs.length;i++){
-                    if(this.quizs[i].key===updQuiz.key){
+                this.getQuizzes();//Collects new and updated data from firebase
+                for (var i=0; i<this.quizs.length;i++){//A check is run from the quiz recieved from the edit component
+                    if(this.quizs[i].key===updQuiz.key){ //if the key of the object edited from the edit view and the okey from the database matches, updates the object and renders the updated view with the quizView component
                         this.viewingQuiz = this.quizs[i];
                         this.render = "quizView";
                     }
                 }
             },
-            onQuizView: function(quiz) {
+            onQuizView: function(quiz) {//If called, sets the render as quizview and also sets a quiz to be viewed, displaying it on the page
                 this.viewingQuiz = quiz;
                 this.render = "quizView";
 
             },
-            onQuizEdit: function() {
+            onQuizEdit: function() {//If called, sets the render as the edit view component, sending the viewingQuiz
                 //this.viewingQuiz = quiz;
                 this.render = "editView";
 
             },
-            onCatalogueView: function() {
+            onCatalogueView: function() {//If called, sets render to the quizCatalogue component
                 this.viewingQuiz = '';
                 this.render = "quizCatalogue";
 
             },
-            resetSearch: function() {
+            resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
             },
             forceRerender() {
+                //Changes key top notify vuie that a change to the object has occured, forcing an update and re-render
                 this.editKey += 1;
             }
         },
-        // dummy data
+        //Initialised data
         data: () => ({
             render: "quizCatalogue",
             edit: false,

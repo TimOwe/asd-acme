@@ -28,7 +28,7 @@
         props: {
             quiz: Object
         },
-        beforeMount: function(){
+        beforeMount: function(){//assigns all properties of the quiz object prop to computed properties declared in the component to avoid mutation
             this.img = this.quiz.img;
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
@@ -36,18 +36,11 @@
             this.questions = this.quiz.questions
         },
         methods: {
-            deleteQuiz: function(quizKey) {
-                this.deleteConfirm = false;
-                this.loading = true;
-                setTimeout(() => {
-                    this.loading = false;
-                    this.$db.ref('/Quizs/' + quizKey).remove();
-                }, 2000);
-            },
             onViewButton() {
-                this.$emit("quizView", this.quiz);
+                this.$emit("quizView", this.quiz);//Emits the quizView command to the QuizCatalogue, sending the quiz object as a parameter
             },
         },
+        //Computed properties
         data: () => ({
             edit: false,
             deleteConfirm: false,
