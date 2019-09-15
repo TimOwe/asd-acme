@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint",
     "deploy": "npm run build && firebase --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn && firebase deploy --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn",
     "test:unit": "vue-cli-service test:unit --silent",
-    "cypress": "./node_modules/.bin/cypress open"
+    "cypress": "./node_modules/.bin/cypress open",
+    "test:HRTest": "node ./src/modules/07-Host-Game/Utils/Core.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
