@@ -10,6 +10,14 @@
 
         <v-layout justify-center class="headline pt-5">Joined Users</v-layout>
 
+        <v-container grid-md-list>
+            <v-layout row wrap class="pa-3">
+                <v-flex  v-for="user in participants" xs4>
+                    <v-btn depressed color="blue" class="white--text mb-5">{{user.displayName}}</v-btn>
+                </v-flex>
+            </v-layout>
+        </v-container>
+
     </div>
 </template>
 
@@ -18,11 +26,35 @@
         name: "HostCL",
         beforeMount(){
             this.sessionKey = this.$route.params.id;
+            this.getSessionFromToken(this.sessionKey);
         },
         data(){
             return {
-                sessionKey: ''
+                sessionKey: '',
+                participants: [],
+                sessions: []
             }
+        },
+        methods: {
+            getSessionFromToken(token){
+                this.$db.ref('/Sessions').once('value', (snap) => {
+                    snap.forEach(session => {
+                        var sessionObj = session.val();
+                        sessionObj.key = session.key;
+                        if(sessionObj.token === token){
+                            this.currentSession = sessionObj;
+                            // console.log(this.currentSession);
+                        }
+                    });
+                    this.$db.ref('/Sessions/'+this.currentSession.key+'/participants').on('value', (snap)=> {
+                        this.participants = [];
+                        snap.forEach(user => {
+                            this.participants.push(user.val())
+                        });
+                        console.log(this.participants);
+                    })
+                });
+            },
         }
     }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            User has been created.
+            <p>{{validationText}}</p>
         </v-card-title>
         <v-card-actions>
             <v-layout>
@@ -13,12 +13,13 @@
 
 <script>
     export default {
-        name: "Created-Card",
+        name: "Changed-Card",
         methods: {
             closeValidation(){
                 this.$emit('close')
             }
-        }
+        },
+        props: ['validationText'],
     }
 </script>
 

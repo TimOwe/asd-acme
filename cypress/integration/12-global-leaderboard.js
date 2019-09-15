@@ -1,20 +1,17 @@
 describe('Global Leaderboard', function () {
     before(() => {
-        cy.visit('http://localhost:8080/leaderboard')
+        cy.visit('http://localhost:8080/leaderboardselect')
     })
-    it('Has user entries', function () {
-        cy.get('table').contains('td', 'Daniel Hartshorne');
-        cy.get('table').contains('td', 'Tim Owe');
-        cy.get('table').contains('td', 'Alex Blazevski');
+    it('Finds quiz', function () {
+        cy.get(':nth-child(2)').contains('.v-card__title', 'Tim\'s Test Quiz');
+        cy.get(':nth-child(2) > .v-card > .v-card__actions > .v-btn').contains('View Leaderboard').click();
     })
     it('Sorts by descending', function () {
-        cy.get('button').contains('Sort Descending').click();
-        cy.get('table').contains('tr', 'Daniel Hartshorne').and('contain', '87%').and('contain', '1');
-        cy.get('table').contains('tr', 'Alex Blazevski').and ('contain', '49%').and('contain', '3');
+        cy.get('button').contains('Order Descending').click();
+        cy.get('table').find('tr');
     })
     it('Sorts by Ascending', function () {
-        cy.get('button').contains('Sort Ascending').click();
-        cy.get('table').contains('tr', 'Daniel Hartshorne').and('contain', '87%').and('contain', '1');
-        cy.get('table').contains('tr', 'Alex Blazevski').and ('contain', '49%').and('contain', '3');
+        cy.get('button').contains('Order Ascending').click();
+        cy.get('table').find('tr');
     })
 })

@@ -7,12 +7,15 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy": "npm run build && firebase --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn && firebase deploy --token 1/GYJu1Rk28FU88g6r7i9Dj1zt4zPLwyUXxyJpBPfbkLlNSNrFM2S4W4jin5jQE3Fn",
-    "test:unit": "vue-cli-service test:unit --silent"
+    "test:unit": "vue-cli-service test:unit --silent",
+    "cypress": "./node_modules/.bin/cypress open",
+    "test:HRTest": "node ./src/modules/07-Host-Game/Utils/Core.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
     "firebase": "^6.4.0",
     "firebase-admin": "^8.3.0",
+    "firebase-functions": "^3.2.0",
     "firebase-tools": "^7.2.2",
     "g": "^2.0.1",
     "js-md5": "^0.7.3",
