@@ -155,11 +155,11 @@
 
             formCheck: function(){
                 this.falseCount = 0;//Sets a false count
-                if(!this.$refs.quizForm.validate(true)) {//First validates all elements with rule bindings within the quizform v-form element
+                if(!this.$refs.quizForm.validate(true)) {//First validates all elements with rule bindings within the quizform v-form element, validating them visually
                     this.falseCount++;//If a field does not pass validation tests, the count is incremented
                 }
                 for (let i =0; i<this.questionBank.length; i++){//For every question in the questionbank
-                    if(!this.$refs.questionForm[i].validate(true)){//Validate every field for that question
+                    if(!this.$refs.questionForm[i].validate(true)){//Validate every field for that question, validating them visually
                         this.falseCount++;//if a field for the specified question does not pass validation, falsecount is incremented
                     }
                 }
