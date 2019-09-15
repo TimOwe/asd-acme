@@ -171,7 +171,7 @@
                 var imageCheck = this.img !== '';
                 var questionCheck = true;
                 this.questionBank.forEach(question => {
-                    if (question.q !== '' && question.c.length !== 4 && question.score > 99) {
+                    if (question.q !== '' && question.q.length > 4 && question.q.length < 80 && question.c.length !== 4 && question.score > 99 && question.score < 10000 ) {
                         for (var i = 0; i < 4; i++) {
                             if (question.a[i] === '' || question.a[i] === undefined || question.a[i].length > 40) {
                                 questionCheck = false;
