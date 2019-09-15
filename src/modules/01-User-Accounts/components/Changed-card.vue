@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Your password has been successfully changed.
+            <p>{{validationText}}</p>
         </v-card-title>
         <v-card-actions>
             <v-layout>
@@ -18,7 +18,8 @@
             closeValidation(){
                 this.$emit('close')
             }
-        }
+        },
+        props: ['validationText'],
     }
 </script>
 

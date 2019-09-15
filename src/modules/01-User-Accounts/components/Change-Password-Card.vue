@@ -23,12 +23,12 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeChange()">Close</v-btn>
-            <v-btn color="blue darken-1" text @click="handleRegister()">Save</v-btn>
+            <v-btn color="blue darken-1" text @click="closeDialog()">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="handlePasswordChange()">Save</v-btn>
         </v-card-actions>
 
         <v-dialog width=350 v-model="done">
-            <ChangedCard @close="closeDone"></ChangedCard>
+            <ChangedCard validationText="Your password has been changed successfully." @close="closeDone"></ChangedCard>
         </v-dialog>
 
     </v-card>
@@ -40,7 +40,8 @@
         name: "Change-Password-Card",
         components: {ChangedCard},
         methods: {
-            handleRegister(){
+            //Handles the password change
+            handlePasswordChange(){
                 this.validation = '';
                 if(this.isValid() && this.isEqual()) {
                     this.$db.ref('/Users/' + (this.$cookies.get('user').key) + '/password').set(md5(this.pass));
@@ -48,17 +49,20 @@
                 }
             },
 
+            //Removes entered text and validation
             clearScreen(){
                 this.pass = '';
                 this.rpass = '';
                 this.validation ='';
             },
 
-            closeChange(){
+            //Closes the change password dialog
+            closeDialog(){
                 this.$emit('close')
                 this.clearScreen();
             },
 
+            //Checks if passwords are equal
             isEqual(){
                 if(this.pass === this.rpass){
                     return true;
@@ -69,6 +73,7 @@
                 }
             },
 
+            //Checks if password is between 6 and 20 characters
             isValid(){
                 if((/^.{6,20}$/.test(this.pass))) {
                     return true;
@@ -77,14 +82,12 @@
                     this.validation = 'Passwords must be between 6-20 characters';
                     return false;
                 }
-
             },
 
-
+            //Closes the done validation and the dialog
             closeDone(e){
                 this.done = e;
-                this.$emit('close');
-                this.clearScreen();
+                this.closeDialog();
             }
         },
         data() {

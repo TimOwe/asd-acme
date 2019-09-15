@@ -25,7 +25,7 @@
         </v-container>
 
         <v-dialog v-model="registerDialog" persistent max-width="600px">
-        <RegisterCard @close="Updatereg"></RegisterCard>
+        <RegisterCard @close="closeRegDialog"></RegisterCard>
         </v-dialog>
     </div>
 </template>
@@ -38,8 +38,9 @@
         name: "login-card-vue",
         components: {RegisterCard},
         methods:{
+            //Handles when the login button is pressed
             async handleLogin(){
-                var auth = await this.auth(this.logEmail, this.logPass);
+                var auth = await this.auth((this.logEmail).toLowerCase(), this.logPass);
                 if(auth.user !== undefined){
                     this.$cookies.set('user', auth.user, '1d');
                     this.addLog(auth.user.key,'Log In');
@@ -48,30 +49,32 @@
                     this.error = "Username or Password is Incorrect";
                 }
             },
+
+            //Adds a log. For Matt Zylstra's feature
             addLog(userKey,logType){
                 this.$db.ref('/Users/'+userKey+'/Logs').push({
                     time: new Date().toISOString(),
                     type: logType
                 })
             },
-            async auth(email, password) {
 
+            //Checks if user exists in the database and email and password is correct
+            async auth(email, password) {
                 var authObj = {},
                     //Declaring an Object
                     matched = [],
                     //Declaring an Array
                     users = await this.getUsers();
-
                 users.forEach((user) => {
                     if (user.email === email && user.password === md5(password)) {
                         matched.push(user);
                     }
                 });
                 authObj.user = matched[0];
-
                 return authObj
             },
 
+            //Gets users from the database
             getUsers(){
                 return new Promise(resolve => {
                     var users = [];
@@ -89,8 +92,8 @@
                 })
             },
 
-            //listener
-            Updatereg(e) {
+            //Closes the register dialog
+            closeRegDialog(e) {
                 this.registerDialog = e;
             }
         },

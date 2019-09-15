@@ -1,10 +1,12 @@
 <template>
-    <v-app>
-        <br>
-        <h2 style="text-align: center">You have been successfully logged out!</h2>
-        <br>
-        <p style="text-align: center">You will be redirected to the home page in a moment</p>
-    </v-app>
+    <v-content>
+        <v-container>
+            <br>
+            <h2 style="text-align: center">You have been successfully logged out!</h2>
+            <br>
+            <p style="text-align: center">You will be redirected to the home page in a moment</p>
+        </v-container>
+    </v-content>
 </template>
 
 <script>
