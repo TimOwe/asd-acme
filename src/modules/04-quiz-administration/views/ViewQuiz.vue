@@ -7,8 +7,8 @@
                         <v-card-title>{{quiz.quiz_title}}</v-card-title>
                         <button-card :img="quiz.img" ></button-card>
                         <v-card-actions>
-                        <v-btn depressed large color="red" class="white--text" @click="deleteQuiz(quiz.key)">Delete</v-btn>
-                        <v-btn large color="primary" @click="handleShowLogs(quiz.key)">View Logs</v-btn>
+                            <v-btn depressed large color="red" class="white--text" @click="deleteQuiz(quiz.key)">Delete</v-btn>
+                            <v-btn large color="primary" @click="handleShowLogs(quiz.key)">View Logs</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -33,10 +33,15 @@
 
         },
         components:{buttonCard},
+        data(){
+            return {
+                quizs: []
+            }
+        },
         methods: {
             deleteQuiz(quizKey) {
                 this.$db.ref('/Quizs/'+quizKey).remove();
-                location.reload();
+                // location.reload();
             }
         },
 

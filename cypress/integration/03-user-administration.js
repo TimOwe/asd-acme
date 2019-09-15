@@ -4,13 +4,6 @@ describe('User Administration', function() {
         cy.visit('http://localhost:8080/users');
     });
 
-    it('View A User Log', function () {
-        cy.wait(2000);
-        cy.get('.v-btn.v-btn--contained.theme--light.v-size--large.primary').first().contains('View Logs');
-        //cy.wait(2000);
-        // cy.get('.v-btn.v-btn--contained.theme--light.v-size--large.primary').first().click();
-    });
-
     it('Delete A User', function () {
         cy.wait(2000);
         cy.get('.white--text.v-btn.v-btn--depressed.theme--light.v-size--large.red').last().click();
@@ -18,10 +11,16 @@ describe('User Administration', function() {
         cy.get('.v-btn.v-btn--contained.theme--light.v-size--large.primary').first().click();
     });
 
-    // it('Delete A User Log', function () {
-    //     cy.get(<span class="v-btn__content">Delete</span>);
-    //     cy.get(<span className="v-btn__content">View Logs</span>);
-    //     cy.get(<span className="v-btn__content">X</span>);
-    // })
+    it('View A User Log', function () {
+        cy.wait(2000);
+        cy.get('.v-btn.v-btn--contained.theme--light.v-size--large.primary').first().contains('View Logs');
+        //cy.wait(2000);
+        // cy.get('.v-btn.v-btn--contained.theme--light.v-size--large.primary').first().click();
+    });
+
+    it('Delete A User Log', function () {
+         cy.wait(2000);
+         cy.get('button span.v-btn__content').first().click();
+     })
 });
 
