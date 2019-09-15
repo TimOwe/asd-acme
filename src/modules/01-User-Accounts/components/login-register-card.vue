@@ -46,7 +46,6 @@
                     this.$router.push('/');
                 } else {
                     this.error = "Username or Password is Incorrect";
-                    this.login='';
                 }
             },
             addLog(userKey,logType){

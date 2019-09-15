@@ -21,7 +21,7 @@
           <v-btn to="/game">09 Game Playing</v-btn>
         </flex>
         <flex xs3 class="mr-4">
-          <v-btn to="/leaderboard">12 Leaderboard</v-btn>
+          <v-btn to="/leaderboardselect">12 Leaderboard</v-btn>
         </flex>
         <flex xs3 class="mr-4">
           <v-btn to="/quizcatalogue">05 Quiz Management</v-btn>

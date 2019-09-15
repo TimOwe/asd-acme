@@ -49,6 +49,9 @@
                 <v-icon class="mr-2" small>mdi-clock</v-icon><span class="caption grey--text font-weight-light">last attempt 26 minutes ago</span>
             </v-card-text>
         </v-card>
+        <v-overlay :value="loading">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
     </div>
 </template>
 
@@ -56,11 +59,13 @@
     export default {
         name: "Leaderboard",
         async beforeMount(){
+            this.loading=true;
             var quizId = this.$route.params.id;
+            this.results = await this.getResultsArrayFromQuiz(quizId);
             this.$db.ref('/Quizs/').child(quizId).once('value', (snap) => {
                 this.quiz = snap.val();
+                this.loading=false;
             });
-            this.results = await this.getResultsArrayFromQuiz(quizId);
         },
         data(){
             return {
@@ -85,7 +90,8 @@
                     240,
                 ],
                 results: [],
-                quiz: {}
+                quiz: {},
+                loading: false
             }
         },
         methods:{

@@ -12,7 +12,12 @@
                     <v-flex xs12>
                         <v-text-field  v-model="rpass" label="Confirm Password" type="password" required></v-text-field>
                     </v-flex>
-                    <span style="margin-left: 3px; color: red">{{validation}}</span>
+                    <div v-if="validation !== ''">
+                        <span style="margin-left: 3px; color: red">{{validation}}</span>
+                    </div>
+                    <div>
+
+                    </div>
                 </v-layout>
             </v-container>
         </v-card-text>
@@ -23,43 +28,58 @@
         </v-card-actions>
 
         <v-dialog width=350 v-model="done">
-            <CreatedCard @close="closeDone"></CreatedCard>
+            <ChangedCard @close="closeDone"></ChangedCard>
         </v-dialog>
 
     </v-card>
 </template>
 <script>
-    import CreatedCard from "../components/Created-Card";
+    import ChangedCard from "../components/Changed-card";
     const md5 = require('md5');
     export default {
         name: "Change-Password-Card",
-        components: {CreatedCard},
+        components: {ChangedCard},
         methods: {
             handleRegister(){
-                if(this.isValid()){
-                    this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/password').set(md5(this.pass));
+                this.validation = '';
+                if(this.isValid() && this.isEqual()) {
+                    this.$db.ref('/Users/' + (this.$cookies.get('user').key) + '/password').set(md5(this.pass));
                     this.done = true;
-                } else {
-                    this.validation = 'Passwords do not match';
                 }
             },
 
             clearScreen(){
                 this.pass = '';
                 this.rpass = '';
+                this.validation ='';
             },
 
             closeChange(){
                 this.$emit('close')
+                this.clearScreen();
+            },
+
+            isEqual(){
+                if(this.pass === this.rpass){
+                    return true;
+                }
+                else{
+                    this.validation = 'Passwords do not match';
+                    return false;
+                }
             },
 
             isValid(){
-                return this.pass === this.rpass;
+                if((/^.{6,20}$/.test(this.pass))) {
+                    return true;
+                }
+                else{
+                    this.validation = 'Passwords must be between 6-20 characters';
+                    return false;
+                }
+
             },
 
-            closeVal(e){
-                this.validation = e;
-            },
 
             closeDone(e){
                 this.done = e;

@@ -27,7 +27,7 @@
 
         <v-container>
             <v-layout justify-center align-center>
-                    <v-btn depressed large color="primary" @click="nickname = true">Join Game</v-btn>
+                    <v-btn depressed large color="primary" @click="handleJoin()">Join Game</v-btn>
                     <v-btn class="ml-5" large>Host Info</v-btn>
             </v-layout>
         </v-container>
@@ -51,6 +51,45 @@
                     <v-btn fab absolute right bottom color="light-green" @click="addParticipant()"><v-icon>mdi mdi-arrow-right</v-icon></v-btn>
                 </v-card-actions>
             </v-card>
+            </v-layout>
+        </v-dialog>
+
+        <v-dialog width="500" v-model="userJoin">
+            <v-layout justify-center>
+                <v-card elevation="12" height="300" width="500">
+                    <v-layout class="headline pt-9" justify-center>
+                        Log In or Guest?
+                    </v-layout>
+                        <v-card-actions>
+                            <v-container grid-md-list>
+                                <v-layout justify-center class="pt-12">
+                                    <v-flex xs2>
+                                        <v-btn color="primary">Log In</v-btn>
+                                    </v-flex>
+                                    <v-flex xs2>
+                                        <v-btn color="white" @click="nickname = true; userJoin=false">Guest</v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-card-actions>
+                </v-card>
+            </v-layout>
+        </v-dialog>
+
+        <v-dialog width="500" v-model="authenticated">
+            <v-layout justify-center>
+                <v-card elevation="12" height="300" width="500">
+                    <v-layout class="headline pt-9" justify-center>
+                       Adding You To The Game...
+                    </v-layout>
+                    <v-card-text>
+                        <v-layout justify-center class="pt-12">
+                            <v-flex xs2>
+                                <v-progress-circular indeterminate size="64"></v-progress-circular>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                </v-card>
             </v-layout>
         </v-dialog>
 
@@ -81,10 +120,21 @@
                 },
                 nickname: false,
                 displayName: '',
-                participants: []
+                participants: [],
+                isActiveUser: true,
+                authenticated: false,
+                userJoin: false
             }
         },
         methods:{
+            handleJoin(){
+                if(this.isActiveUser){
+                    this.authenticated = true;
+                    // this.addActiveUser();
+                } else {
+                    this.userJoin = true;
+                }
+            },
             getSessionFromToken(token){
                 this.$db.ref('/Sessions').once('value', (snap) => {
                     snap.forEach(session => {
