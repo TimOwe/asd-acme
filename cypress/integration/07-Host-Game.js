@@ -4,17 +4,11 @@ describe('Register', function () {
         cy.visit('http://localhost:8080/')
     });
 
-    it('Go To Home And Navigate To Host', function () {
-        cy.get('.v-btn').contains('Host Game').click();
-        cy.wait(2000);
-        cy.url().should('eq', 'http://localhost:8080/host');
-
-    });
-
     it('Enter Meta Data For Session', function () {
+        cy.visit('http://localhost:8080/host');
         cy.get('.v-select__selections').click();
         cy.wait(1000);
-        cy.get('#ancient-history-list-item-54').click();
+        cy.get('.v-list-item__content').first().click();
         cy.get('input').eq(1).type(20);
         cy.get('input').last().type(100);
         // cy.get('[name="logpass"]').type('passpasspasspass');

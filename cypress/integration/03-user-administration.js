@@ -27,7 +27,7 @@ describe('User Administration', function() {
         cy.url().should('eq', 'http://localhost:8080/');;
     });
     it('View A User Log', function () {
-        cy.get(':nth-child(2) > .v-btn').click();
+        cy.visit('http://localhost:8080/users');
         cy.wait(2000);
         cy.get('.container').contains('Mattmattmattmatt Zylzylzylzyl').parent().contains('View Logs').click();
     });
