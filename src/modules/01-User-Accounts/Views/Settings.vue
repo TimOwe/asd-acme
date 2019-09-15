@@ -21,7 +21,7 @@
                             <v-card-text name="fname" style="font-size: 22px; padding-left: 16px">First Name:</v-card-text>
                         </v-row>
                         <v-row>
-                            <v-text-field v-model="fname" style="padding-left: 16px; max-width: 600px;" label="First Name" single-line outlined></v-text-field>
+                            <v-text-field name="fnamefield" v-model="fname" style="padding-left: 16px; max-width: 600px;" label="First Name" single-line outlined></v-text-field>
                             <span style="margin-left: 20px; margin-top:15px; font-size: 18px; color: red">{{fNameWarning}}</span>
                         </v-row>
                         <v-row>

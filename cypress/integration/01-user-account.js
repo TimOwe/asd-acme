@@ -30,7 +30,7 @@ describe('Register', function () {
         cy.wait(2000);
         cy.get(':nth-child(7) > .v-btn--fab > .v-btn__content > .v-icon').click();
         cy.wait(2000);
-        cy.get('#input-101').type('mamamam');
+        cy.get('[name="fnamefield"]').type('mamamam');
         cy.get('button').contains('Save Changes').click();
         cy.wait(2000);
         cy.get(':nth-child(3) > :nth-child(2) > span').should('have.text','Your details have been updated.')
