@@ -5,8 +5,11 @@ describe("Creator Card", () => {
     it("Create Quiz Correctly", () => {
         const localVue = createLocalVue();
         const wrapper = shallowMount(CreatorCard, {
-            localVue
+            localVue,
+
+
         });
+
         wrapper.vm.quizTitle = "Unit Test";
         wrapper.vm.description = "This is a quiz for a unit test";
         wrapper.vm.img = { name: 'Colourful', url: 'https://imgur.com/zmxFPdu.jpg' };
@@ -18,6 +21,7 @@ describe("Creator Card", () => {
         const localVue = createLocalVue();
         const wrapper = shallowMount(CreatorCard, {
             localVue
+
         });
         wrapper.vm.quizTitle = "Unit Test";
         wrapper.vm.description = "This is a quiz for a unit test";
