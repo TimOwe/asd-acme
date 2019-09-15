@@ -18,14 +18,14 @@ describe('Register', function () {
         cy.get('button').contains('Save').click();
         cy.wait(2000);
         cy.get('button').contains('Close').click();
-    })
+    });
     it('Login', function () {
         cy.get('[name="logemail"]').type('dan@asdf.com');
         cy.get('[name="logpass"]').type('passpasspasspass');
         cy.get('button').contains('Log-In').click();
         cy.wait(2000);
         cy.url().should('eq', 'http://localhost:8080/');;
-    })
+    });
     it('Update Name', function () {
         cy.wait(2000);
         cy.get(':nth-child(7) > .v-btn--fab > .v-btn__content > .v-icon').click();
@@ -37,7 +37,7 @@ describe('Register', function () {
         cy.get('.v-app-bar > .v-toolbar__content > [href="/"] > .v-btn__content > .v-icon').click();
         cy.wait(2000);
         cy.get('button.font-weight-light > .v-btn__content').should('have.text','Mamamam Harthartharthart')
-    })
+    });
     it('Delete user', function () {
         cy.get(':nth-child(7) > .v-btn--fab > .v-btn__content > .v-icon').click();
         cy.wait(2000);
