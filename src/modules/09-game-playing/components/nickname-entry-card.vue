@@ -44,7 +44,7 @@
 
         <v-card-actions class="center">
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="onClickButton">Go</v-btn>
+          <v-btn v-bind:disabled="nickname === ''" color="primary" @click="onClickButton">Go</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -60,21 +60,12 @@ export default {
     player: ""
   }),
   methods: {
-    addPlayer() {
-      this.loading = true;
-      let x = Math.floor(Math.random() * 100);
-      this.$db.ref("/Players").push({
-        nickname: this.nickname,
-        score: x,
-        user_id: null
-      });
-      // console.log(this.nickname);
-      setTimeout(() => (this.loading = false), 2500);
-    },
     onClickButton() {
+      // Call nickEnter function on game.vue
       this.$emit("nickEnter", this.nickname);
     },
     concatName() {
+      // DIsplay the user's details as username if they are logged in already
       let nick =
         this.$cookies.get("user").fname +
         " " +

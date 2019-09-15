@@ -5,9 +5,6 @@
         <v-card-title v-bind:class="colourStyle">
           <span class="headline white--text">{{questionText}}</span>
           <v-spacer></v-spacer>
-          <!--
-          <span class="headline white--text">30</span>
-          <v-icon dark large>mdi-alarm</v-icon>-->
         </v-card-title>
         <v-list>
           <v-list-item-group>
@@ -50,17 +47,21 @@ export default {
   }),
   methods: {
     answer: function(a) {
+      // Disable selecting another answer
       this.isAnswered = true;
+      // Change colour to green if correct, call answer() on game.vue
       if (a == this.correct) {
         this.$emit("answer", true, this.score, this.questionText, a);
         this.colourStyle = "light-green";
         return;
       }
+      // As above, but sets colour as red if incorrect
       this.colourStyle = "red";
       this.$emit("answer", false, 0, this.questionText, a);
       this.feedbackText = "Incorrect!";
     },
     add: function(i) {
+      // used for rendering numbers
       return i + 1;
     }
   }
