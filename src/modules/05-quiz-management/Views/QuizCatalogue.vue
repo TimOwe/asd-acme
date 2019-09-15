@@ -1,42 +1,55 @@
 <template>
-        <v-row>
-            <v-col>
-                <v-card class="mx-auto"
-                        max-width="90%">
-                    <v-toolbar flat>
-                        <v-btn icon>
-                            <v-icon>mdi-arrow-left</v-icon>
-                        </v-btn>
-                        <v-toolbar-title class="text-center, display-1">Quizzes</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-btn icon>
-                            <v-icon>mdi-magnify</v-icon>
-                        </v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn to="/quiz-creator" color="green">Create Quiz</v-btn>
-                    </v-toolbar>
-                    <v-container fluid>
-                        <v-row>
-                            <v-col v-for="quiz in quizs" :key="quiz.key" cols="4">
-                                <quiz-card v-on:refresh="refresh" :quiz="quiz" :img="quiz.img" :title="quiz.quiz_title" :description="quiz.description" :owner="quiz.owner_id" :questions="quiz.questions" ></quiz-card>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                    <v-footer class="mt-12"></v-footer>
-                </v-card>
-            </v-col>
-        </v-row>
+    <v-container grid-list-md>
+        <div v-if="render === 'quizCatalogue'"> <!--Displays if render is equal to quiCatalogue-->
+            <v-container grid-list-md>
+                <v-layout justify-center align-center>
+                    <v-row>
+                        <v-col>
+                            <v-layout pl-10 justify-start align-start class="text-center, display-1">Quizzes</v-layout>
+                        </v-col>
+                        <v-col>
+                            <v-text-field  hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-layout pr-10 justify-end align-center class="text-right, display-1"><v-btn to="/quiz-creator" color="primary">Create Quiz</v-btn></v-layout>
+                        </v-col>
+                    </v-row>
+                </v-layout>
+            </v-container>
 
+
+            <v-container>
+                <v-row>
+                    <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
+                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
+
+        <div v-else-if="render === 'quizView'"><!--Displays if render is equal to quizview-->
+            <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
+        </div>
+
+        <div v-if="render === 'editView'"><!--Displays if render is equal to editview-->
+            <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
+        </div>
+
+        <v-footer class="mt-12"></v-footer>
+    </v-container>
 </template>
 
 
 
 <script>
 
-    import QuizCard from "../Components/quiz-card";
+    import quizCard from "../Components/quiz-card";
+    import quizView from "../Components/quiz-view";
+    import editCard from "../Components/edit-card";
     export default {
         name: "QuizCatalogue",
-        components: {QuizCard},
+        components: {quizCard, quizView, editCard},
+
         // grabbing all data on page render
         beforeMount: function(){
             this.getQuizzes();
@@ -59,18 +72,71 @@
                 });
             },
             // function to push dummy data to firebase
-            refresh: function () {
-                this.getQuizzes();
+            onRefresh: function (updQuiz) {
+                this.getQuizzes();//Collects new and updated data from firebase
+                for (var i=0; i<this.quizs.length;i++){//A check is run from the quiz recieved from the edit component
+                    if(this.quizs[i].key===updQuiz.key){ //if the key of the object edited from the edit view and the okey from the database matches, updates the object and renders the updated view with the quizView component
+                        this.viewingQuiz = this.quizs[i];
+                        this.render = "quizView";
+                    }
+                }
             },
-        },
-        // dummy data
-        data(){
-            return {
-                quizs: [],
+            onQuizView: function(quiz) {//If called, sets the render as quizview and also sets a quiz to be viewed, displaying it on the page
+                this.viewingQuiz = quiz;
+                this.render = "quizView";
+
+            },
+            onQuizEdit: function() {//If called, sets the render as the edit view component, sending the viewingQuiz
+                //this.viewingQuiz = quiz;
+                this.render = "editView";
+
+            },
+            onCatalogueView: function() {//If called, sets render to the quizCatalogue component
+                this.viewingQuiz = '';
+                this.render = "quizCatalogue";
+
+            },
+            resetSearch: function() {//Resets the search term property to nothing, removing all criteria
+                this.searchTerm = '';
+            },
+            forceRerender() {
+                //Changes key top notify vuie that a change to the object has occured, forcing an update and re-render
+                this.editKey += 1;
             }
         },
+        //Initialised data
+        data: () => ({
+            render: "quizCatalogue",
+            edit: false,
+            deleteConfirm: false,
+            loading: false,
+            quizTitle: '',
+            description: '',
+            owner: '',
+            questions: '',
+            img: '',
+            key: '',
+            viewingQuiz:'',
+            quizs: [],
+            editKey: 0,
+            searchTerm: '',
+
+            data(){
+                return {
+                    quizs: [],
+                    editKey: 0,
+                }
+            },
+        }),
         props: {
 
+        },
+        computed: {
+            filteredList() {
+                return this.quizs.filter(quiz => {
+                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())
+                })
+            }
         }
 
     }

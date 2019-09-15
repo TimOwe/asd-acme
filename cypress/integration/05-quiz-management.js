@@ -5,7 +5,7 @@ describe('Creating a Quiz', function() {
 
   it('Open Quiz Creator Page', function() {
     cy.get('.v-btn').contains('Create Quiz').click();
-    cy.get('.v-toolbar__title').contains('Create a New Quiz');
+    cy.get('.v-layout').contains('Create a New Quiz');
   })
 
   it('Enters Quiz Information', function() {
