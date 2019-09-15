@@ -10,7 +10,7 @@
 
         <div v-else-if="render === 'code'">
           <v-slide-x-transition mode="out-in">
-            <game-code-card @codeTry="onCodeTry"></game-code-card>
+            <game-code-card @codeTry="onCodeTry" v-bind:eText="codeError"></game-code-card>
           </v-slide-x-transition>
         </div>
 
@@ -68,33 +68,43 @@ export default {
     showFeedback: false,
     feedbackText: null,
     sTime: null,
-    eTime: null
+    eTime: null,
+    codeError: null,
+    sessions: null,
   }),
+  mounted: function() {
+    // Get a list of all sessions when page is loaded
+    var sessions = [];
+    const db = this.$db;
+    // Get a list of sessions
+    db.ref("/Sessions")
+      .orderByValue()
+      .on("value", function(snapshot) {
+        snapshot.forEach(function(data) {
+          sessions.push(data);
+        });
+      });
+    this.sessions = sessions;
+  },
   methods: {
     // Creates a player, pushes to db
     onNickEnter: function(nick) {
       let userId = null;
+      // Check if user is logged in w/ session cookie
       if (this.$cookies.isKey("user")) {
         userId = this.$cookies.get("user").key;
       }
+      // Push the player to the database, includes user id if logged in
       const p = { nickname: nick, score: 0, user: userId };
       const ref = this.$db.ref("/Players");
+      // Store the player id in data
       this.player = ref.push(p).key;
       this.render = "code";
     },
     onCodeTry: function(code) {
-      var sessions = [];
-      const db = this.$db;
-      // Get a list of sessions
-      db.ref("/Sessions")
-        .orderByValue()
-        .on("value", function(snapshot) {
-          snapshot.forEach(function(data) {
-            sessions.push(data);
-          });
-        });
       // Check if entered code matches any existing session
-      for (var session of sessions) {
+      for (var session of this.sessions) {
+        const db = this.$db;
         if (code === session.child("token").val()) {
           this.game = session.key;
           let quiz;
@@ -110,6 +120,7 @@ export default {
             sTime = snapshot.val().timestart;
             eTime = snapshot.val().timeend;
           });
+          // Get information from the session to push w/ results
           this.sTime = sTime;
           this.eTIme = eTime;
           this.quiz = quiz;
@@ -118,11 +129,13 @@ export default {
           return;
         }
       }
-      return false;
+      this.codeError = "Invalid game code";
     },
     getQuestions: function() {
       let questions = [];
+      // Get questions from database
       var ref = this.$db.ref(`/Quizs/${this.quiz}/questions`);
+      // Add each question to the data
       ref.once("value", function(snapshot) {
         snapshot.forEach(function(data) {
           questions.push({
@@ -130,32 +143,42 @@ export default {
             a: data.val().a,
             c: data.val().c,
             score: data.val().score,
-            selected: ''
+            selected: ""
           });
         });
       });
+      // We have to declare outside of ref.once() as it changes the scope of 'this'
       this.questions = questions;
     },
     onAnswer: function(correct, points, qText, ans) {
       var newQuestions = this.questions.map(q => {
-                  if((q.q == qText) && (q.c == correct))
-                     return Object.assign({}, q, {selected:ans})
-                  return q
-              });
+        // Find the relevant question
+        if (q.q == qText && q.c == correct)
+          // Add the selected answer
+          return Object.assign({}, q, { selected: ans });
+        return q;
+      });
+      // Assign back to questions in data (this if for sending results to db)
       this.questions = newQuestions;
 
       if (correct) {
+        // Update score on firebase
         this.score += points;
         const ref = this.$db.ref("Players/" + this.player);
         ref.update({ score: this.score });
-        this.feedbackText = this.feedbackText = `Correct! +${points} points!`;
-        this.showFeedback = true;
+        // Show feedback text
+        this.feedback(`Correct! +${points} points!`);
         return;
       }
-      this.feedbackText = this.feedbackText = "Incorrect!";
+      // Show feedback text
+      this.feedback("Incorrect!");
+    },
+    feedback: function(text) {
+      this.feedbackText = text;
       this.showFeedback = true;
     },
     finishQuiz: function() {
+      // Show results screen, push results to firebase if logged in
       this.render = "scoreboard";
       if (this.$cookies.isKey("user")) {
         this.pushResults();

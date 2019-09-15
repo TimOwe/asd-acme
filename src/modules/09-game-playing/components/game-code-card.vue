@@ -6,6 +6,7 @@
           <v-toolbar-title>Join a game</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
+          <span class="red">{{eText}}</span>
           <v-form>
             <v-text-field placeholder="Game code" name="code" type="text" v-model="code"></v-text-field>
           </v-form>
@@ -15,7 +16,7 @@
           <v-btn icon @click="showGames = !showGames">
             <v-icon>{{ showGames ? 'mdi-arrow-up' : 'mdi-playlist-play' }}</v-icon>
           </v-btn>
-          <v-btn color="primary" @click="onClickButton">Join</v-btn>
+          <v-btn v-bind:disabled="code === ''" color="primary" @click="onClickButton">Join</v-btn>
         </v-card-actions>
         <v-spacer></v-spacer>
         <v-expand-transition>
@@ -34,8 +35,10 @@
 </template>
 
 <script>
-
 export default {
+  props: {
+    eText: String
+  },
   data: () => ({
     loading: false,
     code: "",
@@ -43,19 +46,21 @@ export default {
     showGames: false
   }),
   mounted: function() {
-    this.games=[];
-    let self = this;
+    // Get a list of all sessions when this component is mounted
+    let gs = [];
     const ref = this.$db.ref("/Sessions");
-    ref.orderByValue().on("value", function(snapshot) {
+    ref.orderByValue().once("value", function(snapshot) {
       snapshot.forEach(function(data) {
-        self.games.push(data.child("token").val());
+        gs.push(data.child("token").val());
       });
     });
+    this.games = gs;
   },
   name: "game-code-card",
   methods: {
     onClickButton() {
-      this.$emit("codeTry", this.code);
+      // Call codeTry on game.vue with the entered code
+        this.$emit("codeTry", this.code);
     }
   }
 };
