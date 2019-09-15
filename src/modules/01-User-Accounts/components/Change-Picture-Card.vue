@@ -20,24 +20,27 @@
             </v-container>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeChange()">Close</v-btn>
+                <v-btn color="blue darken-1" text @click="closeDialog()">Close</v-btn>
                 <v-btn color="blue darken-1" text @click="handleSave()">Save</v-btn>
             </v-card-actions>
         </v-card-text>
         <v-dialog width=350 v-model="done">
-            <ChangedCard @close="closeDone"></ChangedCard>
+            <ChangedCard validation-text="Your picture has been successfully changed." @close="closeDone"></ChangedCard>
         </v-dialog>
     </v-card>
 </template>
 <script>
-    import ChangedCard from '../components/Picture-changed-card'
+    import ChangedCard from '../components/Changed-card'
     export default {
         name: "Change-Password-Card",
         components: {ChangedCard},
         methods: {
-            closeChange(){
+            //Closes the dialog box
+            closeDialog(){
                 this.$emit('close')
             },
+
+            //Previews the image
             previewImage(){
                 this.clearValidation();
                 if(this.isValid()){
@@ -47,6 +50,8 @@
                     this.validMessage = 'Please enter a valid Url'
                 }
             },
+
+            //Handles the save button press
             handleSave(){
                 this.clearValidation();
                 if(this.isValid()){
@@ -61,15 +66,18 @@
                 }
             },
 
+            //Clears the validation
             clearValidation(){
                 this.validMessage = '';
             },
 
+            //CLoses the done popup and the dialog
             closeDone(e) {
                 this.done = e;
                 this.$emit('close');
             },
 
+            //Check's if the url is valid
             isValid(){
                 return /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(this.imgUrl);
             }
