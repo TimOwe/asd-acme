@@ -121,7 +121,7 @@
                 nickname: false,
                 displayName: '',
                 participants: [],
-                isActiveUser: true,
+                isActiveUser: false,
                 authenticated: false,
                 userJoin: false
             }
