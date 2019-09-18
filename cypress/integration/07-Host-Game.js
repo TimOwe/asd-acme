@@ -7,7 +7,7 @@ describe('Register', function () {
     it('Enter Meta Data For Session', function () {
         cy.visit('http://localhost:8080/host');
         cy.get('.v-select__selections').click();
-        cy.wait(1000);
+        cy.wait(3000);
         cy.get('.v-list-item__content').first().click();
         cy.get('input').eq(1).type(20);
         cy.get('input').last().type(100);

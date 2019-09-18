@@ -1,4 +1,4 @@
-# asd-acme 
+# asd-acme
 Advanced Software Development 41026 project consisting of 3 releases.
 
 # Instructions
@@ -13,12 +13,6 @@ Advanced Software Development 41026 project consisting of 3 releases.
 - url: https://acme-asd.web.app/
 
 - The backend database is visible on firebase.
-- tim demo
-- thai demo
-
-
-- Matt asd demo deployment
-- Alex demo deployment :)
 
 # Boilerplate
 Project is created using Vue Node.js library in tandem with the Vuetify material design component framework for views.
@@ -59,10 +53,10 @@ npm i
 cd .. // change back to original directory
 npm run deploy // run deployment script
 ```
-2. Installing firebase into the project: `npm install -g firebase-tools`
-3. Initialising the project: `firebase init` (Only needs to be run once per project)
-4. Running the command `firebase login:ci` to get an access token
-5. Adding the deployment script which uses the token to deploy the project when run on CodeShip:
+3. Installing firebase into the project: `npm install -g firebase-tools`
+4. Initialising the project: `firebase init` (Only needs to be run once per project)
+5. Running the command `firebase login:ci` to get an access token
+6. Adding the deployment script which uses the token to deploy the project when run on CodeShip:
 ```
 npm run build && firebase --token <token> && firebase deploy --token <token>
 ```
@@ -73,6 +67,10 @@ The firebase project was integrated with slack to enable monitoring of important
 2. Click `install` on the slack button
 3. On slack, create a new application, enable integrations and copy the webhook URL
 4. Paste this webhook url into the firebase configuration page and select a channel and name for the integration
+
+### Testing
+The project utilises cypress.js for automated integration testing and Jest for unit testing.
+
 
 # Commands
 Setup project: `npm install`
