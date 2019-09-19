@@ -21,7 +21,7 @@
 
                 <v-container grid-list-md>
                     <v-layout justify-center align-center>
-                        <v-flex xs7>
+                        <v-flex xs8>
                             <v-card>
                                 <v-toolbar color="primary" dark flat>
                                     <v-layout justify-center class="headline">Quiz Details</v-layout>
@@ -40,7 +40,7 @@
 
                 <v-container grid-list-md>
                     <v-layout justify-center align-center>
-                        <v-flex xs7>
+                        <v-flex xs8>
                             <v-card>
                                 <v-toolbar color="primary" dark flat>
                                     <v-layout justify-center class="headline">Quiz Difficulty</v-layout>
@@ -60,7 +60,6 @@
                                             <v-btn tile color="orange" outlined value="0.2">Medium</v-btn>
                                             <v-btn tile outlined color="red" value="0.3">Hard</v-btn>
                                         </v-btn-toggle>
-                                        {{score_decay}}
                                     </v-layout>
                                 </v-flex>
                             </v-layout>
@@ -75,7 +74,7 @@
             </v-form>
             <v-container grid-list-md>
                 <v-layout justify-center align-center>
-                    <v-flex xs7>
+                    <v-flex xs8>
                         <v-card>
                             <v-toolbar color="primary" dark flat>
                                 <v-layout justify-center class="headline">Quiz Questions</v-layout>

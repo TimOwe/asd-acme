@@ -21,7 +21,7 @@
             <v-container>
                 <v-row>
                     <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
-                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card><v-btn  >View</v-btn>
+                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
                     </v-col>
                 </v-row>
             </v-container>
