@@ -21,7 +21,7 @@
             <v-container>
                 <v-row>
                     <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
-                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
+                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card><v-btn  @click="logKey(quiz.key)">View</v-btn>
                     </v-col>
                 </v-row>
             </v-container>
@@ -91,6 +91,13 @@
                 this.render = "editView";
 
             },
+            logKey: function(key) {//If called, sets the render as the edit view component, sending the viewingQuiz
+                //this.viewingQuiz = quiz;
+                this.beep = key;
+                this.$router.push('/quizview/'+this.beep);
+
+
+            },
             onCatalogueView: function() {//If called, sets render to the quizCatalogue component
                 this.viewingQuiz = '';
                 this.render = "quizCatalogue";
@@ -120,6 +127,7 @@
             quizs: [],
             editKey: 0,
             searchTerm: '',
+            viewKey: "",
 
             data(){
                 return {

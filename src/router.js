@@ -9,6 +9,7 @@ import LeaderboardSelect from './modules/11-user-results/views/LeaderboardSelect
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
 import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
+import QuizView from "./modules/05-quiz-management/Views/QuizView";
 import Host from './modules/07-Host-Game/Views/Host';
 import HostCL from './modules/07-Host-Game/Views/HostCL'
 import Join from './modules/07-Host-Game/Views/Join'
@@ -41,6 +42,11 @@ const router = new Router({
           path: '/quiz-creator',
           name: 'quiz-creator',
           component: QuizCreator
+      },
+      {
+          path: '/quizview/:id',
+          name: 'quizview',
+          component: QuizView
       },
     {
         path: '/login',
