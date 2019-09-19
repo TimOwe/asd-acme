@@ -14,7 +14,7 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-btn text color="grey darken-2" @click="onViewButton"><v-icon large>mdi-view-headline</v-icon>  View Quiz</v-btn>
+                <v-btn text color="grey darken-2" @click="viewQuiz(quiz.key)"><v-icon large>mdi-view-headline</v-icon>View Quiz</v-btn>
             </v-card-actions>
         </v-card>
 
@@ -36,8 +36,11 @@
             this.questions = this.quiz.questions
         },
         methods: {
-            onViewButton() {
-                this.$emit("quizView", this.quiz);//Emits the quizView command to the QuizCatalogue, sending the quiz object as a parameter
+            viewQuiz: function(key) {//If called, sets the render as the edit view component, sending the viewingQuiz
+
+                this.$router.push('/quizview/'+key);
+
+
             },
         },
         //Computed properties

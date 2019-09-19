@@ -6,7 +6,7 @@
                     <v-layout justify-center align-center>
                         <v-row>
                             <v-col>
-                                <v-layout pl-10 justify-start align-start><v-btn icon @click="closeEdit()"><v-icon>mdi-close</v-icon></v-btn></v-layout>
+                                <v-layout pl-10 justify-start align-start><v-btn icon @click="closeEdit"><v-icon>mdi-close</v-icon></v-btn></v-layout>
                             </v-col>
                             <v-col>
                                 <v-layout justify-center class="display-1">Edit Quiz</v-layout>
@@ -139,7 +139,7 @@
         },
         beforeMount: function(){//assigns all properties of the quiz object prop to computed properties declared in the component to avoid mutation
             this.newImg();
-            this.key = this.quiz.key;
+            this.key = this.$route.params.id;
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
             this.owner = this.quiz.owner;

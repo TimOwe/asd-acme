@@ -1,89 +1,24 @@
 <template>
-    <div>
-        <v-container>
-            <v-card>
-                <v-toolbar flat color="primary">
-                    <v-btn color="white" icon @click="onBackButton"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                    <v-layout class="white--text"><span class="headline">Quizzes</span></v-layout>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="white"><v-icon size="35">mdi-play</v-icon></v-btn>
-                    <v-btn text color="white" @click="triggerEdit()" :quiz="thisQuiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
-                    <v-btn text color="white" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
-                </v-toolbar>
-                <v-container grid-list-md>
-
-                    <v-img :src="img" :aspect-ratio="50/13" class="white--text" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"><!--Sets aspect ratio on image--></v-img>
-
-                    <v-container>
-                        <v-layout pt-5 class="display-2">{{quizTitle}}</v-layout>
-                        <v-layout pt-5 class="headline">{{description}}</v-layout>
-                        <v-layout pt-5 class="subtitle-1"><b>Created by: </b>{{owner}}</v-layout>
-                    </v-container>
-
-                    <v-expansion-panels>
-                        <v-expansion-panel>
-                            <v-expansion-panel-header class="headline">Questions</v-expansion-panel-header>
-                            <v-expansion-panel-content>
-                                <div class="d-flex">
-                                    <v-checkbox v-model="readonly" label="Show Answers" align="end"></v-checkbox>
-                                </div>
-                                <v-list>
-                                    <v-list-group v-for="(question, index) in questions" :key="question.q" sub-group><!--Displays an list item for each question in the quiz-->
-                                        <template v-slot:activator>
-                                            <v-list-item-title class="title">{{index+1}}. {{question.q}}</v-list-item-title><!--Displays the question as a list item-->
-                                            <v-list-item-action-text>{{question.score}} Points</v-list-item-action-text><!--Displays its point score-->
-                                        </template>
-
-                                        <div v-if="readonly===true"><!--If the checkbox has been ticked, the option will become available-->
-                                            <v-list-item-title class="body-1, pl-4">Answers</v-list-item-title>
-                                            <v-list-item>
-                                                <v-layout>
-                                                    <v-flex xs2 v-for="(n,i) in 4" :key="n"><!--Displays each answer propvided, highlighting the correct answer in green if its index matches the index defined in the quiz creation-->
-                                                        <v-container v-bind:class="{ 'green--text': answerCheck(question.c, i), 'black--text': answerCheck(question.c, i), 'body-1': true}" name="answer" v-model="question.a[i]" :label="'Answer #'+ n">{{n}}. {{question.a[i]}}</v-container>
-                                                    </v-flex>
-                                                </v-layout>
-                                            </v-list-item>
-                                        </div>
-                                    </v-list-group>
-                                </v-list>
-
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                </v-container>
-            </v-card>
-        </v-container>
-
-        <v-dialog width=350 v-model="deleteConfirm">
-            <v-card>
-                <v-card-title>
-                    Confirm Quiz Delete
-                </v-card-title>
-                <v-card-text>Are you sure you want to delete this quiz?</v-card-text>
-                <v-card-actions>
-                    <v-layout>
-                        <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
-                        <v-btn color="error" @click="deleteQuiz(thisQuiz.key)">Delete</v-btn>
-                    </v-layout>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-
-        <v-overlay :value="loading">
-            <v-progress-circular indeterminate size="64"></v-progress-circular>
-        </v-overlay>
-
+    <div v-if="render === 'quizView'"><!--Displays if render is equal to quizview-->
+        <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :key="editKey" :viewKey="newKey"></quiz-view>
     </div>
+
+    <div v-else-if="render === 'editView'"><!--Displays if render is equal to quizview-->
+        <edit-card @refresh="onRefresh" :quiz="this.thisQuiz" :key="refreshKey" ></edit-card>
+    </div>
+
 </template>
 
 <script>
+    import quizView from "../Components/quiz-view";
+    import editCard from "../Components/edit-card";
     export default {
         name: "QuizView",
-        components: {},
+        components: {quizView, editCard},
 
         beforeMount: function(){
             this.newKey = this.$route.params.id;
-            this.getQuiz(this.newKey);
+            this.getQuiz(this.newKey)
         },
 
         methods:{
@@ -91,11 +26,6 @@
             getQuiz: function(key){
                 this.$db.ref('/Quizs/').child(key).once('value', (snap) => {
                     this.thisQuiz = snap.val();
-                    this.img = this.thisQuiz.img;
-                    this.quizTitle = this.thisQuiz.quiz_title;
-                    this.description = this.thisQuiz.description;
-                    this.owner = this.thisQuiz.owner_id;
-                    this.questions = this.thisQuiz.questions;
                 });
             },
             deleteQuiz: function(quizKey) {//Deletes the quiz by locating it in firebase using its key
@@ -108,15 +38,27 @@
                 }, 2000);
 
             },
-            triggerEdit: function(){
-                this.$emit("quizEdit");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
+            onRefresh: function (updQuiz) {
+                //this.getQuiz(updQuiz.key);//Collects new and updated data from firebase
+                this.render = "quizView";
+                this.getQuiz(this.newKey);
+                this.forceRerender();
             },
-            answerCheck: function(c, a){
-                return parseInt(c)===parseInt(a);//Checks if the correct answer index printed is equal to the answer defined in the question
+            onQuizEdit: function() {//If called, sets the render as the edit view component, sending the viewingQuiz
+                //this.viewingQuiz = quiz;
+                this.render = "editView";
+
             },
-            onBackButton() {
-                this.$emit("catalogueView");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
+
+            onCatalogueView: function() {//If called, sets render to the quizCatalogue component
+                this.$router.push('/quizcatalogue/');
+
             },
+            forceRerender() {
+                //Changes key top notify vuie that a change to the object has occured, forcing an update and re-render
+                this.editKey += 1;
+                this.refreshKey += 1;
+            }
 
         },
         //Computed properties
@@ -132,7 +74,9 @@
             img: '',
             newkey: '',
             readonly: false,
-
+            render: "quizView",
+            editKey: 0,
+            refreshKey: 0,
 
             expanded: [],
             headers: [
