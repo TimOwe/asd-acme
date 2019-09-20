@@ -32,6 +32,7 @@
 
 <script>
     import RegisterCard from "../components/Register-Card";
+    import {loginUtils} from "../../../main.js";
     const md5 = require('md5');
 
     export default {
@@ -64,7 +65,7 @@
                     //Declaring an Object
                     matched = [],
                     //Declaring an Array
-                    users = await this.getUsers();
+                    users = await loginUtils.getUsers();
                 users.forEach((user) => {
                     if (user.email === email && user.password === md5(password)) {
                         matched.push(user);
@@ -74,21 +75,12 @@
                 return authObj
             },
 
-            //Gets users from the database
-            getUsers(){
-                return new Promise(resolve => {
-                    var users = [];
-                    this.$db.ref('/Users').once('value', (snap) => {
-                    //Gets a snapshot of data, without listening for changes. 'Value' is an event.
-                        snap.forEach(user => {
-                            var userObj = user.val();
-                            //Extracts contents of 'user' in the snapshot
-                            userObj.key = user.key;
-                            //Sets the key (e.g. 1)
-                            users.push(userObj);
-                        });
-                        resolve(users);
-                    });
+
+            //Adds a log. For Matt Zylstra's feature
+            addLog(userKey,logType){
+                this.$db.ref('/Users/'+userKey+'/Logs').push({
+                    time: new Date().toISOString(),
+                    type: logType
                 })
             },
 

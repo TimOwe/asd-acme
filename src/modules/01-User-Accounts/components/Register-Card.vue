@@ -62,6 +62,7 @@
     import ValidationCard from "../components/Validation-Card";
     import ChangeCard from "../components/Changed-card";
     const md5 = require('md5');
+    import {loginUtils} from "../../../main.js";
 
     //Defines a user
     var User = function(fname,lname, dob, password, email){
@@ -82,7 +83,8 @@
             //Hanldes creating a new user
             async handleRegister(){
                 this.clearWarnings()
-                if(await this.checkUserExist()){
+                var auth = await loginUtils.checkUserExists(this.email);
+                if(auth.user !== undefined){
                     this.userExists = "A user with this email already exists."
                 }
                 else {
@@ -93,33 +95,6 @@
                         this.validation = true;
                     }
                 }
-            },
-
-            //Checks if user with email already exists
-            async checkUserExist(){
-               var users = await this.getUsers();
-               var exists = false;
-                users.forEach((user) => {
-                    if (user.email === this.email) {
-                        exists = true;
-                    }
-                });
-                return exists;
-            },
-
-            //Gets user's from database
-            getUsers(){
-                return new Promise(resolve => {
-                    var users = [];
-                    this.$db.ref('/Users').once('value', (snap) => {
-                        snap.forEach(user => {
-                            var userObj = user.val();
-                            userObj.key = user.key;
-                            users.push(userObj);
-                        });
-                        resolve(users);
-                    });
-                })
             },
 
             //Clears warning messages

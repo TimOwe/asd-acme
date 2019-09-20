@@ -5,6 +5,8 @@ import router from './router.js';
 import * as firebase from "firebase/app";
 import "firebase/database";
 
+var loginUtils = {};
+
 // Database
 var firebaseConfig = {
   apiKey: "AIzaSyCrOYJFp1s2JZsmZfnUizGoEEZvyPwH5ow",
@@ -16,12 +18,49 @@ var firebaseConfig = {
   appId: "1:217892308342:web:2e5ae57a67eb68ff"
 };
 
-firebase.initializeApp(firebaseConfig);
+
+var app = firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
+
+loginUtils.database = app.database();
 
 var VueCookies = require('vue-cookies');
 
 Vue.prototype.$db = db;
+
+//Gets users from the database
+    loginUtils.getUsers = function(){
+        return new Promise(resolve => {
+            var users = [];
+            this.database.ref('/Users').once('value', (snap) => {
+                //Gets a snapshot of data, without listening for changes. 'Value' is an event.
+                snap.forEach(user => {
+                    var userObj = user.val();
+                    //Extracts contents of 'user' in the snapshot
+                    userObj.key = user.key;
+                    //Sets the key (e.g. 1)
+                    users.push(userObj);
+                });
+                resolve(users);
+            });
+        })
+    };
+
+    //Checks if user with email already exists
+     loginUtils.checkUserExists = async function(email){
+         var authObj = {},
+             matched = [],
+             users = await loginUtils.getUsers();
+
+        users.forEach((user) => {
+            if (user.email === email) {
+                matched.push(user)
+            }
+        });
+
+        authObj.user = matched[0];
+        return authObj;
+    };
 
 Vue.prototype.$Test = function(){
 
@@ -84,3 +123,5 @@ export default new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app');
+
+export {loginUtils};
