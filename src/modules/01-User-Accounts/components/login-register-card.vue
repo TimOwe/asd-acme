@@ -75,15 +75,6 @@
                 return authObj
             },
 
-
-            //Adds a log. For Matt Zylstra's feature
-            addLog(userKey,logType){
-                this.$db.ref('/Users/'+userKey+'/Logs').push({
-                    time: new Date().toISOString(),
-                    type: logType
-                })
-            },
-
             //Closes the register dialog
             closeRegDialog(e) {
                 this.registerDialog = e;

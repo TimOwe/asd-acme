@@ -83,8 +83,7 @@
             //Hanldes creating a new user
             async handleRegister(){
                 this.clearWarnings()
-                var auth = await loginUtils.checkUserExists(this.email);
-                if(auth.user !== undefined){
+                if((await loginUtils.checkUserExists(this.email)).user !== undefined){
                     this.userExists = "A user with this email already exists."
                 }
                 else {
