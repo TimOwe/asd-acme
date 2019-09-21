@@ -36,11 +36,8 @@
             this.questions = this.quiz.questions
         },
         methods: {
-            viewQuiz: function(key) {//If called, sets the render as the edit view component, sending the viewingQuiz
-
+            viewQuiz: function(key) {//If called, pushes to the view page, sending the quiz key as a parameter
                 this.$router.push('/quizview/'+key);
-
-
             },
         },
         //Computed properties

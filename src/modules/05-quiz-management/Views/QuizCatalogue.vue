@@ -21,7 +21,7 @@
             <v-container>
                 <v-row>
                     <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
-                        <quiz-card @quizView="onQuizView" :quiz="quiz" ></quiz-card>
+                        <quiz-card :quiz="quiz" ></quiz-card>
                     </v-col>
                 </v-row>
             </v-container>
@@ -71,32 +71,6 @@
                     // sort results by ascending order of score
                 });
             },
-            // function to push dummy data to firebase
-            onRefresh: function (updQuiz) {
-                this.getQuizzes();//Collects new and updated data from firebase
-                for (var i=0; i<this.quizs.length;i++){//A check is run from the quiz recieved from the edit component
-                    if(this.quizs[i].key===updQuiz.key){ //if the key of the object edited from the edit view and the okey from the database matches, updates the object and renders the updated view with the quizView component
-                        this.viewingQuiz = this.quizs[i];
-                        this.render = "quizView";
-                    }
-                }
-            },
-            onQuizView: function(quiz) {//If called, sets the render as quizview and also sets a quiz to be viewed, displaying it on the page
-                this.viewingQuiz = quiz;
-                this.render = "quizView";
-
-            },
-            onQuizEdit: function() {//If called, sets the render as the edit view component, sending the viewingQuiz
-                //this.viewingQuiz = quiz;
-                this.render = "editView";
-
-            },
-
-            onCatalogueView: function() {//If called, sets render to the quizCatalogue component
-                this.viewingQuiz = '';
-                this.render = "quizCatalogue";
-
-            },
             resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
             },
@@ -108,22 +82,12 @@
             edit: false,
             deleteConfirm: false,
             loading: false,
-            quizTitle: '',
-            description: '',
-            owner: '',
-            questions: '',
-            img: '',
-            key: '',
-            viewingQuiz:'',
             quizs: [],
-            editKey: 0,
             searchTerm: '',
-            viewKey: "",
 
             data(){
                 return {
                     quizs: [],
-                    editKey: 0,
                 }
             },
         }),

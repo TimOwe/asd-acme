@@ -1,6 +1,6 @@
 <template>
     <div v-if="render === 'quizView'"><!--Displays if render is equal to quizview-->
-        <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :key="editKey" :viewKey="newKey"></quiz-view>
+        <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" @delete="onDelete" :key="editKey" :viewKey="newKey"></quiz-view>
     </div>
 
     <div v-else-if="render === 'editView'"><!--Displays if render is equal to quizview-->
@@ -28,17 +28,13 @@
                     this.thisQuiz = snap.val();
                 });
             },
-            deleteQuiz: function(quizKey) {//Deletes the quiz by locating it in firebase using its key
-                this.deleteConfirm = false;
-                this.loading = true;
-                setTimeout(() => {
-                    this.loading = false;
-                    this.$db.ref('/Quizs/' + quizKey).remove();
-                    this.$emit("catalogueView")
-                }, 2000);
+            onDelete: function(quizKey) {//Deletes the quiz by locating it in firebase using its key
+                this.$db.ref('/Quizs/' + quizKey).remove();
+                this.$router.push('/quizcatalogue/');
+
 
             },
-            onRefresh: function (updQuiz) {
+            onRefresh: function () {
                 //this.getQuiz(updQuiz.key);//Collects new and updated data from firebase
                 this.render = "quizView";
                 this.getQuiz(this.newKey);

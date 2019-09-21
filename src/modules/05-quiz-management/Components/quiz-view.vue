@@ -63,7 +63,7 @@
                 <v-card-actions>
                     <v-layout>
                         <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
-                        <v-btn color="error" @click="deleteQuiz(thisQuiz.key)">Delete</v-btn>
+                        <v-btn color="error" @click="deleteQuiz">Delete</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -105,13 +105,12 @@
                     this.questions = this.thisQuiz.questions;
                 });
             },
-            deleteQuiz: function(quizKey) {//Deletes the quiz by locating it in firebase using its key
+            deleteQuiz: function() {//Deletes the quiz by locating it in firebase using its key
                 this.deleteConfirm = false;
                 this.loading = true;
                 setTimeout(() => {
                     this.loading = false;
-                    this.$db.ref('/Quizs/' + quizKey).remove();
-                    this.$emit("catalogueView")
+                    this.$emit("delete", this.newKey)
                 }, 2000);
 
             },
