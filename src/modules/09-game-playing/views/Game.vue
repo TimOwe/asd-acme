@@ -2,7 +2,6 @@
   <v-app id="inspire">
     <v-content>
       <v-container>
-
         <div v-if="render === 'name'">
           <v-slide-x-transition mode="out-in">
             <nickname-entry-card @nickEnter="onNickEnter"></nickname-entry-card>
@@ -17,11 +16,12 @@
 
         <div v-else-if="render === 'lobby'">
           <v-slide-x-transition mode="out-in">
-                <lobby-card
-                  v-bind:sessionId="game.id"
-                  v-bind:maxPlayers="game.max"
-                  v-bind:token="game.token"
-                  v-bind:qId="game.quizId"></lobby-card>
+            <lobby-card
+              v-bind:sessionId="game.id"
+              v-bind:maxPlayers="game.max"
+              v-bind:token="game.token"
+              v-bind:qId="game.quizId"
+            ></lobby-card>
           </v-slide-x-transition>
         </div>
 
@@ -65,7 +65,13 @@ import QuestionCard from "../components/question-card.vue";
 import ScoreboardCard from "../components/scoreboard-card.vue";
 import LobbyCard from "../components/lobby-card.vue";
 export default {
-  components: { GameCodeCard, NicknameEntryCard, QuestionCard, ScoreboardCard, LobbyCard },
+  components: {
+    GameCodeCard,
+    NicknameEntryCard,
+    QuestionCard,
+    ScoreboardCard,
+    LobbyCard
+  },
   props: {
     source: String
   },
@@ -92,7 +98,7 @@ export default {
       .orderByValue()
       .on("value", function(snapshot) {
         snapshot.forEach(function(data) {
-          sessions.push(data);
+            sessions.push(data);
         });
       });
     this.sessions = sessions;
@@ -119,10 +125,14 @@ export default {
         const db = this.$db;
         let self = this;
         if (code === session.child("token").val()) {
+          if (Date.now() - session.child("timeend").val() > 0) {
+            this.codeError = "This game has ended";
+            return;
+          }
           // If so, push the player to the session's document
           db.ref("Sessions/" + session.key)
             .child("players")
-            .push({player: this.player, nick: this.nickn});
+            .push({ player: this.player, nick: this.nickn });
           // Get the ID of the quiz in this session
           db.ref("Sessions/" + session.key).once("value", function(snapshot) {
             self.game = {
@@ -137,6 +147,7 @@ export default {
           // Get information from the session to push w/ results
           this.render = "lobby";
           this.getQuestions();
+          this.lobbyKeepAlive();
           return;
         }
       }
