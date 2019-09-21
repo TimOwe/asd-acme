@@ -47,7 +47,7 @@ Vue.prototype.$db = db;
     };
 
     //Checks if user with email already exists
-     loginUtils.checkUserExists = async function(email){
+     loginUtils.checkUserExistsEmail = async function(email){
          var authObj = {},
              matched = [],
              users = await loginUtils.getUsers();
@@ -61,6 +61,22 @@ Vue.prototype.$db = db;
         authObj.user = matched[0];
         return authObj;
     };
+
+    loginUtils.checkUserExistsKey = async function(key){
+        var authObj = {},
+            matched = [],
+            users = await loginUtils.getUsers();
+
+        users.forEach((user) => {
+            if (user.key === key) {
+                matched.push(user)
+            }
+        });
+
+        authObj.user = matched[0];
+        return authObj;
+    };
+
 
 Vue.prototype.$Test = function(){
 

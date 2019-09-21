@@ -15,7 +15,7 @@
             <v-avatar v-else>
                 <img src="https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg">
             </v-avatar>
-            <v-btn text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
+            <v-btn @click="viewProfile" text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
             <v-btn to="/logout" text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
             <v-btn name="settings" icon to="/settings">
                 <v-icon>mdi-settings</v-icon>
@@ -35,17 +35,24 @@
 </template>
 
 <script>
-export default {
-  name: 'App',
-  created(){
+    export default {
+        name: 'App',
+        created() {
 
-  },
+        },
 
-  data() {
-      return {
-      }
-  }
-};
+        data() {
+            return {}
+        },
+
+        methods:{
+            viewProfile(){
+                this.$router.push({path: `/profile/${this.$cookies.get('user').key}`})
+            }
+        }
+    };
+
+
 </script>
 
 <style>
