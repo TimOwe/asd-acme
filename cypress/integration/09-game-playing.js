@@ -10,7 +10,7 @@ describe('Game Playing', function () {
   })
   it('Enters a game code', function () {
     cy.wait(500)
-    cy.get('[name="code"]').type('1jaqxc');
+    cy.get('[name="code"]').type('26l2n9');
     cy.get('button').contains('Join').click();
     cy.wait(500)
     cy.get('.v-toolbar__title').should('not.contain', 'Enter a Nickname');
