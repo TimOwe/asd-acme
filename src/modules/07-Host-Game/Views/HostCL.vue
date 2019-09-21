@@ -6,6 +6,7 @@
     <v-layout justify-center>
       <v-btn color="blue" style="color:white;" @click="start">Start Game</v-btn>
       <v-btn color="red" style="color:white;" @click="end">End Game</v-btn>
+      <v-btn color="red" style="color:white;" @click="reset">reset game</v-btn>
     </v-layout>
 
     <v-layout justify-center class="headline pt-5">Joined Users</v-layout>
@@ -70,6 +71,12 @@ export default {
     start: function() {
       this.$db.ref(`/Sessions/${this.currentSession.key}/`).update({
         timestart: Date.now()
+      });
+    },
+    reset: function() {
+      this.$db.ref(`/Sessions/${this.currentSession.key}/`).update({
+        timestart: "null",
+        timeend: "null"
       });
     }
   }

@@ -75,6 +75,9 @@ export default {
   props: {
     source: String
   },
+  mounted: function() {
+    this.getSessions();
+  },
   data: () => ({
     render: "name",
     score: 0,
@@ -89,20 +92,6 @@ export default {
     sessions: null,
     nickn: null
   }),
-  mounted: function() {
-    // Get a list of all sessions when page is loaded
-    var sessions = [];
-    const db = this.$db;
-    // Get a list of sessions
-    db.ref("/Sessions")
-      .orderByValue()
-      .on("value", function(snapshot) {
-        snapshot.forEach(function(data) {
-          sessions.push(data);
-        });
-      });
-    this.sessions = sessions;
-  },
   methods: {
     // Creates a player, pushes to db
     onNickEnter: function(nick) {
@@ -119,21 +108,21 @@ export default {
       this.render = "code";
       this.nickn = nick;
     },
-    onCodeTry: function(code) {
+    onCodeTry: async function(code) {
+      await this.getSessions();
       // Check if entered code matches any existing session
       for (var session of this.sessions) {
         const db = this.$db;
         let self = this;
         if (code === session.child("token").val()) {
           // check if started or ended already
-          console.log("validating");
           if (!this.gameValid(session)) return;
           // If so, push the player to the session's document
           db.ref("Sessions/" + session.key)
             .child("players")
             .push({ player: this.player, nick: this.nickn });
           // Get the ID of the quiz in this session
-          db.ref("Sessions/" + session.key).once("value", function(snapshot) {
+          await db.ref("Sessions/" + session.key).once("value", function(snapshot) {
             self.game = {
               id: session.key,
               token: snapshot.val().token,
@@ -146,11 +135,25 @@ export default {
           // Get information from the session to push w/ results
           this.render = "lobby";
           this.getQuestions();
-          this.lobbyKeepAlive();
+          this.lobbyStartCheck(session.key);
           return;
         }
       }
       this.codeError = "Invalid game code";
+    },
+    getSessions: async function() {
+      // Get a list of all sessions when page is loaded
+      var sessions = [];
+      const db = this.$db;
+      // Get a list of sessions
+      await db.ref("/Sessions")
+        .orderByValue()
+        .once("value", function(snapshot) {
+          snapshot.forEach(function(data) {
+            sessions.push(data);
+          });
+        });
+      this.sessions = sessions;
     },
     gameValid: function(session) {
       if (session.child("timeend").val() !== "null") {
@@ -163,9 +166,18 @@ export default {
       }
       return true;
     },
-    lobby: function() {
+    lobbyStartCheck: function(session) {
       // if max players, start
-      // read db for start flag
+      // Check if host has manually started
+      let self = this;
+      this.$db
+        .ref(`/Sessions/${session}`)
+        .on("child_changed", function(snapshot) {
+          console.log(snapshot.val())
+          if (snapshot.val() !== "null") {
+            self.render = "question";
+          }
+        });
     },
     getQuestions: function() {
       let questions = [];

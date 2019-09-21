@@ -64,7 +64,6 @@ export default {
       });
     });
     this.$db.ref(`/Quizs/${this.qId}/`).once("value", function(snapshot) {
-      console.log(snapshot);
       self.quizTitle = snapshot.val().quiz_title;
     });
   },
