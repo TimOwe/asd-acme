@@ -87,7 +87,7 @@ export default {
     feedbackText: null,
     codeError: null,
     sessions: null,
-    nickn: null,
+    nickn: null
   }),
   mounted: function() {
     // Get a list of all sessions when page is loaded
@@ -98,7 +98,7 @@ export default {
       .orderByValue()
       .on("value", function(snapshot) {
         snapshot.forEach(function(data) {
-            sessions.push(data);
+          sessions.push(data);
         });
       });
     this.sessions = sessions;
@@ -125,10 +125,9 @@ export default {
         const db = this.$db;
         let self = this;
         if (code === session.child("token").val()) {
-          if (Date.now() - session.child("timeend").val() > 0) {
-            this.codeError = "This game has ended";
-            return;
-          }
+          // check if started or ended already
+          console.log("validating");
+          if (!this.gameValid(session)) return;
           // If so, push the player to the session's document
           db.ref("Sessions/" + session.key)
             .child("players")
@@ -152,6 +151,17 @@ export default {
         }
       }
       this.codeError = "Invalid game code";
+    },
+    gameValid: function(session) {
+      if (session.child("timeend").val() !== "null") {
+        this.codeError = "This game has ended";
+        return false;
+      }
+      if (session.child("timestart").val() !== "null") {
+        this.codeError = "This game has already started";
+        return false;
+      }
+      return true;
     },
     lobby: function() {
       // if max players, start
