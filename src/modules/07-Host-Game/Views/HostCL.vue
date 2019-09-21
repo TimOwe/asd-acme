@@ -14,7 +14,7 @@
     <v-container grid-md-list>
       <v-layout row wrap class="pa-3">
         <v-flex v-for="user in participants" xs4>
-          <v-btn depressed color="blue" class="white--text mb-5">{{user.nick}}</v-btn>
+          <v-btn depressed color="blue" class="white--text mb-5">{{user}}</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -52,7 +52,7 @@ export default {
           .on("value", snap => {
             this.participants = [];
             snap.forEach(user => {
-              this.participants.push(user.val());
+              this.participants.push(user.val().nickname);
             });
           });
         this.$db

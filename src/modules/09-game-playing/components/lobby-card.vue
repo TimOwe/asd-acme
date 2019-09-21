@@ -60,7 +60,7 @@ export default {
     playersref.on("value", function(snapshot) {
       self.players = [];
       snapshot.forEach(function(childSnapshot) {
-        self.players.push({ name: childSnapshot.val().nick });
+        self.players.push({ name: childSnapshot.val().nickname });
       });
     });
     this.$db.ref(`/Quizs/${this.qId}/`).once("value", function(snapshot) {

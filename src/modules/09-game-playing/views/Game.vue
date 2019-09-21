@@ -2,6 +2,10 @@
   <v-app id="inspire">
     <v-content>
       <v-container>
+        <span v-if="render ==='lobby' || render === 'question' | render === 'scoreboard'">
+          <keep-alive-component @kA="keepAlive"></keep-alive-component>
+        </span>
+
         <div v-if="render === 'name'">
           <v-slide-x-transition mode="out-in">
             <nickname-entry-card @nickEnter="onNickEnter"></nickname-entry-card>
@@ -64,13 +68,15 @@ import NicknameEntryCard from "../components/nickname-entry-card.vue";
 import QuestionCard from "../components/question-card.vue";
 import ScoreboardCard from "../components/scoreboard-card.vue";
 import LobbyCard from "../components/lobby-card.vue";
+import KeepAliveComponent from "../components/keep-alive.vue";
 export default {
   components: {
     GameCodeCard,
     NicknameEntryCard,
     QuestionCard,
     ScoreboardCard,
-    LobbyCard
+    LobbyCard,
+    KeepAliveComponent
   },
   props: {
     source: String
@@ -82,6 +88,7 @@ export default {
     render: "name",
     score: 0,
     player: null,
+    playerref: null,
     answer: null,
     game: null,
     quiz: null,
@@ -89,11 +96,10 @@ export default {
     showFeedback: false,
     feedbackText: null,
     codeError: null,
-    sessions: null,
-    nickn: null
+    sessions: null
   }),
   methods: {
-    // Creates a player, pushes to db
+    // Creates a player
     onNickEnter: function(nick) {
       let userId = null;
       // Check if user is logged in w/ session cookie
@@ -101,12 +107,14 @@ export default {
         userId = this.$cookies.get("user").key;
       }
       // Push the player to the database, includes user id if logged in
-      const p = { nickname: nick, score: 0, user: userId };
-      const ref = this.$db.ref("/Players");
-      // Store the player id in data
-      this.player = ref.push(p).key;
+      const p = {
+        nickname: nick,
+        score: 0,
+        user: userId,
+        keepAlive: Date.now()
+      };
+      this.player = p;
       this.render = "code";
-      this.nickn = nick;
     },
     onCodeTry: async function(code) {
       await this.getSessions();
@@ -118,24 +126,27 @@ export default {
           // check if started or ended already
           if (!this.gameValid(session)) return;
           // If so, push the player to the session's document
-          db.ref("Sessions/" + session.key)
+          self.playerref = db
+            .ref("Sessions/" + session.key)
             .child("players")
-            .push({ player: this.player, nick: this.nickn });
+            .push(self.player).key;
           // Get the ID of the quiz in this session
-          await db.ref("Sessions/" + session.key).once("value", function(snapshot) {
-            self.game = {
-              id: session.key,
-              token: snapshot.val().token,
-              quizId: snapshot.val().quiz_id,
-              max: parseInt(snapshot.val().max_ppl),
-              sTime: snapshot.val().timestart,
-              eTime: snapshot.val().timeend
-            };
-          });
+          await db
+            .ref("Sessions/" + session.key)
+            .once("value", function(snapshot) {
+              self.game = {
+                id: session.key,
+                token: snapshot.val().token,
+                quizId: snapshot.val().quiz_id,
+                max: parseInt(snapshot.val().max_ppl),
+                sTime: snapshot.val().timestart,
+                eTime: snapshot.val().timeend
+              };
+            });
           // Get information from the session to push w/ results
           this.render = "lobby";
           this.getQuestions();
-          this.lobbyStartCheck(session.key);
+          this.lobbyStatusCheck(session.key);
           return;
         }
       }
@@ -146,7 +157,8 @@ export default {
       var sessions = [];
       const db = this.$db;
       // Get a list of sessions
-      await db.ref("/Sessions")
+      await db
+        .ref("/Sessions")
         .orderByValue()
         .once("value", function(snapshot) {
           snapshot.forEach(function(data) {
@@ -156,27 +168,36 @@ export default {
       this.sessions = sessions;
     },
     gameValid: function(session) {
+      // Check if the game has ended
       if (session.child("timeend").val() !== "null") {
         this.codeError = "This game has ended";
         return false;
       }
+      // Chceck if game has started, but not ended
       if (session.child("timestart").val() !== "null") {
         this.codeError = "This game has already started";
         return false;
       }
+      // Check if game has reached capacity 
+      if (session.child("players").numChildren() >= parseInt(session.child("max_ppl").val())) {
+        this.codeError = "Check if game has reached capacity "
+        return false;
+      }
       return true;
     },
-    lobbyStartCheck: function(session) {
+    lobbyStatusCheck: function(session) {
       // if max players, start
       // Check if host has manually started
       let self = this;
       this.$db
         .ref(`/Sessions/${session}`)
         .on("child_changed", function(snapshot) {
-          console.log(snapshot.val())
-          if (snapshot.val() !== "null") {
+          if (snapshot.key === 'timestart'&& snapshot.val() !== "null") {
             self.render = "question";
+          } else if (snapshot.key === 'timeend'&& snapshot.val() !== "null") {
+            self.render = "scoreboard"
           }
+
         });
     },
     getQuestions: function() {
@@ -212,7 +233,9 @@ export default {
       if (correct) {
         // Update score on firebase
         this.score += points;
-        const ref = this.$db.ref("Players/" + this.player);
+        const ref = this.$db.ref(
+          `/Sessions/${this.game.id}/players/${this.playerref}`
+        );
         ref.update({ score: this.score });
         // Show feedback text
         this.feedback(`Correct! +${points} points!`);
@@ -246,6 +269,14 @@ export default {
     },
     add: function(i) {
       return i + 1;
+    },
+    keepAlive: function() {
+      const ref = this.$db.ref(
+        `/Sessions/${this.game.id}/players/${this.playerref}`
+      );
+      ref.update({
+        keepAlive: Date.now()
+      });
     }
   }
 };
