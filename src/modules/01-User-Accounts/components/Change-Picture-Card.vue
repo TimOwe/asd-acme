@@ -58,7 +58,8 @@
                     this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/picture').set(this.imgUrl);
                     this.$cookies.remove('user');
                     this.storeUser.picture = this.imgUrl;
-                    this.$cookies.set('user', this.storeUser, '1d');
+                    var user = {key: this.storeUser.key, fname: this.storeUser.fname, lname: this.storeUser.lname, picture: this.storeUser.picture }
+                    this.$cookies.set('user', user, '1d');
                     this.done  = true;
                 }
                 else{

@@ -43,7 +43,8 @@
             async handleLogin(){
                 var auth = await this.auth((this.logEmail).toLowerCase(), this.logPass);
                 if(auth.user !== undefined){
-                    this.$cookies.set('user', auth.user, '1d');
+                    var user = {key: auth.user.key, fname: auth.user.fname, lname: auth.user.lname, picture: auth.user.picture }
+                    this.$cookies.set('user', user, '1d');
                     this.addLog(auth.user.key,'Log In');
                     this.$router.push('/');
                 } else {
