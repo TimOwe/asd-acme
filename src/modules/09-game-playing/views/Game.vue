@@ -54,7 +54,7 @@
 
         <div v-if="render === 'scoreboard'">
           <v-slide-x-transition mode="out-in">
-            <scoreboard-card v-bind:score="score"></scoreboard-card>
+            <scoreboard-card v-bind:thisplayer="playerref" v-bind:game="game"></scoreboard-card>
           </v-slide-x-transition>
         </div>
       </v-container>
@@ -170,17 +170,17 @@ export default {
     gameValid: function(session) {
       // Check if the game has ended
       if (session.child("timeend").val() !== "null") {
-        this.codeError = "This game has ended";
+        this.codeError = "This game has ended.";
         return false;
       }
       // Chceck if game has started, but not ended
       if (session.child("timestart").val() !== "null") {
-        this.codeError = "This game has already started";
+        this.codeError = "This game has already started.";
         return false;
       }
       // Check if game has reached capacity 
       if (session.child("players").numChildren() >= parseInt(session.child("max_ppl").val())) {
-        this.codeError = "Check if game has reached capacity "
+        this.codeError = "This game has reached capacity."
         return false;
       }
       return true;
