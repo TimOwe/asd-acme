@@ -48,6 +48,15 @@
             <scoreboard-card v-bind:thisplayer="playerref" v-bind:game="game"></scoreboard-card>
           </v-slide-x-transition>
         </div>
+        <div v-if="render === 'scoreboard'">
+          <div class="text-center">
+            <v-slide-x-transition mode="out-in">
+              <v-btn class="ma-2" outlined icon to="/">
+                <v-icon>mdi-home</v-icon>
+              </v-btn>
+            </v-slide-x-transition>
+          </div>
+        </div>
       </v-container>
     </v-content>
   </v-app>
