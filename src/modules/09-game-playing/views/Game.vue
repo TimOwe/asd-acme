@@ -30,17 +30,8 @@
         </div>
 
         <div v-else-if="render === 'question'">
-          <v-slide-x-transition group mode="out-in">
-            <question-card
-              @answer="onAnswer"
-              v-for="(question, i) in questions"
-              v-bind:key="add(i)"
-              v-bind:index="i"
-              v-bind:questionText="question.q"
-              v-bind:answers="question.a"
-              v-bind:correct="question.c"
-              v-bind:score="question.score"
-            ></question-card>
+          <v-slide-x-transition mode="out-in">
+            <question-stepper @answer="onAnswer" v-bind:questions="questions" />
           </v-slide-x-transition>
         </div>
         <div v-if="render === 'question'">
@@ -69,6 +60,7 @@ import QuestionCard from "../components/question-card.vue";
 import ScoreboardCard from "../components/scoreboard-card.vue";
 import LobbyCard from "../components/lobby-card.vue";
 import KeepAliveComponent from "../components/keep-alive.vue";
+import QuestionStepper from "../components/question-stepper.vue";
 export default {
   components: {
     GameCodeCard,
@@ -76,7 +68,8 @@ export default {
     QuestionCard,
     ScoreboardCard,
     LobbyCard,
-    KeepAliveComponent
+    KeepAliveComponent,
+    QuestionStepper
   },
   props: {
     source: String
@@ -90,7 +83,7 @@ export default {
     player: null,
     playerref: null,
     answer: null,
-    game: null,
+    game: {},
     quiz: null,
     questions: [],
     showFeedback: false,
@@ -178,9 +171,12 @@ export default {
         this.codeError = "This game has already started.";
         return false;
       }
-      // Check if game has reached capacity 
-      if (session.child("players").numChildren() >= parseInt(session.child("max_ppl").val())) {
-        this.codeError = "This game has reached capacity."
+      // Check if game has reached capacity
+      if (
+        session.child("players").numChildren() >=
+        parseInt(session.child("max_ppl").val())
+      ) {
+        this.codeError = "This game has reached capacity.";
         return false;
       }
       return true;
@@ -192,12 +188,11 @@ export default {
       this.$db
         .ref(`/Sessions/${session}`)
         .on("child_changed", function(snapshot) {
-          if (snapshot.key === 'timestart'&& snapshot.val() !== "null") {
+          if (snapshot.key === "timestart" && snapshot.val() !== "null") {
             self.render = "question";
-          } else if (snapshot.key === 'timeend'&& snapshot.val() !== "null") {
-            self.render = "scoreboard"
+          } else if (snapshot.key === "timeend" && snapshot.val() !== "null") {
+            self.render = "scoreboard";
           }
-
         });
     },
     getQuestions: function() {
