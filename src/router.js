@@ -16,6 +16,7 @@ import Join from './modules/07-Host-Game/Views/Join'
 import Live from './modules/07-Host-Game/Views/Live';
 import Logout from './modules/01-User-Accounts/Views/LogedOut';
 import Settings from './modules/01-User-Accounts/Views/Settings';
+import Profile from "./modules/01-User-Accounts/Views/Profile";
 import UserResults from './modules/11-user-results/views/user-results'
 
 Vue.use(Router);
@@ -102,6 +103,11 @@ const router = new Router({
           path:'/leaderboard/:id',
           name: 'Leaderboard',
           component: Leaderboard
+      },
+      {
+          path:'/profile/:id',
+          name: 'Profile',
+          component: Profile
       },
       {
           path: '/user-results',

@@ -32,6 +32,7 @@
 
 <script>
     import RegisterCard from "../components/Register-Card";
+    import {loginUtils} from "../../../main.js";
     const md5 = require('md5');
 
     export default {
@@ -42,7 +43,8 @@
             async handleLogin(){
                 var auth = await this.auth((this.logEmail).toLowerCase(), this.logPass);
                 if(auth.user !== undefined){
-                    this.$cookies.set('user', auth.user, '1d');
+                    var user = {key: auth.user.key, fname: auth.user.fname, lname: auth.user.lname, picture: auth.user.picture }
+                    this.$cookies.set('user', user, '1d');
                     this.addLog(auth.user.key,'Log In');
                     this.$router.push('/');
                 } else {
@@ -64,7 +66,7 @@
                     //Declaring an Object
                     matched = [],
                     //Declaring an Array
-                    users = await this.getUsers();
+                    users = await loginUtils.getUsers();
                 users.forEach((user) => {
                     if (user.email === email && user.password === md5(password)) {
                         matched.push(user);
@@ -72,24 +74,6 @@
                 });
                 authObj.user = matched[0];
                 return authObj
-            },
-
-            //Gets users from the database
-            getUsers(){
-                return new Promise(resolve => {
-                    var users = [];
-                    this.$db.ref('/Users').once('value', (snap) => {
-                    //Gets a snapshot of data, without listening for changes. 'Value' is an event.
-                        snap.forEach(user => {
-                            var userObj = user.val();
-                            //Extracts contents of 'user' in the snapshot
-                            userObj.key = user.key;
-                            //Sets the key (e.g. 1)
-                            users.push(userObj);
-                        });
-                        resolve(users);
-                    });
-                })
             },
 
             //Closes the register dialog

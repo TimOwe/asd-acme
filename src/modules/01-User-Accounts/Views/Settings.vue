@@ -110,7 +110,8 @@
                     }
                     if(isUpdated){
                         this.$cookies.remove('user');
-                        this.$cookies.set('user', this.storeUser, '1d');
+                        var user = {key: this.storeUser.key, fname: this.storeUser.fname, lname: this.storeUser.lname, picture: this.storeUser.picture }
+                        this.$cookies.set('user', user, '1d');
                         this.updated = 'Your details have been updated.'
                         this.$forceUpdate();
                     }

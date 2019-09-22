@@ -52,6 +52,7 @@ import GameCodeCard from "../components/game-code-card.vue";
 import NicknameEntryCard from "../components/nickname-entry-card.vue";
 import QuestionCard from "../components/question-card.vue";
 import ScoreboardCard from "../components/scoreboard-card.vue";
+import {loginUtils} from "../../../main";
 export default {
   components: { GameCodeCard, NicknameEntryCard, QuestionCard, ScoreboardCard },
   props: {
@@ -71,7 +72,11 @@ export default {
     eTime: null,
     codeError: null,
     sessions: null,
+    storeUser: []
   }),
+  beforeMount: async function() {
+    this.storeUser = ((await loginUtils.checkUserExistsKey(this.$cookies.get('user').key)).user);
+  },
   mounted: function() {
     // Get a list of all sessions when page is loaded
     var sessions = [];
@@ -107,6 +112,7 @@ export default {
         const db = this.$db;
         if (code === session.child("token").val()) {
           this.game = session.key;
+          this.updateDBVals();
           let quiz;
           let sTime;
           let eTime;
@@ -198,6 +204,10 @@ export default {
     },
     add: function(i) {
       return i + 1;
+    },
+    updateDBVals: function() {
+      var played = this.storeUser.gamesPlayed + 1;
+      this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/gamesPlayed').set((played));
     }
   }
 };

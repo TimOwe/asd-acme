@@ -23,7 +23,9 @@
                         <tbody>
                         <tr v-for="result in results">
                             <td class="text-center">{{ result.rank }}</td>
-                            <td class="text-center">{{ result.fname }}</td>
+                            <td class="text-center">
+                                <v-btn style="text-transform: none; font-weight: normal" @click="handleNameClick(result.userKey)" text >{{ result.fname }}</v-btn>
+                            </td>
                             <td class="text-center">{{ new Date(result.time_start).toDateString() }}</td>
                             <td class="text-center">{{ result.score }}</td>
                         </tr>
@@ -54,6 +56,9 @@
             }
         },
         methods: {
+            handleNameClick(key){
+                this.$router.push({path: `/profile/${key}`})
+            },
             getResultsArrayFromQuiz(quizKey) {
                 var results = [];
                 return new Promise((resolve) => {
