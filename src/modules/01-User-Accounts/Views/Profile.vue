@@ -54,7 +54,7 @@
                                         <v-card-text style="font-size: 25px; color: royalblue">Games Played:</v-card-text>
                                     </v-col>
                                     <v-col style="margin-left:-8%">
-                                        <v-card-text style="font-size: 25px;">20</v-card-text>
+                                        <v-card-text style="font-size: 25px;">{{user.gamesPlayed}}</v-card-text>
                                     </v-col>
                                 </v-row>
                                 <v-row style="margin-top: -25px">
@@ -62,7 +62,7 @@
                                         <v-card-text style="font-size: 25px; color: royalblue">Questions Answered:</v-card-text>
                                     </v-col>
                                     <v-col style="margin-left:-8%">
-                                        <v-card-text style="font-size: 25px;">87</v-card-text>
+                                        <v-card-text style="font-size: 25px;">{{questionsAnswered}}</v-card-text>
                                     </v-col>
                                 </v-row>
                                 <v-row style="margin-top: -25px">
@@ -70,7 +70,7 @@
                                         <v-card-text style="font-size: 25px; color: Green">Correct Answers:</v-card-text>
                                     </v-col>
                                     <v-col style="margin-left:-8%">
-                                        <v-card-text style="font-size: 25px;">67</v-card-text>
+                                        <v-card-text style="font-size: 25px;">{{user.correctQuestions}}</v-card-text>
                                     </v-col>
                                 </v-row>
                                 <v-row style="margin-top: -25px">
@@ -78,7 +78,7 @@
                                         <v-card-text style="font-size: 25px; color: red">Incorrect Answers:</v-card-text>
                                     </v-col>
                                     <v-col style="margin-left:-8%">
-                                        <v-card-text style="font-size: 25px;">20</v-card-text>
+                                        <v-card-text style="font-size: 25px;">{{user.incorrectQuestions}}</v-card-text>
                                     </v-col>
                                 </v-row>
                                 <v-row v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)">
@@ -109,6 +109,12 @@
         data(){
             return{
                 user: [],
+            }
+        },
+
+        computed:{
+            questionsAnswered : function(){
+                return (this.user.correctQuestions + this.user.incorrectQuestions)
             }
         }
     }

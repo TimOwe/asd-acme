@@ -72,6 +72,9 @@
         this.dob = dob;
         this.isAdmin = false;
         this.picture = '';
+        this.gamesPlayed = 0;
+        this.correctQuestions = 0;
+        this.incorrectQuestions = 0;
         this.password = md5(password);
     };
 
