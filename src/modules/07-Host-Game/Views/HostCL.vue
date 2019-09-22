@@ -40,6 +40,7 @@ export default {
     return {
       sessionKey: "",
       participants: [],
+      max: null,
       quizTitle: "",
       currentSession: null,
       isStarted: null,
@@ -63,33 +64,31 @@ export default {
           }
         });
         this.$db
-          .ref("/Sessions/" + self.currentSession.key + "/players")
-          .on("value", snap => {
-            this.participants = [];
-            snap.forEach(user => {
-              this.participants.push(user.val().nickname);
-            });
-          });
-        this.$db
-          .ref(`/Sessions/${self.currentSession.key}/quiz`)
-          .once("value")
-          .then(function(snapshot) {
-            self.quizTitle = snapshot.val().quiz_title;
-          });
-        this.$db
           .ref(`/Sessions/${self.currentSession.key}`)
           .once("value")
           .then(function(snapshot) {
-            console.log(
-              `start ${snapshot.val().timestart}, end ${snapshot.val().timeend}`
-            );
             snapshot.val().timestart == "null"
               ? (self.isStarted = false)
               : (self.isStarted = true);
             snapshot.val().timeend == "null"
               ? (self.isEnded = false)
               : (self.isEnded = true);
-            console.log(`isStarted ${self.isStarted}, isended ${self.isEnded}`);
+            self.max = snapshot.val().max_ppl;
+          });
+        this.$db
+          .ref("/Sessions/" + self.currentSession.key + "/players")
+          .on("value", snap => {
+            self.participants = [];
+            snap.forEach(user => {
+              self.participants.push(user.val().nickname);
+            });
+            this.startQuiz()
+          });
+        this.$db
+          .ref(`/Sessions/${self.currentSession.key}/quiz`)
+          .once("value")
+          .then(function(snapshot) {
+            self.quizTitle = snapshot.val().quiz_title;
           });
         this.$db
           .ref(`/Sessions/${self.currentSession.key}`)
@@ -107,7 +106,6 @@ export default {
                 self.isEnded = false;
               }
             }
-            console.log(`started: ${self.isStarted}, ended: ${self.isEnded}`);
           });
       });
     },
@@ -128,7 +126,7 @@ export default {
       });
     },
     startQuiz: function() {
-      // call start if max players reached
+      if (this.participants.length >= this.max && this.isStarted == false) this.start();
     },
     playQuiz: function() {
       // Advance the current question info
