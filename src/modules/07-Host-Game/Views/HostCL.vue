@@ -126,7 +126,18 @@ export default {
         timestart: "null",
         timeend: "null"
       });
-    }
+    },
+    startQuiz: function() {
+      // call start if max players reached
+    },
+    playQuiz: function() {
+      // Advance the current question info
+      // if all answered next question
+      // if all questions end quiz
+    },
+    allAnswered: function() {
+      // return true if all players have answered the current question
+    },
   }
 };
 </script>
