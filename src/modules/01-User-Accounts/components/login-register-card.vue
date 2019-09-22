@@ -25,7 +25,7 @@
         </v-container>
 
         <v-dialog v-model="registerDialog" persistent max-width="600px">
-        <RegisterCard @close="closeRegDialog"></RegisterCard>
+            <RegisterCard @close="closeRegDialog"></RegisterCard>
         </v-dialog>
     </div>
 </template>
