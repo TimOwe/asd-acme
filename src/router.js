@@ -110,7 +110,7 @@ const router = new Router({
           component: Profile
       },
       {
-          path: '/user-results',
+          path: '/user-results/:id',
           name:'user-results',
           component: UserResults
       }

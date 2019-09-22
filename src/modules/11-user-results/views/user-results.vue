@@ -69,8 +69,7 @@
         name: "user-results",
         beforeMount() {
             this.loading = true;
-            //get the user from a key
-            var userKey = this.$cookies.get('user').key;
+            var userKey = this.$route.params.id;
             this.$db.ref(`/Users/${userKey}`).once('value', (snap) => {
                 this.activeUser = snap.val();
                 this.attempts = Object.values(this.activeUser.results);
