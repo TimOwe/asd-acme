@@ -1,4 +1,4 @@
-describe('Creating a Quiz', function() {
+describe('Creating a Quiz with Advanced Features', function() {
   before(() => {
     cy.visit('http://localhost:8080/quizcatalogue')
   })
@@ -8,11 +8,16 @@ describe('Creating a Quiz', function() {
   })
 
   it('Enters Quiz Information', function() {
-    cy.get('[name="quiztitle"]').type('This is a new test quiz!');
-    cy.get('[name="quizdescription"]').type('For an acceptance test!');
+    cy.get('[name="quiztitle"]').type('This is a new test quiz with advanced details!');
+    cy.get('[name="quizdescription"]').type('For an acceptance test for feature 06!');
     cy.get('[name="quizimage"]').click({force: true})
     cy.get('[role="listbox"]').contains('Light').click()
     cy.wait(500)
+  })
+
+  it('Enters Advanced Quiz Details', function() {
+    cy.get('[name="questiontime"]').type(23)
+    cy.get('[name="medbutton"]').click()
   })
 
   it('Enters a question', function() {
@@ -63,5 +68,5 @@ describe('Creating a Quiz', function() {
     cy.get('.v-btn').contains('Publish').click();
     cy.wait(500)
     cy.get('.v-dialog').contains('Success!')
-    cy.get('.v-btn').contains('Go to Catalogue').click();})
+    cy.get('.v-btn').contains('Go to Quiz').click();})
 })
