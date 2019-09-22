@@ -75,7 +75,9 @@ export default {
     storeUser: []
   }),
   beforeMount: async function() {
-    this.storeUser = ((await loginUtils.checkUserExistsKey(this.$cookies.get('user').key)).user);
+    if(this.$cookies.isKey('user')){
+      this.storeUser = ((await loginUtils.checkUserExistsKey(this.$cookies.get('user').key)).user);
+    }
   },
   mounted: function() {
     // Get a list of all sessions when page is loaded
@@ -112,7 +114,9 @@ export default {
         const db = this.$db;
         if (code === session.child("token").val()) {
           this.game = session.key;
-          this.updateDBVals();
+          if(this.$cookies.isKey('user')){
+            this.updateDBVals();
+          }
           let quiz;
           let sTime;
           let eTime;
