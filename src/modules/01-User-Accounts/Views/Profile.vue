@@ -81,8 +81,9 @@
                                         <v-card-text style="font-size: 25px;">{{user.incorrectQuestions}}</v-card-text>
                                     </v-col>
                                 </v-row>
-                                <v-row v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)">
-                                    <v-btn text style="margin-left: 82%"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
+                                <v-row>
+                                    <v-btn text style="margin-left: 0" v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
+                                    <v-btn text style="margin-left: 15px" color="blue" @click="viewResults(user.key)">View Results<v-icon>mdi-trophy</v-icon></v-btn>
                                 </v-row>
                             </v-col>
                         </v-row>
@@ -104,6 +105,9 @@
         methods:{
             handleBack(){
                 this.$router.go(-1);
+            },
+            viewResults(userKey) {
+                this.$router.push({path: `/user-results/${userKey}`});
             }
         },
         data(){

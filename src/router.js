@@ -5,8 +5,8 @@ import Game from './modules/09-game-playing/views/Game.vue';
 import Login from './modules/01-User-Accounts/Views/Login';
 import Quizs from './modules/04-quiz-administration/views/ViewQuiz.vue'
 import Users from './modules/03-user-administration/views/Users.vue'
-import LeaderboardSelect from './modules/11-user-results/views/LeaderboardSelect';
-import Leaderboard from "./modules/11-user-results/views/Leaderboard";
+import LeaderboardSelect from './modules/12-leaderboard/views/LeaderboardSelect';
+import Leaderboard from "./modules/12-leaderboard/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
 import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
 import QuizView from "./modules/05-quiz-management/Views/QuizView";
@@ -110,7 +110,7 @@ const router = new Router({
           component: Profile
       },
       {
-          path: '/user-results',
+          path: '/user-results/:id',
           name:'user-results',
           component: UserResults
       }
