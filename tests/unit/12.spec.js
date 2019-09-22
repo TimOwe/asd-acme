@@ -1,5 +1,5 @@
 import {createLocalVue, shallowMount} from "@vue/test-utils";
-import Leaderboard from "../../src/modules/11-user-results/views/Leaderboard.vue";
+import Leaderboard from "../../src/modules/12-leaderboard/views/Leaderboard.vue";
 
 describe("Leaderboard Sorting", () => {
     it("Sorts by Ascending correctly", () => {

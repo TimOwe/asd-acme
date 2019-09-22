@@ -25,8 +25,8 @@
         <v-dialog v-model="attemptData" width="800">
             <v-card width="800" height="600">
                 <v-card-text>
-                    Total Score: {{this.currentAttemp.score}} <br>
-                    Time Start: {{this.currentAttemp.time_start}}
+                    Total Score: {{this.currentAttempt.score}} <br>
+                    Time Start: {{this.currentAttempt.time_start}}
                     <v-divider class="mt-4 mb-5"></v-divider>
                     Historical Data:
                         <v-simple-table fixed>
@@ -39,7 +39,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="question in currentAttemp.questions">
+                            <tr v-for="question in currentAttempt.questions">
                                 <td class="text-left">{{ question.q }}</td>
                                 <td class="text-center">{{ question.a[question.c] }}</td>
                                 <td class="text-center">{{ !question.a[question.selected] ? 'Not Selected' : question.a[question.selected]}}</td>
@@ -78,12 +78,10 @@
                     this.loading = false
                 }, 500)
             })
-            //get all user attemps
-                //show result data
         },
         methods:{
             showAttemptData(attempt){
-                this.currentAttemp = attempt;
+                this.currentAttempt = attempt;
                 this.attemptData = true;
             }
         },
@@ -91,9 +89,10 @@
             return {
                 activeUser: {},
                 attempts: {},
-                currentAttemp: {},
+                currentAttempt: {},
                 attemptData: false,
-                loading: false
+                loading: false,
+                quizTitle: []
             }
         }
     }
