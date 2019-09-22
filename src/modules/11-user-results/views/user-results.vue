@@ -8,7 +8,7 @@
                 <v-flex xs6 v-for="(attempt,ind) in attempts">
                     <v-card height="220">
                         <v-card-title>
-                            Attempt {{ind + 1}} - {{attempt.quizId}}
+                            Quiz Result {{ind + 1}}: {{attempt.quizId}}
                         </v-card-title>
                         <v-card-text>
                             Score: {{attempt.score}} <br>
@@ -28,14 +28,13 @@
                     Total Score: {{this.currentAttempt.score}} <br>
                     Time Start: {{this.currentAttempt.time_start}}
                     <v-divider class="mt-4 mb-5"></v-divider>
-                    Historical Data:
                         <v-simple-table fixed>
                             <thead>
                             <tr>
                                 <th class="text-center">Question</th>
                                 <th class="text-center">Correct</th>
-                                <th class="text-center">Actual</th>
-                                <th class="text-center">Point Value</th>
+                                <th class="text-center">Selected</th>
+                                <th class="text-center">Value</th>
                             </tr>
                             </thead>
                             <tbody>
