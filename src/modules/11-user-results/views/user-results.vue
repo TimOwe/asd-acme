@@ -67,11 +67,11 @@
 <script>
     export default {
         name: "user-results",
-        beforeMount(){
+        beforeMount() {
             this.loading = true;
             //get the user from a key
             var userKey = this.$cookies.get('user').key;
-            this.$db.ref(`/Users/${userKey}`).once('value',(snap) => {
+            this.$db.ref(`/Users/${userKey}`).once('value', (snap) => {
                 this.activeUser = snap.val();
                 this.attempts = Object.values(this.activeUser.results);
                 setTimeout(() => {
@@ -79,11 +79,11 @@
                 }, 500)
             })
         },
-        methods:{
-            showAttemptData(attempt){
+        methods: {
+            showAttemptData(attempt) {
                 this.currentAttempt = attempt;
                 this.attemptData = true;
-            }
+            },
         },
         data(){
             return {
@@ -91,11 +91,11 @@
                 attempts: {},
                 currentAttempt: {},
                 attemptData: false,
-                loading: false,
-                quizTitle: []
+                loading: false
             }
         }
     }
+
 </script>
 
 <style scoped>
