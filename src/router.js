@@ -9,6 +9,7 @@ import LeaderboardSelect from './modules/11-user-results/views/LeaderboardSelect
 import Leaderboard from "./modules/11-user-results/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
 import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
+import QuizView from "./modules/05-quiz-management/Views/QuizView";
 import Host from './modules/07-Host-Game/Views/Host';
 import HostCL from './modules/07-Host-Game/Views/HostCL'
 import Join from './modules/07-Host-Game/Views/Join'
@@ -16,6 +17,7 @@ import Live from './modules/07-Host-Game/Views/Live';
 import Logout from './modules/01-User-Accounts/Views/LogedOut';
 import Settings from './modules/01-User-Accounts/Views/Settings';
 import Profile from "./modules/01-User-Accounts/Views/Profile";
+import UserResults from './modules/11-user-results/views/user-results'
 
 Vue.use(Router);
 
@@ -42,6 +44,11 @@ const router = new Router({
           path: '/quiz-creator',
           name: 'quiz-creator',
           component: QuizCreator
+      },
+      {
+          path: '/quizview/:id',
+          name: 'quizview',
+          component: QuizView
       },
     {
         path: '/login',
@@ -101,6 +108,11 @@ const router = new Router({
           path:'/profile/:id',
           name: 'Profile',
           component: Profile
+      },
+      {
+          path: '/user-results',
+          name:'user-results',
+          component: UserResults
       }
   ]
 });

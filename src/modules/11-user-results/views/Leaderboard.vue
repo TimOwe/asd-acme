@@ -77,7 +77,7 @@
                                         result.fname = userObj.fname;
                                         results.push(result);
                                     }
-                                    this.results = results.sort((a,b) => b.score - a.score)
+                                    this.results = results.sort((a,b) => b.score - a.score);
                                     for(var i=0; i<this.results.length;i++){
                                         this.results[i].rank = i+1;
                                     }
