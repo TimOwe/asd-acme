@@ -107,20 +107,6 @@ export default {
       this.storeUser = ((await loginUtils.checkUserExistsKey(this.$cookies.get('user').key)).user);
     }
   },
-  mounted: function() {
-    // Get a list of all sessions when page is loaded
-    var sessions = [];
-    const db = this.$db;
-    // Get a list of sessions
-    db.ref("/Sessions")
-      .orderByValue()
-      .on("value", function(snapshot) {
-        snapshot.forEach(function(data) {
-          sessions.push(data);
-        });
-      });
-    this.sessions = sessions;
-  },
   methods: {
     // Creates a player
     onNickEnter: function(nick) {
@@ -148,13 +134,9 @@ export default {
         if (code === session.child("token").val()) {
           // check if started or ended already
           if (!this.gameValid(session)) return;
-          this.game = session.key;
           if(this.$cookies.isKey('user')){
             this.updateDBVals();
           }
-          let quiz;
-          let sTime;
-          let eTime;
           // If so, push the player to the session's document
           self.playerref = db
             .ref("Sessions/" + session.key)
