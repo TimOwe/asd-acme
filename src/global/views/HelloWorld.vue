@@ -3,91 +3,66 @@
     <v-container grid-md-list>
       <v-layout class="display-2 justify-center font-weight-bold mb-3 mt-4">Welcome to Acme!</v-layout>
 
+      <v-row>
+        <v-col cols="12" sm="4">
+          <v-card class="mx-auto">
+            <v-img
+              class="white--text"
+              height="200px"
+              src="https://i.imgur.com/pqZKGnU.jpg"
+            >
+              <v-card-title class="align-end fill-height">Join</v-card-title>
+            </v-img>
+            <v-card-title>Login or sign up</v-card-title>
+            <v-card-text>Create quizzes and track your statistics!</v-card-text>
+            <v-card-actions>
+              <v-btn outlined to="/login">Sounds Good!</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col cols="12" sm="4">
+          <v-card class="mx-auto">
+            <v-img
+              class="white--text"
+              height="200px"
+              src="https://i.imgur.com/KBWMGRU.jpg"
+            >
+              <v-card-title class="align-end fill-height">Play</v-card-title>
+            </v-img>
+            <v-card-title>Play quizzes online</v-card-title>
+            <v-card-text>Create or join a game session to get started</v-card-text>
+            <v-card-actions>
+              <v-btn outlined to="/host">Host a game!</v-btn>
+              <v-btn outlined to="/game">Play a game!</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col cols="12" sm="4">
+          <v-card class="mx-auto">
+            <v-img
+              class="white--text"
+              height="200px"
+              src="https://i.imgur.com/YLPwT5W.jpg"
+            >
+              <v-card-title class="align-end fill-height">Community</v-card-title>
+            </v-img>
+            <v-card-title>Quizzes made easy</v-card-title>
+            <v-card-text>Browse, create or edit quizzes and view leaderboards.</v-card-text>
+            <v-card-actions>
+              <v-btn outlined to="/quizcatalogue">Quizzes</v-btn>
+              <v-btn outlined to="/leaderboardselect">Leaderboards</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
 
-      <v-layout row wrap class="pt-4">
-        <flex xs4 class="mr-4 mb-4">
-          <v-btn to="/login">01 User Accounts</v-btn>
-        </flex>
         <flex xs4 class="mr-4">
-          <v-btn to="/users">03 User Administration</v-btn>
+          <v-btn to="/users">User Administration</v-btn>
         </flex>
-        <flex xs4 class="mr-4">
-          <v-btn to="/quizs">04 Quiz Administration</v-btn>
-        </flex>
-        <flex xs3 class="mr-4">
-          <v-btn to="/host">07 Host Game</v-btn>
-        </flex>
-        <flex xs3 class="mr-4">
-          <v-btn to="/game">09 Game Playing</v-btn>
-        </flex>
-        <flex xs3 class="mr-4">
-          <v-btn to="/leaderboardselect">12 Leaderboard</v-btn>
-        </flex>
-        <flex xs3 class="mr-4">
-          <v-btn to="/quizcatalogue">05 Quiz Management</v-btn>
-        </flex>
-      </v-layout>
-
+      </v-row>
     </v-container>
   </v-layout>
 </template>
 
 <script>
-export default {
-    created(){
-        // this.$db.ref('/Users').push('da')
-    },
-  data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader',
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify',
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify',
-      },
-    ],
-    importantLinks: [
-      {
-        text: 'Documentation',
-        href: 'https://vuetifyjs.com',
-      },
-      {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com',
-      },
-      {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuejs.com/vuetify',
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs',
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify',
-      },
-    ],
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com/components/api-explorer',
-      },
-      {
-        text: 'Select a layout',
-        href: 'https://vuetifyjs.com/layout/pre-defined',
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-      },
-    ],
-  }),
-};
+export default {};
 </script>

@@ -121,7 +121,7 @@
                 nickname: false,
                 displayName: '',
                 participants: [],
-                isActiveUser: true,
+                isActiveUser: false,
                 authenticated: false,
                 userJoin: false
             }
@@ -158,7 +158,7 @@
                 var sessionRef = this.$db.ref('/Sessions/'+this.currentSession.key);
                 var userObj = {
                     key: '-L73yuhduaih7839',
-                    displayName: this.displayName
+                    displayName: this.displayName,
                 };
                     sessionRef.child('participants').push(userObj);
                     this.displayName = false;
