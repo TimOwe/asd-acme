@@ -18,6 +18,7 @@ import Logout from './modules/01-User-Accounts/Views/LogedOut';
 import Settings from './modules/01-User-Accounts/Views/Settings';
 import Profile from "./modules/01-User-Accounts/Views/Profile";
 import UserResults from './modules/11-user-results/views/user-results'
+import Error from './modules/07-Host-Game/Views/LiveCatch'
 
 Vue.use(Router);
 
@@ -113,6 +114,11 @@ const router = new Router({
           path: '/user-results/:id',
           name:'user-results',
           component: UserResults
+      },
+      {
+          path:'/errorLive',
+          name: 'error',
+          component: Error
       }
   ]
 });
