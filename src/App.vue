@@ -31,18 +31,37 @@
     <v-content>
      <router-view></router-view>
     </v-content>
+
+      <v-dialog v-model="catchError" width="500">
+          <v-card height="200">
+              <v-layout justify-center class="headline pt-8 pb-8">
+                  Warning!
+              </v-layout>
+              <v-card-content class="pl-12"> Fatal Error Occured. Would you like to go back home?</v-card-content>
+                <v-card-actions>
+                    <v-layout justify-center>
+                        <v-btn text color="green" @click="$router.push('/')">Yes</v-btn>
+                        <v-btn text color="red" @click="catchError=false">No</v-btn>
+                    </v-layout>
+                </v-card-actions>
+          </v-card>
+      </v-dialog>
+
   </v-app>
 </template>
 
 <script>
     export default {
         name: 'App',
-        created() {
-
+        mounted() {
+            this.$db.ref('/CatchError').on('child_added', () => {
+                this.catchError = true;
+            })
         },
-
         data() {
-            return {}
+            return {
+                catchError:false
+            }
         },
 
         methods:{
