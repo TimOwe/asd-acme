@@ -45,7 +45,7 @@
 
                 <div v-if="render === 'scoreboard'">
                     <v-slide-x-transition mode="out-in">
-                        <scoreboard-card v-bind:thisplayer="playerref" v-bind:game="game"></scoreboard-card>
+                        <scoreboard-card v-bind:thisplayer="playerref" v-bind:game="game" @pushScore="pushResults"></scoreboard-card>
                     </v-slide-x-transition>
                 </div>
                 <div v-if="render === 'scoreboard'">
@@ -146,7 +146,7 @@
                         // Get the ID of the quiz in this session
                         await db
                             .ref("Sessions/" + session.key)
-                            .once("value", function (snapshot) {
+                            .on("value", function (snapshot) {
                                 self.game = {
                                     id: session.key,
                                     token: snapshot.val().token,
