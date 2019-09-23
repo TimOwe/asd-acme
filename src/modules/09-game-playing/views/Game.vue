@@ -70,6 +70,7 @@ import ScoreboardCard from "../components/scoreboard-card.vue";
 import LobbyCard from "../components/lobby-card.vue";
 import KeepAliveComponent from "../components/keep-alive.vue";
 import QuestionStepper from "../components/question-stepper.vue";
+import {loginUtils} from "../../../main";
 export default {
   components: {
     GameCodeCard,
@@ -99,7 +100,27 @@ export default {
     feedbackText: null,
     codeError: null,
     sessions: null,
+    storeUser: []
   }),
+  beforeMount: async function() {
+    if(this.$cookies.isKey('user')){
+      this.storeUser = ((await loginUtils.checkUserExistsKey(this.$cookies.get('user').key)).user);
+    }
+  },
+  mounted: function() {
+    // Get a list of all sessions when page is loaded
+    var sessions = [];
+    const db = this.$db;
+    // Get a list of sessions
+    db.ref("/Sessions")
+      .orderByValue()
+      .on("value", function(snapshot) {
+        snapshot.forEach(function(data) {
+          sessions.push(data);
+        });
+      });
+    this.sessions = sessions;
+  },
   methods: {
     // Creates a player
     onNickEnter: function(nick) {
@@ -127,6 +148,13 @@ export default {
         if (code === session.child("token").val()) {
           // check if started or ended already
           if (!this.gameValid(session)) return;
+          this.game = session.key;
+          if(this.$cookies.isKey('user')){
+            this.updateDBVals();
+          }
+          let quiz;
+          let sTime;
+          let eTime;
           // If so, push the player to the session's document
           self.playerref = db
             .ref("Sessions/" + session.key)
@@ -281,6 +309,10 @@ export default {
       ref.update({
         keepAlive: Date.now()
       });
+    }, 
+    updateDBVals: function() {
+      var played = this.storeUser.gamesPlayed + 1;
+      this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/gamesPlayed').set((played));
     }
   }
 };

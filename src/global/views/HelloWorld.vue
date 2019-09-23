@@ -55,9 +55,14 @@
           </v-card>
         </v-col>
 
-        <flex xs4 class="mr-4">
+        <v-flex xs4 class="mr-4">
           <v-btn to="/users">User Administration</v-btn>
-        </flex>
+        </v-flex>
+
+        <v-flex xs4 class="mr-4" v-if="!!this.$cookies.get('user')">
+          <v-btn :to="({ path: `/user-results/${this.$cookies.get('user').key}` })">View Your Results</v-btn>
+        </v-flex>
+
       </v-row>
     </v-container>
   </v-layout>
