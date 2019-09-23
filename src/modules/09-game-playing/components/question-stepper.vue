@@ -44,9 +44,9 @@ export default {
       let self = this;
       this.$db
         .ref(`/Sessions/${this.session}/`)
-        .on("child_changed", function(snapshot) {
-          if (snapshot.key === "screen") {
-            self.stepno = snapshot.val();
+        .on("value", function(snapshot) {
+          if (snapshot.val().screen != 0) {
+            self.stepno = snapshot.val().screen;
             console.log(self.stepno);
           }
         });

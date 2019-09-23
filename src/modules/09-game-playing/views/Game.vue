@@ -206,10 +206,12 @@ export default {
       let self = this;
       this.$db
         .ref(`/Sessions/${session}`)
-        .on("child_changed", function(snapshot) {
-          if (snapshot.key === "timestart" && snapshot.val() !== "null") {
+        .on("value", function(snapshot) {
+          if (snapshot.val().timestart !== "null") {
             self.render = "question";
-          } else if (snapshot.key === "timeend" && snapshot.val() !== "null") {
+            console.log('rendering q')
+          }
+          if (snapshot.val().timeend !== "null") {
             self.render = "scoreboard";
           }
         });
@@ -291,7 +293,7 @@ export default {
       ref.update({
         keepAlive: Date.now()
       });
-    }, 
+    },
     updateDBVals: function() {
       var played = this.storeUser.gamesPlayed + 1;
       this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/gamesPlayed').set((played));
