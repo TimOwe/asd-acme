@@ -11,7 +11,7 @@
                             <v-text-field  hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
                         </v-col>
                         <v-col>
-                            <v-layout pr-10 justify-end align-center class="text-right, display-1"><v-btn to="/quiz-creator" color="primary">Create Quiz</v-btn></v-layout>
+                            <v-layout pr-10 justify-end align-center class="text-right, display-1"><v-btn to="/quiz-creator" color="primary" v-if="!!$cookies.isKey('user')">Create Quiz</v-btn></v-layout>
                         </v-col>
                     </v-row>
                 </v-layout>
@@ -92,7 +92,7 @@
             },
         }),
         props: {
-
+            activeUser: Object
         },
         computed: {
             filteredList() {

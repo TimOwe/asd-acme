@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container grid-list-md>
+        <v-container v-if="!!$cookies.isKey('user')" grid-list-md>
             <v-form v-model="valid" ref="quizForm"><!--Assigns all elements with :rule bindings to the quizForm reference-->
 
                 <v-container grid-list-md>
@@ -129,6 +129,23 @@
                 </v-layout>
             </v-container>
 
+        </v-container>
+
+        <v-container v-else-if="!($cookies.isKey('user'))" grid-list-md>
+            <v-layout justify-center align-center>
+                <v-card>
+                    <v-toolbar color="red" dark flat>
+                        <v-layout justify-center class="headline">Error!</v-layout>
+                    </v-toolbar>
+                    <v-card-text>You must be logged in to create a quiz! Either log in or return to the Quiz Catalogue</v-card-text>
+                    <v-card-actions>
+                        <v-layout  justify-center>
+                            <v-btn color="green" to="/login"><v-layout justify-center class="white--text">Log In</v-layout></v-btn>
+                            <v-btn color="primary" to="/quizcatalogue">Return to Catalogue</v-btn>
+                        </v-layout>
+                    </v-card-actions>
+                </v-card>
+            </v-layout>
         </v-container>
 
         <v-dialog width=350 v-model="confirm">
