@@ -35,10 +35,13 @@
 </template>
 
 <script>
+    import {loginUtils} from "./main";
     export default {
         name: 'App',
-        created() {
-
+        async created() {
+            if(this.$cookies.isKey('user') && (await loginUtils.checkUserExistsKey(this.$cookies.get('user').key).user) === undefined){
+                this.$cookies.remove('user');
+            }
         },
 
         data() {
@@ -51,10 +54,7 @@
             }
         }
     };
-
-
 </script>
-
 <style>
     .v-dialog {
         overflow-y: auto !important
