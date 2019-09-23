@@ -31,7 +31,7 @@
 
         <div v-else-if="render === 'question'">
           <v-slide-x-transition mode="out-in">
-            <question-stepper @answer="onAnswer" v-bind:questions="questions" />
+            <question-stepper @answer="onAnswer" v-bind:questions="questions" v-bind:session="game.id"/>
           </v-slide-x-transition>
         </div>
         <div v-if="render === 'question'">
@@ -98,7 +98,7 @@ export default {
     showFeedback: false,
     feedbackText: null,
     codeError: null,
-    sessions: null
+    sessions: null,
   }),
   methods: {
     // Creates a player
@@ -226,7 +226,7 @@ export default {
     onAnswer: function(correct, points, qText, ans) {
       var newQuestions = this.questions.map(q => {
         // Find the relevant question
-        if (q.q == qText && q.c == correct)
+        if (q.q == qText)
           // Add the selected answer
           return Object.assign({}, q, { selected: ans });
         return q;

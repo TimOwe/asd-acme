@@ -44,11 +44,13 @@ export default {
       quizTitle: "",
       currentSession: null,
       isStarted: null,
-      isEnded: null
+      isEnded: null,
+      qTime: null,
+      qCount: null
     };
   },
   computed: {
-    disableEnd: function(){
+    disableEnd: function() {
       return !this.isStarted || this.isEnded;
     }
   },
@@ -74,6 +76,16 @@ export default {
               ? (self.isEnded = false)
               : (self.isEnded = true);
             self.max = snapshot.val().max_ppl;
+            self.qTime = snapshot.val().max_time_pq;
+          });
+        this.$db
+          .ref("/Sessions/" + self.currentSession.key + "/quiz/questions")
+          .on("value", snap => {
+            let questions = [];
+            snap.forEach(q => {
+              questions.push(q);
+            });
+            self.qCount = questions.length;
           });
         this.$db
           .ref("/Sessions/" + self.currentSession.key + "/players")
@@ -82,7 +94,7 @@ export default {
             snap.forEach(user => {
               self.participants.push(user.val().nickname);
             });
-            this.startQuiz()
+            this.startQuiz();
           });
         this.$db
           .ref(`/Sessions/${self.currentSession.key}/quiz`)
@@ -118,6 +130,7 @@ export default {
       this.$db.ref(`/Sessions/${this.currentSession.key}/`).update({
         timestart: Date.now()
       });
+      this.playQuiz();
     },
     reset: function() {
       this.$db.ref(`/Sessions/${this.currentSession.key}/`).update({
@@ -126,16 +139,32 @@ export default {
       });
     },
     startQuiz: function() {
-      if (this.participants.length >= this.max && this.isStarted == false) this.start();
+      if (this.participants.length >= this.max && this.isStarted == false)
+        this.start();
     },
     playQuiz: function() {
-      // Advance the current question info
-      // if all answered next question
-      // if all questions end quiz
+      let self = this;
+      let ref = this.$db.ref(`/Sessions/${this.currentSession.key}/`);
+      // Display first screen (loading)
+      ref.update({ screen: 1 });
+      var x = 1;
+      this.interval = setInterval(function() {
+        ref.update({ screen: ++x });
+        if (x > self.qCount) {
+          clearInterval(self.interval);
+        }
+      }, this.qTime * 1000);
+      ref.on("child_changed", function(snapshot) {
+        if (snapshot.key === "screen") {
+          if (snapshot.val() > self.qCount) {
+            self.end();
+          }
+        }
+      });
     },
     allAnswered: function() {
       // return true if all players have answered the current question
-    },
+    }
   }
 };
 </script>
