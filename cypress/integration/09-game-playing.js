@@ -1,4 +1,4 @@
-describe('Game Playing', function () {
+/** describe('Game Playing', function () {
   before(() => {
     cy.visit('http://localhost:8080/game')
   })
@@ -29,4 +29,4 @@ describe('Game Playing', function () {
     cy.get('.v-btn--depressed').contains('Done').click()
     cy.get('.text--primary').contains('You scored')
   })
-})
+}) **/
