@@ -26,7 +26,7 @@ describe('Register', function () {
     it('Navigates to host page', function () {
         cy.get('.v-btn.v-btn--absolute.v-btn--bottom.v-btn--contained.v-btn--fab.v-btn--right.v-btn--round.theme--light.v-size--default').click();
         cy.wait(2000);
-        cy.get('.v-btn.red').contains('End Game')
+        cy.contains('Joined Users');
     })
 
 });

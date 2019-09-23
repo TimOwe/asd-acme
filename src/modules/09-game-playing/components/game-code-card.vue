@@ -6,7 +6,9 @@
           <v-toolbar-title>Join a game</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <span class="red">{{eText}}</span>
+          <v-scale-transition v-if="eText" mode="out-in">
+            <v-alert type="error">{{eText}}</v-alert>
+          </v-scale-transition>
           <v-form>
             <v-text-field placeholder="Game code" name="code" type="text" v-model="code"></v-text-field>
           </v-form>
@@ -51,7 +53,9 @@ export default {
     const ref = this.$db.ref("/Sessions");
     ref.orderByValue().once("value", function(snapshot) {
       snapshot.forEach(function(data) {
-        gs.push(data.child("token").val());
+        if (data.child("timeend").val() == "null") {
+          gs.push(data.child("token").val());
+        }
       });
     });
     this.games = gs;
@@ -60,7 +64,7 @@ export default {
   methods: {
     onClickButton() {
       // Call codeTry on game.vue with the entered code
-        this.$emit("codeTry", this.code);
+      this.$emit("codeTry", this.code);
     }
   }
 };
