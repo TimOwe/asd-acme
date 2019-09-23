@@ -42,6 +42,35 @@
                     <v-flex xs8>
                         <v-card>
                             <v-toolbar color="primary" dark flat>
+                                <v-layout justify-center class="headline">Quiz Difficulty</v-layout>
+                            </v-toolbar>
+                            <v-container grid-list-md>
+
+                                <v-layout justify-center>
+                                    <v-flex xs6>
+                                        <v-container grid-list-md>
+                                            <v-layout justify-center align-center >
+                                                <v-btn-toggle mandatory ref="decay" :rules="[() => !!score_decay || 'Required.']" v-model="score_decay" class="justify-center" name="questiondifficulty">
+                                                    <v-btn name="easybutton" tile outlined color="green" value=0.1>Easy</v-btn>
+                                                    <v-btn name="medbutton" tile color="orange" outlined value=0.2>Medium</v-btn>
+                                                    <v-btn name="hardbutton" tile outlined color="red" value=0.3>Hard</v-btn>
+                                                </v-btn-toggle>
+                                            </v-layout>
+                                        </v-container>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <v-container grid-list-md>
+                <v-layout justify-center align-center>
+                    <v-flex xs8>
+                        <v-card>
+                            <v-toolbar color="primary" dark flat>
                                 <v-layout justify-center class="headline">Quiz Questions</v-layout>
                             </v-toolbar>
                             <v-container grid-list-md>
@@ -158,17 +187,18 @@
         beforeMount: function(){//assigns all properties of the quiz object prop to computed properties declared in the component to avoid mutation
             this.newImg();
             this.key = this.$route.params.id;
+            this.score_decay = this.quiz.score_decay.toString()
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
             this.owner = this.quiz.owner;
-            this.questionBank = this.quiz.questions
+            this.questionBank = this.quiz.questions;
         },
 
     methods: {
             saveQuiz: function(){
                 //Calls function which returns true if all fields pass validation
                 if(this.formCheck()) {
-                    this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
+                    this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, parseFloat(this.score_decay));
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
@@ -183,8 +213,8 @@
 
                 }
             },
-            updateQuiz: function(quiz_title, questions, owner_id, img, description){//Takes all computed properties from teh form and pushes it to update the ibject in firebase with its identical key. If properties are the same, no changes are made, if they differ, they are updated
-                this.$db.ref('/Quizs/'+this.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
+            updateQuiz: function(quiz_title, questions, owner_id, img, description, score_decay){//Takes all computed properties from teh form and pushes it to update the ibject in firebase with its identical key. If properties are the same, no changes are made, if they differ, they are updated
+                this.$db.ref('/Quizs/'+this.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description, "score_decay": score_decay})
             },
             removeQuestion: function(index){
                 this.questionBank.splice(index,1);
@@ -218,6 +248,7 @@
             },
 
 
+
         },
         //Computed properties
         data: () => ({
@@ -239,8 +270,13 @@
             key: '',
             valid: true,
             falseCount: 0,
-            time_limit: "",
-            score_decay: "",
+            score_decay: '',
+
+            data(){
+                return {
+
+                }
+            },
 
         }),
     }

@@ -48,12 +48,8 @@
                                 <v-container grid-list-md>
 
                                         <v-layout justify-center>
-                                <v-flex  pt-3 xs6>
-                                    <v-text-field ref="time" v-model.number="time_limit" outlined shaped label="Seconds Per Question" type="number" name="questiontime" :rules="[() => !!time_limit || 'Required.', () => time_limit >= 5 || 'Please enter a time longer than 5 seconds', () => time_limit < 45 || 'Please enter a time less than 45 seconds']"></v-text-field>
-                                </v-flex>
-                                <v-flex xs3></v-flex>
                                 <v-flex xs6>
-                                    <v-layout justify-center align-center class="body-1">Quiz Difficulty</v-layout>
+                                    <v-container grid-list-md>
                                     <v-layout justify-center align-center >
                                         <v-btn-toggle mandatory ref="decay" :rules="[() => !!score_decay || 'Required.']" v-model="score_decay" class="justify-center" name="questiondifficulty">
                                             <v-btn name="easybutton" tile outlined color="green" value="0.1">Easy</v-btn>
@@ -61,6 +57,7 @@
                                             <v-btn name="hardbutton" tile outlined color="red" value="0.3">Hard</v-btn>
                                         </v-btn-toggle>
                                     </v-layout>
+                                    </v-container>
                                 </v-flex>
                             </v-layout>
                                 </v-container>
@@ -207,7 +204,7 @@
             saveQuiz: function () {
                 //Calls function which returns true if all fields pass validation
                  if(this.formCheck()) {
-                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, this.time_limit, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
+                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
@@ -259,7 +256,7 @@
                 return titleCheck && questionCheck && imageCheck &&descCheck;
             },
 
-                newQuiz: function(quiz_title, questions, owner_id, img, description, time_limit, score_decay){
+                newQuiz: function(quiz_title, questions, owner_id, img, description, score_decay){
                     var Quiz = {
                         //New quiz object is created with the properties passed from the form
                         quiz_title,
@@ -267,7 +264,6 @@
                         owner_id,
                         img,
                         description,
-                        time_limit,
                         score_decay
                     };
                 var reciept = this.$db.ref('/Quizs').push(Quiz);//The object is then pushed to the quizs table in firebase, adding it as an object
@@ -294,7 +290,6 @@
             valid: true,
             falseCount: 0,
             clicked: false,
-            time_limit: "",
             score_decay: "0.1",
             createdKey: "",
 
@@ -304,7 +299,6 @@
                     quizTitle: "",
                     description: "",
                     img: "",
-                    time_limit: "",
                     score_decay: "0.1",
                 }
             },
