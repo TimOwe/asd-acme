@@ -5,8 +5,8 @@ import Game from './modules/09-game-playing/views/Game.vue';
 import Login from './modules/01-User-Accounts/Views/Login';
 import Quizs from './modules/04-quiz-administration/views/ViewQuiz.vue'
 import Users from './modules/03-user-administration/views/Users.vue'
-import LeaderboardSelect from './modules/11-user-results/views/LeaderboardSelect';
-import Leaderboard from "./modules/11-user-results/views/Leaderboard";
+import LeaderboardSelect from './modules/12-leaderboard/views/LeaderboardSelect';
+import Leaderboard from "./modules/12-leaderboard/views/Leaderboard";
 import QuizCatalogue from "./modules/05-quiz-management/Views/QuizCatalogue";
 import QuizCreator from "./modules/05-quiz-management/Views/Quiz-Creator";
 import QuizView from "./modules/05-quiz-management/Views/QuizView";
@@ -16,6 +16,8 @@ import Join from './modules/07-Host-Game/Views/Join'
 import Live from './modules/07-Host-Game/Views/Live';
 import Logout from './modules/01-User-Accounts/Views/LogedOut';
 import Settings from './modules/01-User-Accounts/Views/Settings';
+import Profile from "./modules/01-User-Accounts/Views/Profile";
+import UserResults from './modules/11-user-results/views/user-results'
 
 Vue.use(Router);
 
@@ -101,6 +103,16 @@ const router = new Router({
           path:'/leaderboard/:id',
           name: 'Leaderboard',
           component: Leaderboard
+      },
+      {
+          path:'/profile/:id',
+          name: 'Profile',
+          component: Profile
+      },
+      {
+          path: '/user-results/:id',
+          name:'user-results',
+          component: UserResults
       }
   ]
 });
