@@ -45,6 +45,7 @@
                 if(auth.user !== undefined){
                     var user = {key: auth.user.key, fname: auth.user.fname, lname: auth.user.lname, picture: auth.user.picture }
                     this.$cookies.set('user', user, '1d');
+                    this.$parent.$parent.$emit('login');
                     this.addLog(auth.user.key,'Log In');
                     this.$router.push('/');
                 } else {
@@ -88,7 +89,7 @@
                 logPass: '',
                 error: '',
             }
-
-        }
+        },
+        props:['activeUser']
     }
 </script>
