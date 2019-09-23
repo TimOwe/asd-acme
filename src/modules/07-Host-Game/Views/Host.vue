@@ -63,7 +63,7 @@
                     quiz: quiz,
                     max_ppl: meta.max,
                     max_time_pq: meta.tlimit,
-                    timestart: new Date().toString(),
+                    timestart: "null",
                     timeend: 'null',
                     token: this.lastToken,
                     participants: [{}]

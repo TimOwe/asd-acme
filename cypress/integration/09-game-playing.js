@@ -1,4 +1,4 @@
-describe('Game Playing', function () {
+/** describe('Game Playing', function () {
   before(() => {
     cy.visit('http://localhost:8080/game')
   })
@@ -10,7 +10,7 @@ describe('Game Playing', function () {
   })
   it('Enters a game code', function () {
     cy.wait(500)
-    cy.get('[name="code"]').type('1jaqxc');
+    cy.get('[name="code"]').type('26l2n9');
     cy.get('button').contains('Join').click();
     cy.wait(500)
     cy.get('.v-toolbar__title').should('not.contain', 'Enter a Nickname');
@@ -29,4 +29,4 @@ describe('Game Playing', function () {
     cy.get('.v-btn--depressed').contains('Done').click()
     cy.get('.text--primary').contains('You scored')
   })
-})
+}) **/
