@@ -82,8 +82,8 @@
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-btn text style="margin-left: 0" v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
-                                    <v-btn text style="margin-left: 15px" color="blue" @click="viewResults(user.key)">View Results<v-icon>mdi-trophy</v-icon></v-btn>
+                                    <v-btn class="white--text" style="margin-left: 15px" raised color="blue" @click="viewResults(user.key)">View Results<v-icon small right color="white">mdi-chart-line</v-icon></v-btn>
+                                    <v-btn absolute raised right v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
                                 </v-row>
                             </v-col>
                         </v-row>
