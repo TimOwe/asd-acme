@@ -29,7 +29,7 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-btn text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
+            <v-btn text to='/logout' class="font-weight-light" style="font-size: medium ">Logout</v-btn>
             <v-btn name="settings" icon to="/settings">
                 <v-icon>mdi-settings</v-icon>
             </v-btn>
@@ -72,6 +72,7 @@
             var test = (await loginUtils.checkUserExistsKey(this.$cookies.get('user').key));
             if (this.$cookies.isKey('user') && (test.user === undefined)) {
                 this.$cookies.remove('user');
+                this.$router.push("/logout");
             }
             if (this.$cookies.isKey('user')) {
                 this.updateData();
