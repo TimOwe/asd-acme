@@ -8,7 +8,7 @@
 
         <div v-if="render === 'name'">
           <v-slide-x-transition mode="out-in">
-            <nickname-entry-card @nickEnter="onNickEnter"></nickname-entry-card>
+            <nickname-entry-card :activeUser="activeUser" @nickEnter="onNickEnter"></nickname-entry-card>
           </v-slide-x-transition>
         </div>
 
@@ -38,13 +38,7 @@
             />
           </v-slide-x-transition>
         </div>
-        <div v-if="render === 'question'">
-          <div class="text-center">
-            <v-slide-x-transition mode="out-in">
-              <v-btn class="ma-2" outlined color="indigo" @click="finishQuiz">Done</v-btn>
-            </v-slide-x-transition>
-          </div>
-        </div>
+
         <v-snackbar v-model="showFeedback" :top="true" :timeout="1500">{{ feedbackText }}</v-snackbar>
 
         <div v-if="render === 'scoreboard'">
@@ -91,7 +85,8 @@ export default {
     QuestionStepper
   },
   props: {
-    source: String
+    source: String,
+    activeUser: Object
   },
   mounted: function() {
     this.getSessions();
@@ -242,8 +237,8 @@ export default {
         });
       });
       this.questions = questions;
+      this.checkEnded();
       // We have to declare outside of ref.once() as it changes the scope of 'this'
-      console.dir(this.questions);
     },
     onAnswer: function(correct, points, qText, ans) {
       var newQuestions = this.questions.map(q => {
@@ -280,9 +275,21 @@ export default {
       this.feedbackText = text;
       this.showFeedback = true;
     },
+    checkEnded: function() {
+      let self = this;
+      console.log(`gameid ${this.game.id}`)
+      let ref = this.$db.ref(`/Sessions/${this.game.id}/`);
+      let listener = ref.on("value", function(snapshot) {
+        console.log(`timeend ${snapshot.val().timeend}`);
+        if (snapshot.val().timeend !== "null") {
+          self.game.eTime = snapshot.val().timeend;
+          self.finishQuiz();
+          ref.off();
+        }
+      });
+    },
     finishQuiz: function() {
       // Show results screen, push results to firebase if logged in
-      this.render = "scoreboard";
       if (this.$cookies.isKey("user")) {
         this.pushResults();
       }

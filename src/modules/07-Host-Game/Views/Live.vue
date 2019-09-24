@@ -108,6 +108,7 @@
             }, 2000);
             this.isActiveUser = !!this.$cookies.get('user');
         },
+        props: ['activeUser'],
         data(){
             return {
                 sessionKey: "",
@@ -170,7 +171,7 @@
                 if(this.isActiveUser && !this.isUserAdded()){
                     var userObj = {
                         key: this.$cookies.get('user').key,
-                        nickname: this.$cookies.get('user').fname,
+                        nickname: this.activeUser.fname,
                     };
                     sessionRef.child('players').push(userObj);
                     this.displayName = false;
