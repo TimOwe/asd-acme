@@ -47,7 +47,6 @@ export default {
         .on("value", function(snapshot) {
           if (snapshot.val().screen != 0) {
             self.stepno = snapshot.val().screen;
-            console.log(self.stepno);
           }
         });
     }
