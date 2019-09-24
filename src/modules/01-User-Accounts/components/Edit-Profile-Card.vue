@@ -9,19 +9,19 @@
                     <v-btn @click="handleSettingChange('email', true)" v-if="!activeUser.profile.email" color="green" class="white--text">Show Email Address</v-btn>
                     <v-btn @click="handleSettingChange('email', false)" v-if="activeUser.profile.email" color="red" class="white--text">Hide Email Address</v-btn>
                 </v-layout>
-                <v-layout wrap>
+                <v-layout wrap style="margin-top:10px">
                     <v-btn @click="handleSettingChange('gamesPlayed', true)" v-if="!activeUser.profile.gamesPlayed" color="green" class="white--text">Show Games Played</v-btn>
                     <v-btn @click="handleSettingChange('gamesPlayed', false)" v-if="activeUser.profile.gamesPlayed" color="red" class="white--text">Hide Games Played</v-btn>
                 </v-layout>
-                <v-layout wrap>
+                <v-layout style="margin-top: 10px" wrap>
                     <v-btn @click="handleSettingChange('questionsAnswered', true)" v-if="!activeUser.profile.questionsAnswered" color="green" class="white--text">Show Number of Questions Answered</v-btn>
                     <v-btn @click="handleSettingChange('questionsAnswered', false)" v-if="activeUser.profile.questionsAnswered" color="red" class="white--text">Hide Number of Questions Answered</v-btn>
                 </v-layout>
-                <v-layout wrap>
+                <v-layout style="margin-top: 10px" wrap>
                     <v-btn @click="handleSettingChange('correct', true)" v-if="!activeUser.profile.correct" color="green" class="white--text">Show Number of Correct Answers</v-btn>
                     <v-btn @click="handleSettingChange('correct', false)" v-if="activeUser.profile.correct" color="red" class="white--text">Hide Number of Correct Answers</v-btn>
                 </v-layout>
-                <v-layout wrap>
+                <v-layout style="margin-top: 10px" wrap>
                     <v-btn @click="handleSettingChange('incorrect', true)" v-if="!activeUser.profile.incorrect" color="green" class="white--text">Show Number of Incorrect Answers</v-btn>
                     <v-btn @click="handleSettingChange('incorrect', false)" v-if="activeUser.profile.incorrect" color="red" class="white--text">Hide Number of Incorrect Answers</v-btn>
                 </v-layout>
