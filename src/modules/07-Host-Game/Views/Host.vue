@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-layout justify-center align-center class="headline pt-5 pb-5">Welcome Back - Hani</v-layout>
+        <v-layout justify-center align-center class="headline pt-5 pb-5">Welcome Back - {{activeUser.fname}}</v-layout>
         <v-container grid-list-md>
             <v-layout>
                 <v-flex xs4>
@@ -32,13 +32,27 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog v-model="invalid" max-width="290">
+            <v-card>
+                <v-card-title>
+                    <v-layout justify-center> Meta Data Invalid!</v-layout>
+                </v-card-title>
+                <v-card-text>
+                    <v-layout justify-center class="headline pt-3">Meta fields must be numeric and Quiz must be valid</v-layout>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn fab absolute bottom right @click="invalid = false">X</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
     export default {
         name: "Host",
-        beforeMount(){
+        async beforeMount(){
             this.$db.ref('/Quizs').on('value', (snap) => {
                 this.names = [];
                 this.keys = [];
@@ -48,7 +62,14 @@
                     this.names.push(quizObj.quiz_title);
                     this.keys.push(quizObj.key);
                 })
-            })
+            });
+            var key = this.$cookies.get('user').key;
+            var template = await this.$db.ref(`/Users/${key}`).once('value');
+            this.activeUser = template.val();
+            if(!!key){
+                this.host = key;
+            }
+
         },
         methods:{
             Session(quizkey,host,meta){
@@ -63,7 +84,7 @@
                     quiz: quiz,
                     max_ppl: meta.max,
                     max_time_pq: meta.tlimit,
-                    timestart: new Date().toString(),
+                    timestart: "null",
                     timeend: 'null',
                     token: this.lastToken,
                     participants: [{}]
@@ -71,11 +92,16 @@
             },
             handleStart(){
                 var index = this.names.indexOf(this.selected);
-                this.startSession(this.keys[index], this.host, {
-                    max: this.maxppl,
-                    tlimit: this.tlimit
-                });
-                this.dialog=true
+                if(this.isValid(index)){
+                    this.startSession(this.keys[index], this.host, {
+                        max: this.maxppl,
+                        tlimit: this.tlimit
+                    });
+                    this.dialog=true
+                } else {
+                    this.invalid = true;
+                }
+
             },
             startSession(quizkey,host, meta){
                 var newSession = this.Session(quizkey,host,meta);
@@ -91,19 +117,26 @@
                     quiz_title: 'Quiz' + Math.random(),
                     questions: [{}],
                 })
+            },
+            isValid(index){
+                var isMetaNumeric = /^[0-9]*$/.test(this.maxppl) && /^[0-9]*$/.test(this.tlimit)
+                var isQuizValid = !!this.keys[index];
+                return isMetaNumeric && isQuizValid
             }
         },
         data(){
             return {
                 quizNames: ['Quiz 1', 'Quiz 2', 'Quiz 3'],
                 dialog: false,
-                host: '-L3278GJH378B',
+                activeUser: {},
+                host: '',
                 names: [],
                 keys: [],
                 selected: '',
                 lastToken: '',
                 tlimit: 0,
-                maxppl: 0
+                maxppl: 0,
+                invalid: false
             }
         }
     }

@@ -5,10 +5,10 @@
                 {{activeUser.fname}}'s Results
             </v-layout>
             <v-layout row wrap class="mt-10">
-                <v-flex xs3 class="mb-10" v-for="(attempt,ind) in attempts">
-                    <v-card height="220" width="450">
+                <v-flex xs6 class="mb-10" v-for="(attempt,ind) in attempts">
+                    <v-card height="220">
                         <v-card-title>
-                            Quiz Result {{ind + 1}}: {{attempt.quizId}}
+                            Quiz Result {{ind + 1}}: {{attempt.quiz_title}}
                         </v-card-title>
                         <v-card-text>
                             Score: {{attempt.score}} <br>
@@ -71,6 +71,11 @@
             this.$db.ref(`/Users/${userKey}`).once('value', (snap) => {
                 this.activeUser = snap.val();
                 this.attempts = Object.values(this.activeUser.results);
+                this.attempts.forEach(attempt => {
+                    this.getQuizName(attempt.quizId).then(data => {
+                        attempt.quiz_title = data;
+                    })
+                });
                 setTimeout(() => {
                     this.loading = false
                 }, 500)
@@ -81,6 +86,11 @@
                 this.currentAttempt = attempt;
                 this.attemptData = true;
             },
+            async getQuizName(id){
+               var template = await this.$db.ref(`/Quizs/${id}`).once('value');
+               var title = template.val().quiz_title;
+               return title;
+            }
         },
         data(){
             return {

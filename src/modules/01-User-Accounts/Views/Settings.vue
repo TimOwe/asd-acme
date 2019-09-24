@@ -67,7 +67,7 @@
                     <ChangePasswordCard @close="UpdatePasswordChange"></ChangePasswordCard>
                 </v-dialog>
                 <v-dialog v-model="changePictureDialog" persistent max-width="600px">
-                    <ChangePictureCard @close="UpdatePictureChange"></ChangePictureCard>
+                    <ChangePictureCard :activeUser="activeUser" @close="UpdatePictureChange"></ChangePictureCard>
                 </v-dialog>
                 <v-footer></v-footer>
             </v-card>
@@ -81,6 +81,7 @@
     export default {
         name: "Settings",
         components: {ChangePasswordCard, ChangePictureCard},
+        props:{activeUser: Object},
         methods: {
             deleteAct(){
                 this.$db.ref('/Users/'+ (this.$cookies.get('user').key)).remove();
@@ -110,7 +111,7 @@
                     }
                     if(isUpdated){
                         this.$cookies.remove('user');
-                        var user = {key: this.storeUser.key, fname: this.storeUser.fname, lname: this.storeUser.lname, picture: this.storeUser.picture }
+                        var user = {key: this.storeUser.key}
                         this.$cookies.set('user', user, '1d');
                         this.updated = 'Your details have been updated.'
                         this.$forceUpdate();
