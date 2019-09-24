@@ -11,6 +11,8 @@
                         <v-card-actions>
                             <v-btn depressed large color="red" class="white--text" @click="deleteUser(user.key)">Delete</v-btn>
                             <v-btn large color="primary" @click="handleShowLogs(user.key)">View Logs</v-btn>
+                            <v-btn v-if="user.isAdmin === false" @click="handleMakeAdmin(user.key, true)" large color="purple" class="white--text">Make Admin</v-btn>
+                            <v-btn v-else @click="handleMakeAdmin(user.key, false)" large color="purple" class="white--text">Remove Admin</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -23,8 +25,9 @@
 </template>
 <script>
     import LogTable from "../components/log-table";
+
     export default {
-        beforeMount(){
+        beforeMount() {
             this.$db.ref('/Users').on('value', (snap) => {
                 this.users = [];
                 snap.forEach(user => {
@@ -37,7 +40,7 @@
         },
         name: "log-table",
         components: {LogTable},
-        data(){
+        data() {
             return {
                 password: '',
                 LogsDialog: false,
@@ -50,27 +53,30 @@
         },
 
         methods: {
-            deleteUser(userKey){
-                this.$db.ref('/Users/'+userKey).remove();
+            deleteUser(userKey) {
+                this.$db.ref('/Users/' + userKey).remove();
             },
-          async handleShowLogs(userKey){
+            async handleShowLogs(userKey) {
                 this.active = userKey;
                 var logs = await this.getUserLogs(userKey);
                 this.activeLogs = logs;
                 this.LogsDialog = true;
             },
-            getUserLogs(userkey){
+            getUserLogs(userkey) {
                 return new Promise((resolve) => {
                     var logs = [];
-                    this.$db.ref('/Users/'+userkey+'/Logs').once('value', (snap) => {
+                    this.$db.ref('/Users/' + userkey + '/Logs').once('value', (snap) => {
                         snap.forEach(log => {
-                           var logObj = log.val();
-                           logObj.key = log.key;
-                           logs.push(logObj);
+                            var logObj = log.val();
+                            logObj.key = log.key;
+                            logs.push(logObj);
                         });
                         resolve(logs);
                     })
                 })
+            },
+            handleMakeAdmin(user, bool){
+                this.$db.ref('/Users/'+ user + '/isAdmin').set(bool);
             }
         }
     }

@@ -16,7 +16,20 @@
                 <img src="https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg">
             </v-avatar>
             <v-btn @click="viewProfile" text class="font-weight-light" style="font-size: 16px">{{activeUser.fname}} {{activeUser.lname}}</v-btn>
-            <v-btn to="/logout" text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
+            <v-menu offset-y>
+                <template v-slot:activator="{on}">
+                    <v-btn v-if="activeUser.isAdmin" v-on="on" text class="font-weight-light" style="font-size: 16px">Admin</v-btn>
+                </template>
+                <v-list>
+                    <v-list-item to="/users">
+                        <v-list-item-title>Users</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item to="/quizs">
+                        <v-list-item-title>Quizs</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+            <v-btn text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
             <v-btn name="settings" icon to="/settings">
                 <v-icon>mdi-settings</v-icon>
             </v-btn>
@@ -64,11 +77,11 @@
                 this.updateData();
             }
         },
-        mounted() {
-            this.$db.ref('/CatchError').on('child_added', () => {
-                this.catchError = true;
-            })
-        },
+        // mounted() {
+        //     this.$db.ref('/CatchError').on('child_added', () => {
+        //         this.catchError = true;
+        //     })
+        // },
         data() {
             return {
                 activeUser: {},
