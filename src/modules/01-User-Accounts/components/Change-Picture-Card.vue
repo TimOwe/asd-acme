@@ -34,6 +34,7 @@
     export default {
         name: "Change-Password-Card",
         components: {ChangedCard},
+        props:['activeUser'],
         methods: {
             //Closes the dialog box
             closeDialog(){
@@ -58,7 +59,7 @@
                     this.$db.ref('/Users/'+ (this.$cookies.get('user').key) + '/picture').set(this.imgUrl);
                     this.$cookies.remove('user');
                     this.storeUser.picture = this.imgUrl;
-                    var user = {key: this.storeUser.key, fname: this.storeUser.fname, lname: this.storeUser.lname, picture: this.storeUser.picture }
+                    var user = {key: this.storeUser.key}
                     this.$cookies.set('user', user, '1d');
                     this.done  = true;
                 }
@@ -88,7 +89,7 @@
                 validMessage: '',
                 done: false,
                 imgUrl: '',
-                displayImg: this.$cookies.get('user').picture,
+                displayImg: this.activeUser.picture,
                 maxHeight: (document.body.clientHeight) - 500,
                 storeUser: this.$cookies.get('user')
             }
