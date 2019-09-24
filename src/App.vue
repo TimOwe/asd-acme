@@ -8,14 +8,14 @@
         <v-btn icon to="/quizcatalogue"><v-icon>mdi-format-list-bulleted-square</v-icon></v-btn>
         <div class="flex-grow-1"></div>
 
-        <div v-if="this.$cookies.isKey('user')">
-            <v-avatar v-if="this.$cookies.get('user').picture !== ''">
-                <img v-bind:src="this.$cookies.get('user').picture">
+        <div v-if="this.$cookies.get('user')">
+            <v-avatar v-if="this.activeUser.picture != ''">
+                <img v-bind:src="this.activeUser.picture">
             </v-avatar>
             <v-avatar v-else>
                 <img src="https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg">
             </v-avatar>
-            <v-btn @click="viewProfile" text class="font-weight-light" style="font-size: 16px">{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname}}</v-btn>
+            <v-btn @click="viewProfile" text class="font-weight-light" style="font-size: 16px">{{activeUser.fname}} {{activeUser.lname}}</v-btn>
             <v-btn to="/logout" text class="font-weight-light" style="font-size: medium ">Logout</v-btn>
             <v-btn name="settings" icon to="/settings">
                 <v-icon>mdi-settings</v-icon>
@@ -29,7 +29,7 @@
     </v-app-bar>
 
     <v-content>
-     <router-view></router-view>
+     <router-view :activeUser="activeUser" @login="updateData" @remove="removeData"></router-view>
     </v-content>
 
       <v-dialog v-model="catchError" width="500">
@@ -51,8 +51,19 @@
 </template>
 
 <script>
+    import {loginUtils} from "./main";
+
     export default {
         name: 'App',
+        async created() {
+            var test = (await loginUtils.checkUserExistsKey(this.$cookies.get('user').key));
+            if (this.$cookies.isKey('user') && (test.user === undefined)) {
+                this.$cookies.remove('user');
+            }
+            if (this.$cookies.isKey('user')) {
+                this.updateData();
+            }
+        },
         mounted() {
             this.$db.ref('/CatchError').on('child_added', () => {
                 this.catchError = true;
@@ -60,6 +71,7 @@
         },
         data() {
             return {
+                activeUser: {},
                 catchError:false
             }
         },
@@ -67,13 +79,19 @@
         methods:{
             viewProfile(){
                 this.$router.push({path: `/profile/${this.$cookies.get('user').key}`})
+            },
+            updateData(){
+                var currentKey = this.$cookies.get('user').key;
+                this.$db.ref(`/Users/${currentKey}`).on('value', (snap) => {
+                    this.activeUser = snap.val();
+                })
+            },
+            removeData(){
+                this.activeUser = undefined;
             }
         }
     };
-
-
 </script>
-
 <style>
     .v-dialog {
         overflow-y: auto !important

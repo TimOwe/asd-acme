@@ -13,6 +13,7 @@
     export default {
         created() {
             if(this.$cookies.isKey('user')){
+                this.$parent.$parent.$emit('remove');
                 this.$cookies.remove('user');
                 setTimeout(()=>{
                     this.$router.push('/')

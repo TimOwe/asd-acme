@@ -34,6 +34,7 @@
     export default {
         name: "Change-Password-Card",
         components: {ChangedCard},
+        props:['activeUser'],
         methods: {
             //Closes the dialog box
             closeDialog(){
@@ -88,7 +89,7 @@
                 validMessage: '',
                 done: false,
                 imgUrl: '',
-                displayImg: this.$cookies.get('user').picture,
+                displayImg: this.activeUser.picture,
                 maxHeight: (document.body.clientHeight) - 500,
                 storeUser: this.$cookies.get('user')
             }
