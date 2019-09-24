@@ -7,7 +7,7 @@
           <v-spacer></v-spacer>
           <div
             v-if="this.$cookies.isKey('user')"
-          >{{this.$cookies.get('user').fname}} {{this.$cookies.get('user').lname.substring(0,1)}}</div>
+          >{{activeUser.fname}} {{activeUser.lname.substring(0,1)}}</div>
           <div v-else>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
@@ -59,6 +59,7 @@ export default {
     nickname: "",
     player: ""
   }),
+  props:['activeUser'],
   methods: {
     onClickButton() {
       // Call nickEnter function on game.vue
@@ -67,9 +68,9 @@ export default {
     concatName() {
       // DIsplay the user's details as username if they are logged in already
       let nick =
-        this.$cookies.get("user").fname +
+        this.activeUser.fname+
         " " +
-        this.$cookies.get("user").lname.substring(0, 1);
+       this.activeUser.lname.substring(0, 1);
       let nickArr = nick.toLowerCase().split(" ");
       for (var i = 0; i < nickArr.length; i++) {
         nickArr[i] =

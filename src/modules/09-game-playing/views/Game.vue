@@ -8,7 +8,7 @@
 
         <div v-if="render === 'name'">
           <v-slide-x-transition mode="out-in">
-            <nickname-entry-card @nickEnter="onNickEnter"></nickname-entry-card>
+            <nickname-entry-card :activeUser="activeUser" @nickEnter="onNickEnter"></nickname-entry-card>
           </v-slide-x-transition>
         </div>
 
@@ -85,7 +85,8 @@ export default {
     QuestionStepper
   },
   props: {
-    source: String
+    source: String,
+    activeUser: Object
   },
   mounted: function() {
     this.getSessions();

@@ -20,14 +20,14 @@
         <v-container grid-md-list>
             <v-layout row wrap class="pa-3">
                 <v-flex  v-for="user in participants" xs4>
-                    <v-btn depressed color="blue" class="white--text mb-5">{{user.displayName}}</v-btn>
+                    <v-btn @click="$router.push('/profile/'+ $cookies.get('user').key)" depressed color="blue" class="white--text mb-5">{{user.nickname}}</v-btn>
                 </v-flex>
             </v-layout>
         </v-container>
 
         <v-container>
             <v-layout justify-center align-center>
-                    <v-btn depressed large color="primary" @click="handleJoin()">Join Game</v-btn>
+                    <v-btn v-if="isUserAdded" depressed large color="primary" @click="handleJoin()">Join Game</v-btn>
                     <v-btn class="ml-5" large>Host Info</v-btn>
             </v-layout>
         </v-container>
@@ -106,7 +106,9 @@
             setTimeout(() => {
                 this.loading = false;
             }, 2000);
+            this.isActiveUser = !!this.$cookies.get('user');
         },
+        props: ['activeUser'],
         data(){
             return {
                 sessionKey: "",
@@ -123,17 +125,27 @@
                 participants: [],
                 isActiveUser: false,
                 authenticated: false,
-                userJoin: false
+                userJoin: false,
             }
         },
+
         methods:{
             handleJoin(){
                 if(this.isActiveUser){
                     this.authenticated = true;
-                    // this.addActiveUser();
+                    this.addParticipant();
                 } else {
                     this.userJoin = true;
                 }
+            },
+            isUserAdded(){
+                this.participants.forEach(user => {
+                    console.log(user.key,this.$cookies.get('user').key, user.key === this.$cookies.get('user').key );
+                    if(user.key === this.$cookies.get('user').key){
+                        return true;
+                    }
+                });
+                return false;
             },
             getSessionFromToken(token){
                 this.$db.ref('/Sessions').once('value', (snap) => {
@@ -145,7 +157,7 @@
                             // console.log(this.currentSession);
                         }
                     });
-                    this.$db.ref('/Sessions/'+this.currentSession.key+'/participants').on('value', (snap)=> {
+                    this.$db.ref('/Sessions/'+this.currentSession.key+'/players').on('value', (snap)=> {
                         this.participants = [];
                         snap.forEach(user => {
                             this.participants.push(user.val())
@@ -156,13 +168,28 @@
             },
             addParticipant(){
                 var sessionRef = this.$db.ref('/Sessions/'+this.currentSession.key);
-                var userObj = {
-                    key: '-L73yuhduaih7839',
-                    displayName: this.displayName,
-                };
-                    sessionRef.child('participants').push(userObj);
+                if(this.isActiveUser && !this.isUserAdded()){
+                    var userObj = {
+                        key: this.$cookies.get('user').key,
+                        nickname: this.activeUser.fname,
+                    };
+                    sessionRef.child('players').push(userObj);
                     this.displayName = false;
-                this.nickname = false;
+                    this.nickname = false;
+                    setTimeout(() => {
+                        this.authenticated = false;
+                    },500);
+                } else if(this.nickname == true){
+                    var userObj = {
+                        key: 'guest',
+                        nickname: this.displayName,
+                    };
+                    sessionRef.child('players').push(userObj);
+                    this.displayName = false;
+                    this.nickname = false;
+                } else {
+                    this.authenticated = false;
+                }
             }
         }
     }
