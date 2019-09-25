@@ -81,6 +81,10 @@
                                         <v-card-text style="font-size: 25px;">{{user.incorrectQuestions}}</v-card-text>
                                     </v-col>
                                 </v-row>
+                                <v-row>
+                                    <v-btn class="white--text" style="margin-left: 15px" raised color="blue" @click="viewResults(user.key)">View Results<v-icon small right color="white">mdi-chart-line</v-icon></v-btn>
+                                    <v-btn absolute raised right v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
+                                </v-row>
                             </v-col>
                         </v-row>
                         <v-row style="margin-right:2% ">

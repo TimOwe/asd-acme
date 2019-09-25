@@ -5,17 +5,17 @@
                 {{activeUser.fname}}'s Results
             </v-layout>
             <v-layout row wrap class="mt-10">
-                <v-flex xs6 class="mb-10" v-for="(attempt,ind) in attempts">
-                    <v-card height="220">
+                <v-flex xs3 class="mb-10" v-for="(attempt,ind) in attempts">
+                    <v-card height="220" width="450">
                         <v-card-title>
                             Quiz Result {{ind + 1}}: {{attempt.quiz_title}}
                         </v-card-title>
                         <v-card-text>
                             Score: {{attempt.score}} <br>
-                            Time: {{attempt.time_start}}
+                            Time: {{new Date(attempt.time_start).toString()}}
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn @click="showAttemptData(attempt)" fab absolute bottom left color="blue"><v-icon color="white">mdi-chart-pie</v-icon></v-btn>
+                            <v-btn @click="showAttemptData(attempt)" fab absolute bottom right color="blue"><v-icon color="white">mdi-eye</v-icon></v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -26,7 +26,7 @@
             <v-card width="800" height="600">
                 <v-card-text>
                     Total Score: {{this.currentAttempt.score}} <br>
-                    Time Start: {{this.currentAttempt.time_start}}
+                    Time Start: {{new Date(currentAttempt.time_start).toString()}}
                     <v-divider class="mt-4 mb-5"></v-divider>
                         <v-simple-table fixed>
                             <thead>
@@ -49,8 +49,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn color="blue" large text>Replay Quiz</v-btn>
-                        <v-btn color="red" large text @click="attemptData = false">Close</v-btn>
+                        <v-btn class="white--text" color="red" raised @click="attemptData = false">Close</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
