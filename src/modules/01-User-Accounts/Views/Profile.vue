@@ -107,8 +107,11 @@
     import editProfileCard from "../components/Edit-Profile-Card"
 
     export default {
-        async beforeMount() {
-           this.user = ((await loginUtils.checkUserExistsKey(this.$route.params.id)).user);
+        beforeMount() {
+            var route = "/Users/" + this.$route.params.id;
+            this.$db.ref(route).on('value', (snap) => {
+                this.user = snap.val();
+            });
         },
         name: "Profile",
         components: {editProfileCard},
