@@ -7,8 +7,8 @@
                     <v-layout class="white--text"><span class="headline">Quizzes</span></v-layout>
                     <v-spacer></v-spacer>
                     <v-btn text color="white"><v-icon size="35">mdi-play</v-icon></v-btn>
-                    <v-btn text color="white" @click="triggerEdit()" :quiz="thisQuiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
-                    <v-btn text color="white" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
+                    <v-btn text color="white" @click="triggerEdit()" :quiz="thisQuiz" v-if="this.$cookies.get('user').key===authorKey"><v-icon size="35">mdi-pencil</v-icon></v-btn>
+                    <v-btn text color="white" @click="deleteConfirm=true" v-if="this.$cookies.get('user').key===authorKey"><v-icon size="35">mdi-delete</v-icon></v-btn>
                 </v-toolbar>
                 <v-container grid-list-md>
 
@@ -17,7 +17,7 @@
                     <v-container>
                         <v-layout pt-5 class="display-2">{{quizTitle}}</v-layout>
                         <v-layout pt-5 class="headline">{{description}}</v-layout>
-                        <v-layout pt-5 class="subtitle-1"><b>Created by: </b>{{owner}}</v-layout>
+                        <v-layout pt-5 class="subtitle-1"><b>Created by</b>: {{owner}}</v-layout>
                     </v-container>
 
                     <v-expansion-panels>
@@ -80,28 +80,24 @@
     export default {
         name: "QuizView",
         components: {
-
-
         },
         props: {
             viewKey: String
-
         },
-
         beforeMount: function(){
             this.newKey = this.viewKey;
             this.getQuiz(this.newKey);
         },
-
         methods:{
             // getting snapshot of data from firebase
             getQuiz: function(key){
                 this.$db.ref('/Quizs/').child(key).once('value', (snap) => {
                     this.thisQuiz = snap.val();
+                    this.authorKey = this.thisQuiz.owner_id
+                    this.setUser(this.authorKey);
                     this.img = this.thisQuiz.img;
                     this.quizTitle = this.thisQuiz.quiz_title;
                     this.description = this.thisQuiz.description;
-                    this.owner = this.thisQuiz.owner_id;
                     this.questions = this.thisQuiz.questions;
                 });
             },
@@ -123,6 +119,12 @@
             onBackButton() {
                 this.$emit("catalogueView");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
             },
+            setUser(userKey) {
+                this.$db.ref('/Users/').child(userKey).once('value', (snap) => {
+                    this.thisUser = snap.val();
+                    this.owner = this.thisUser.fname +" "+ this.thisUser.lname;
+                });
+             },
 
         },
         //Computed properties
@@ -138,6 +140,9 @@
             img: '',
             newkey: '',
             readonly: false,
+            thisUser: "",
+            userFullName: "",
+            authorKey: "",
 
 
             expanded: [],

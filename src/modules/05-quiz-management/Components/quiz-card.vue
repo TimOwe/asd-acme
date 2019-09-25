@@ -32,12 +32,18 @@
             this.img = this.quiz.img;
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
-            this.owner = this.quiz.owner_id;
+            this.setUser(this.quiz.owner_id);
             this.questions = this.quiz.questions
         },
         methods: {
             viewQuiz: function(key) {//If called, pushes to the view page, sending the quiz key as a parameter
                 this.$router.push('/quizview/'+key);
+            },
+            setUser(userKey) {
+                this.$db.ref('/Users/').child(userKey).once('value', (snap) => {
+                    this.thisUser = snap.val();
+                    this.owner = this.thisUser.fname +" "+ this.thisUser.lname;
+                });
             },
         },
         //Computed properties

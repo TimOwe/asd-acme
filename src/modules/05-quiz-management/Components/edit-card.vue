@@ -26,9 +26,11 @@
                                     <v-layout justify-center class="headline">Quiz Details</v-layout>
                                 </v-toolbar>
                                 <v-container grid-list-md>
-                            <v-text-field ref="formtitle" v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[() => !!quizTitle || 'Required.', () => quizTitle.length > 4 || 'Please enter a title longer than 4 characters', () => quizTitle.length < 40 || 'Please enter a title shorter than 40 characters']" counter="40"></v-text-field>
-                            <v-text-field ref="formdescription" v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[() => !!description || 'Required.', () => description.length > 4 || 'Please enter a description longer than 4 characters', () => description.length <= 80 || 'Please enter a description shorter than 80 characters']" counter="80"></v-text-field>
-                            <v-select ref="formimg" name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[() => !!img || 'Required.']"></v-select>
+                                    <v-flex>
+                                        <v-text-field ref="formtitle" v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[() => !!quizTitle || 'Required.', () => quizTitle.length > 4 || 'Please enter a title longer than 4 characters', () => quizTitle.length <= 60 || 'Please enter a title shorter than 60 characters']" counter="60"></v-text-field>
+                                        <v-text-field ref="formdescription" v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[() => !!description || 'Required.', () => description.length > 4 || 'Please enter a description longer than 4 characters', () => description.length <= 80 || 'Please enter a description shorter than 80 characters']" counter="80"></v-text-field>
+                                        <v-select ref="formimg" name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[() => !!img || 'Required.']"></v-select>
+                                    </v-flex>
                                 </v-container>
 
                             </v-card>
@@ -75,7 +77,7 @@
                             </v-toolbar>
                             <v-container grid-list-md>
                                 <v-layout justify-center align-center>
-                                    <v-flex xs10>
+                                    <v-flex xs11>
                                         <v-container v-for="(question,index) in questionBank" :key="question.id" ref="qform"> <!--Creates a new card for each question that is added-->
                                             <v-card>
                                                 <v-toolbar color="purple" flat>

@@ -27,10 +27,11 @@
                                     <v-layout justify-center class="headline">Quiz Details</v-layout>
                                 </v-toolbar>
                                     <v-container grid-list-md>
-
+                                    <v-flex>
                             <v-text-field ref="formtitle" v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[() => !!quizTitle || 'Required.', () => quizTitle.length > 4 || 'Please enter a title longer than 4 characters', () => quizTitle.length <= 60 || 'Please enter a title shorter than 60 characters']" counter="60"></v-text-field>
                             <v-text-field ref="formdescription" v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[() => !!description || 'Required.', () => description.length > 4 || 'Please enter a description longer than 4 characters', () => description.length <= 80 || 'Please enter a description shorter than 80 characters']" counter="80"></v-text-field>
                             <v-select ref="formimg" name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[() => !!img || 'Required.']"></v-select>
+                                    </v-flex>
                                     </v-container>
 
                             </v-card>
@@ -199,12 +200,15 @@
 <script>
 
     export default {
+        props:{
+          activeUser: Object
+        },
         methods:{
             //Quiz saving function called by publish button. Operates by calling validation function to check fields, then executes code. Displays loading screens along with calling the newQuiz function
             saveQuiz: function () {
                 //Calls function which returns true if all fields pass validation
                  if(this.formCheck()) {
-                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
+                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, this.$cookies.get('user').key, this.img.url, this.description, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen

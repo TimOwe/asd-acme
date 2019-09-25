@@ -87,6 +87,7 @@
                             <div class="flex-grow-1"></div>
                             <v-btn text style="margin-left: 0" @click="editProfile" v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
                             <v-btn text style="margin-left: 15px" color="blue" @click="viewResults(user.key)">View Results<v-icon>mdi-trophy</v-icon></v-btn>
+                            <v-btn text style="margin-left: 15px" color="orange" @click="viewUserQuizzes(user.key)"><v-icon>mdi-format-list-bulleted-square</v-icon>View your Quizzes</v-btn>
                         </v-row>
                     </v-container>
                         <v-dialog v-model="editProfileCard" persistent max-width="600px">
@@ -120,6 +121,9 @@
             },
             viewResults(userKey) {
                 this.$router.push({path: `/user-results/${userKey}`});
+            },
+            viewUserQuizzes(userKey) {
+                this.$router.push({path: `/userquizzes/${userKey}`});
             },
             updateEditProfileCard(e){
                 this.editProfileCard = e;

@@ -17,7 +17,6 @@
                 </v-layout>
             </v-container>
 
-
             <v-container>
                 <v-row>
                     <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
