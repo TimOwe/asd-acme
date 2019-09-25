@@ -10,10 +10,10 @@
                                 <v-layout pl-10 justify-start align-start><v-btn icon to="/quizcatalogue"><v-icon>mdi-arrow-left</v-icon></v-btn></v-layout>
                             </v-col>
                             <v-col>
-                                <v-layout justify-center class="display-1">Create a New Quiz</v-layout>
+                                <v-layout pt-2 justify-center align-center class="display-1">Create a New Quiz</v-layout>
                             </v-col>
                             <v-col>
-                                <v-layout pr-10 justify-end align-center class="text-right, display-1"></v-layout>
+                                <v-layout pt-8 pr-10 justify-end align-center class="text-right, display-1"></v-layout>
                             </v-col>
                         </v-row>
                     </v-layout>
@@ -150,11 +150,12 @@
         <v-dialog width=350 v-model="confirm">
             <v-card>
                 <v-card-title>
-                    Confirm Quiz Publish
+                    <v-layout justify-center align-center>
+                        Confirm Quiz Publish</v-layout>
                 </v-card-title>
-                <v-card-text>Would you like to submit and publish your quiz?</v-card-text>
+                <v-card-text style="text-align: center">Would you like to submit and publish your quiz?</v-card-text>
                 <v-card-actions>
-                    <v-layout  justify-center>
+                    <v-layout  justify-center align-center>
                         <v-btn color="white" @click="confirm = false">Cancel</v-btn>
                         <v-btn color="primary" @click="saveQuiz">Publish</v-btn>
                     </v-layout>
@@ -164,13 +165,13 @@
 
         <v-dialog width=350 v-model="success">
             <v-card>
-                <v-card-title>
-                    Success!
+                <v-card-title><v-layout justify-center align-center>
+                    Success!</v-layout>
                 </v-card-title>
-                <v-card-text>Your new quiz has been successfully created! Click here to view it
+                <v-card-text style="text-align: center">Your new quiz has been successfully created! Click here to view it
                 </v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="primary" @click="redirectToQuiz">Go to Quiz</v-btn>
                     </v-layout>
                 </v-card-actions>
@@ -179,13 +180,13 @@
 
         <v-dialog width=350 v-model="validation"><!--Displays if there are validation errors-->
             <v-card>
-                <v-card-title>
-                    Please Fill Out All Fields Correctly
+                <v-card-title><v-layout justify-center align-center>
+                    Please Fill Out All Fields Correctly</v-layout>
                 </v-card-title>
-                <v-card-text>Please check and ensure that every field has been filled out correctly before publishing
+                <v-card-text style="text-align: center">Please check and ensure that every field has been filled out correctly before publishing
                 </v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="error" @click="validation = false">Close</v-btn>
                     </v-layout>
                 </v-card-actions>

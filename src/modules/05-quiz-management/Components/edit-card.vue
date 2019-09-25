@@ -131,11 +131,12 @@
         <v-dialog width=350 v-model="confirm">
             <v-card>
                 <v-card-title>
-                    Confirm Quiz Update
+                    <v-layout justify-center align-center>
+                        Confirm Quiz Update</v-layout>
                 </v-card-title>
-                <v-card-text>Would you like to update this quiz with these new details?</v-card-text>
+                <v-card-text style="text-align: center">Would you like to update this quiz with these new details?</v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="white" @click="confirm = false">Cancel</v-btn>
                         <v-btn color="primary" @click="saveQuiz">Update</v-btn>
                     </v-layout>
@@ -145,12 +146,12 @@
 
         <v-dialog v-on:closeEdit="triggerClose" width=350 v-model="success">
             <v-card>
-                <v-card-title>
-                    Success!
+                <v-card-title><v-layout justify-center align-center>
+                    Success!</v-layout>
                 </v-card-title>
-                <v-card-text>Your new quiz has been successfully updated! Click below to see your updated quiz!.</v-card-text>
+                <v-card-text style="text-align: center">Your new quiz has been successfully updated! Click below to see your updated quiz!.</v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="primary" @click="closeEdit()">Go to Quiz</v-btn>
                     </v-layout>
                 </v-card-actions>
@@ -159,10 +160,10 @@
 
         <v-dialog width=350 v-model="validation">
             <v-card>
-                <v-card-title>
-                    Please Fill Out All Fields Correctly
+                <v-card-title><v-layout justify-center align-center>
+                    Please Fill Out All Fields Correctly</v-layout>
                 </v-card-title>
-                <v-card-text>Please check and ensure that every field has been filled out correctly before publishing
+                <v-card-text style="text-align: center">Please check and ensure that every field has been filled out correctly before publishing
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>

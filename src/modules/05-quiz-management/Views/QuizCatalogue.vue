@@ -9,7 +9,7 @@
                                         <v-layout justify-start align-start>
                                             <v-layout pl-5 class="text-center, display-1">Quizzes</v-layout>
                                         </v-layout>
-                                    </v-col >
+                                    </v-col>
                                     <v-col>
                                         <v-layout justify-center align-center>
                                             <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
