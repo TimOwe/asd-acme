@@ -23,10 +23,13 @@
                     </v-card>
                 </v-flex>
             </v-layout>
+            <v-alert type="warning" v-if="showError">
+                This user has no results.
+            </v-alert>
         </v-container>
 
-        <v-dialog v-model="attemptData" width="800">
-            <v-card width="800" height="600">
+        <v-dialog v-model="attemptData">
+            <v-card>
                 <v-card-text>
                     Total Score: {{this.currentAttempt.score}} <br>
                     Time Start: {{new Date(currentAttempt.time_start).toString()}}
@@ -37,7 +40,7 @@
                                 <th class="text-center">Question</th>
                                 <th class="text-center">Correct</th>
                                 <th class="text-center">Selected</th>
-                                <th class="text-center">Value</th>
+                                <th class="text-center">Points</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -45,7 +48,7 @@
                                 <td class="text-left">{{ question.q }}</td>
                                 <td class="text-center">{{ question.a[question.c] }}</td>
                                 <td class="text-center">{{ !question.a[question.selected] ? 'Not Selected' : question.a[question.selected]}}</td>
-                                <td class="text-center">{{ question.score }}</td>
+                                <td class="text-center">{{ question.a[question.c]===question.a[question.selected] ? question.score : '0' }}</td>
                             </tr>
                             </tbody>
                         </v-simple-table>
@@ -73,16 +76,20 @@
             var userKey = this.$route.params.id;
             this.$db.ref(`/Users/${userKey}`).once('value', (snap) => {
                 this.activeUser = snap.val();
+                if (!snap.val().results) {
+                    this.showError = true;
+                    return;
+                }
                 this.attempts = Object.values(this.activeUser.results);
                 this.attempts.forEach(attempt => {
                     this.getQuizName(attempt.quizId).then(data => {
                         attempt.quiz_title = data;
                     })
                 });
-                setTimeout(() => {
-                    this.loading = false
-                }, 500)
-            })
+            });
+            setTimeout(() => {
+                this.loading = false;
+            }, 500)
         },
         methods: {
             showAttemptData(attempt) {
@@ -104,7 +111,8 @@
                 attempts: {},
                 currentAttempt: {},
                 attemptData: false,
-                loading: false
+                loading: false,
+                showError: false
             }
         }
     }
