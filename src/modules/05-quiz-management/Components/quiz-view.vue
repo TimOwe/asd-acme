@@ -1,14 +1,15 @@
-<template>
+`<template>
     <div>
         <v-container>
             <v-card>
                 <v-toolbar flat color="primary">
-                    <v-btn color="white" icon @click="onBackButton"><v-icon>mdi-arrow-left</v-icon></v-btn>
-                    <v-layout class="white--text"><span class="headline">Quizzes</span></v-layout>
+                    <v-btn color="white" icon @click="onBackButton"><v-icon size="35" >mdi-arrow-left</v-icon></v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn text color="white"><v-icon size="35">mdi-play</v-icon></v-btn>
-                    <v-btn text color="white" @click="triggerEdit()" :quiz="thisQuiz"><v-icon size="35">mdi-pencil</v-icon></v-btn>
-                    <v-btn text color="white" @click="deleteConfirm=true"><v-icon size="35">mdi-delete</v-icon></v-btn>
+                    <v-btn text color="white" @click="toHost"><v-icon size="35">mdi-play</v-icon></v-btn>
+                    <div v-if="!!($cookies.isKey('user'))">
+                    <v-btn text color="white" @click="triggerEdit()" :quiz="thisQuiz" v-if="this.$cookies.get('user').key===authorKey"><v-icon size="35">mdi-pencil</v-icon></v-btn>
+                    <v-btn text color="white" @click="deleteConfirm=true" v-if="this.$cookies.get('user').key===authorKey"><v-icon size="35">mdi-delete</v-icon></v-btn>
+                    </div>
                 </v-toolbar>
                 <v-container grid-list-md>
 
@@ -17,10 +18,10 @@
                     <v-container>
                         <v-layout pt-5 class="display-2">{{quizTitle}}</v-layout>
                         <v-layout pt-5 class="headline">{{description}}</v-layout>
-                        <v-layout pt-5 class="subtitle-1"><b>Created by: </b>{{owner}}</v-layout>
+                        <v-layout pt-5 class="subtitle-1"><b>Created by</b>:&nbsp;<v-btn class="subtitle-1" small style="text-transform: none; font-weight: normal; min-width: 0; padding: 0;" @click="handleNameClick" text >{{owner}}</v-btn></v-layout>
                     </v-container>
 
-                    <v-expansion-panels>
+                    <v-expansion-panels v-model="panel">
                         <v-expansion-panel>
                             <v-expansion-panel-header class="headline">Questions</v-expansion-panel-header>
                             <v-expansion-panel-content>
@@ -55,15 +56,34 @@
         </v-container>
 
         <v-dialog width=350 v-model="deleteConfirm">
+        <v-card>
+            <v-card-title>
+                <v-layout justify-center align-center>
+                    Confirm Quiz Delete</v-layout>
+            </v-card-title>
+            <v-card-text style="text-align: center">Are you sure you want to delete this quiz?</v-card-text>
+            <v-card-actions>
+                <v-layout justify-center align-center>
+                    <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
+                    <v-btn color="error" @click="deleteQuiz">Delete</v-btn>
+                </v-layout>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+
+        <v-dialog width=350 v-model="hostAlert">
             <v-card>
-                <v-card-title>
-                    Confirm Quiz Delete
+
+                <v-card-title ali>
+                    <v-layout justify-center align-center>
+                        Woah Slow Down!</v-layout>
                 </v-card-title>
-                <v-card-text>Are you sure you want to delete this quiz?</v-card-text>
+                <v-card-text style="text-align: center">
+                    You must be logged in to host this quiz, log in below.</v-card-text>
                 <v-card-actions>
-                    <v-layout>
-                        <v-btn color="white" @click="deleteConfirm = false">Cancel</v-btn>
-                        <v-btn color="error" @click="deleteQuiz">Delete</v-btn>
+                    <v-layout justify-center align-center>
+                        <v-btn color="white" @click="hostAlert = false">Back</v-btn>
+                        <v-btn color="primary" to="/login">Log In</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -80,30 +100,29 @@
     export default {
         name: "QuizView",
         components: {
-
-
         },
         props: {
             viewKey: String
-
         },
-
         beforeMount: function(){
             this.newKey = this.viewKey;
             this.getQuiz(this.newKey);
         },
-
         methods:{
             // getting snapshot of data from firebase
             getQuiz: function(key){
                 this.$db.ref('/Quizs/').child(key).once('value', (snap) => {
                     this.thisQuiz = snap.val();
+                    this.authorKey = this.thisQuiz.owner_id
+                    this.setUser(this.authorKey);
                     this.img = this.thisQuiz.img;
                     this.quizTitle = this.thisQuiz.quiz_title;
                     this.description = this.thisQuiz.description;
-                    this.owner = this.thisQuiz.owner_id;
                     this.questions = this.thisQuiz.questions;
                 });
+            },
+            handleNameClick(){
+                this.$router.push({path: `/profile/${this.authorKey}`})
             },
             deleteQuiz: function() {//Deletes the quiz by locating it in firebase using its key
                 this.deleteConfirm = false;
@@ -123,12 +142,25 @@
             onBackButton() {
                 this.$emit("catalogueView");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
             },
+            toHost() {
+                if(!(this.$cookies.isKey('user'))){
+                    this.hostAlert=true;
+                }
+                else this.$router.push({ name: 'Host', params: { name: this.quizTitle}});
+            },
+            setUser(userKey) {
+                this.$db.ref('/Users/').child(userKey).once('value', (snap) => {
+                    this.thisUser = snap.val();
+                    this.owner = this.thisUser.fname +" "+ this.thisUser.lname;
+                });
+             },
 
         },
         //Computed properties
         data: () => ({
             edit: false,
             deleteConfirm: false,
+            hostAlert: false,
             thisQuiz: "",
             loading: false,
             quizTitle: '',
@@ -138,6 +170,10 @@
             img: '',
             newkey: '',
             readonly: false,
+            thisUser: "",
+            userFullName: "",
+            authorKey: "",
+            panel: 0,
 
 
             expanded: [],
@@ -156,4 +192,4 @@
 
 
 
-</style>
+</style>`

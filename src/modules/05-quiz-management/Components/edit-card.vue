@@ -26,9 +26,11 @@
                                     <v-layout justify-center class="headline">Quiz Details</v-layout>
                                 </v-toolbar>
                                 <v-container grid-list-md>
-                            <v-text-field ref="formtitle" v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[() => !!quizTitle || 'Required.', () => quizTitle.length > 4 || 'Please enter a title longer than 4 characters', () => quizTitle.length < 40 || 'Please enter a title shorter than 40 characters']" counter="40"></v-text-field>
-                            <v-text-field ref="formdescription" v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[() => !!description || 'Required.', () => description.length > 4 || 'Please enter a description longer than 4 characters', () => description.length <= 80 || 'Please enter a description shorter than 80 characters']" counter="80"></v-text-field>
-                            <v-select ref="formimg" name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[() => !!img || 'Required.']"></v-select>
+                                    <v-flex>
+                                        <v-text-field ref="formtitle" v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[() => !!quizTitle || 'Required.', () => quizTitle.length > 4 || 'Please enter a title longer than 4 characters', () => quizTitle.length <= 60 || 'Please enter a title shorter than 60 characters']" counter="60"></v-text-field>
+                                        <v-text-field ref="formdescription" v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[() => !!description || 'Required.', () => description.length > 4 || 'Please enter a description longer than 4 characters', () => description.length <= 80 || 'Please enter a description shorter than 80 characters']" counter="80"></v-text-field>
+                                        <v-select ref="formimg" name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[() => !!img || 'Required.']"></v-select>
+                                    </v-flex>
                                 </v-container>
 
                             </v-card>
@@ -42,11 +44,40 @@
                     <v-flex xs8>
                         <v-card>
                             <v-toolbar color="primary" dark flat>
+                                <v-layout justify-center class="headline">Quiz Difficulty</v-layout>
+                            </v-toolbar>
+                            <v-container grid-list-md>
+
+                                <v-layout justify-center>
+                                    <v-flex xs6>
+                                        <v-container grid-list-md>
+                                            <v-layout justify-center align-center >
+                                                <v-btn-toggle mandatory ref="decay" :rules="[() => !!score_decay || 'Required.']" v-model="score_decay" class="justify-center" name="questiondifficulty">
+                                                    <v-btn name="easybutton" tile outlined color="green" value=0.1>Easy</v-btn>
+                                                    <v-btn name="medbutton" tile color="orange" outlined value=0.2>Medium</v-btn>
+                                                    <v-btn name="hardbutton" tile outlined color="red" value=0.3>Hard</v-btn>
+                                                </v-btn-toggle>
+                                            </v-layout>
+                                        </v-container>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <v-container grid-list-md>
+                <v-layout justify-center align-center>
+                    <v-flex xs8>
+                        <v-card>
+                            <v-toolbar color="primary" dark flat>
                                 <v-layout justify-center class="headline">Quiz Questions</v-layout>
                             </v-toolbar>
                             <v-container grid-list-md>
                                 <v-layout justify-center align-center>
-                                    <v-flex xs10>
+                                    <v-flex xs11>
                                         <v-container v-for="(question,index) in questionBank" :key="question.id" ref="qform"> <!--Creates a new card for each question that is added-->
                                             <v-card>
                                                 <v-toolbar color="purple" flat>
@@ -83,13 +114,14 @@
                                     </v-flex>
                                 </v-layout>
                             </v-container>
-                            <v-container grid-md-list>
-                                <v-layout justify-center pb-4>
+                        </v-card>
+
+                        <v-container grid-md-list>
+                                <v-layout justify-center pb-4 pt-4>
                                     <v-btn class="ma-1" color="white" to="/quizcatalogue">Cancel</v-btn>
                                     <v-btn class="ma-1" color="primary" @click="confirm=true">Update Quiz</v-btn>
                                 </v-layout>
                             </v-container>
-                        </v-card>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -99,11 +131,12 @@
         <v-dialog width=350 v-model="confirm">
             <v-card>
                 <v-card-title>
-                    Confirm Quiz Update
+                    <v-layout justify-center align-center>
+                        Confirm Quiz Update</v-layout>
                 </v-card-title>
-                <v-card-text>Would you like to update this quiz with these new details?</v-card-text>
+                <v-card-text style="text-align: center">Would you like to update this quiz with these new details?</v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="white" @click="confirm = false">Cancel</v-btn>
                         <v-btn color="primary" @click="saveQuiz">Update</v-btn>
                     </v-layout>
@@ -113,12 +146,12 @@
 
         <v-dialog v-on:closeEdit="triggerClose" width=350 v-model="success">
             <v-card>
-                <v-card-title>
-                    Success!
+                <v-card-title><v-layout justify-center align-center>
+                    Success!</v-layout>
                 </v-card-title>
-                <v-card-text>Your new quiz has been successfully updated! Click below to see your updated quiz!.</v-card-text>
+                <v-card-text style="text-align: center">Your new quiz has been successfully updated! Click below to see your updated quiz!.</v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="primary" @click="closeEdit()">Go to Quiz</v-btn>
                     </v-layout>
                 </v-card-actions>
@@ -127,10 +160,10 @@
 
         <v-dialog width=350 v-model="validation">
             <v-card>
-                <v-card-title>
-                    Please Fill Out All Fields Correctly
+                <v-card-title><v-layout justify-center align-center>
+                    Please Fill Out All Fields Correctly</v-layout>
                 </v-card-title>
-                <v-card-text>Please check and ensure that every field has been filled out correctly before publishing
+                <v-card-text style="text-align: center">Please check and ensure that every field has been filled out correctly before publishing
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
@@ -158,17 +191,18 @@
         beforeMount: function(){//assigns all properties of the quiz object prop to computed properties declared in the component to avoid mutation
             this.newImg();
             this.key = this.$route.params.id;
+            this.score_decay = this.quiz.score_decay.toString()
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
-            this.owner = this.quiz.owner;
-            this.questionBank = this.quiz.questions
+            this.owner = this.quiz.owner_id;
+            this.questionBank = this.quiz.questions;
         },
 
     methods: {
             saveQuiz: function(){
                 //Calls function which returns true if all fields pass validation
                 if(this.formCheck()) {
-                    this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description);
+                    this.updateQuiz(this.quizTitle, this.questionBank, this.owner, this.img.url, this.description, parseFloat(this.score_decay));
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
@@ -183,8 +217,8 @@
 
                 }
             },
-            updateQuiz: function(quiz_title, questions, owner_id, img, description){//Takes all computed properties from teh form and pushes it to update the ibject in firebase with its identical key. If properties are the same, no changes are made, if they differ, they are updated
-                this.$db.ref('/Quizs/'+this.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description})
+            updateQuiz: function(quiz_title, questions, owner_id, img, description, score_decay){//Takes all computed properties from teh form and pushes it to update the ibject in firebase with its identical key. If properties are the same, no changes are made, if they differ, they are updated
+                this.$db.ref('/Quizs/'+this.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "description": description, "score_decay": score_decay})
             },
             removeQuestion: function(index){
                 this.questionBank.splice(index,1);
@@ -218,6 +252,7 @@
             },
 
 
+
         },
         //Computed properties
         data: () => ({
@@ -239,8 +274,13 @@
             key: '',
             valid: true,
             falseCount: 0,
-            time_limit: "",
-            score_decay: "",
+            score_decay: '',
+
+            data(){
+                return {
+
+                }
+            },
 
         }),
     }
