@@ -69,7 +69,9 @@
             if(!!key){
                 this.host = key;
             }
-
+            if(this.$route.params.name!==undefined){
+                this.selected = this.$route.params.name;
+            }
         },
         methods:{
             Session(quizkey,host,meta){
@@ -132,7 +134,7 @@
                 host: '',
                 names: [],
                 keys: [],
-                selected: '',
+                selected: "",
                 lastToken: '',
                 tlimit: 0,
                 maxppl: 0,
