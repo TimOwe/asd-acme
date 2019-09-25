@@ -2,6 +2,9 @@
     <div>
         <v-container grid-list-md>
             <v-layout justify-center class="headline pt-12">
+                <v-btn style="margin-top: -1%;" icon @click="handleBack">
+                    <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
                 {{activeUser.fname}}'s Results
             </v-layout>
             <v-layout row wrap class="mt-10">
@@ -92,6 +95,9 @@
             showAttemptData(attempt) {
                 this.currentAttempt = attempt;
                 this.attemptData = true;
+            },
+            handleBack(){
+                this.$router.go(-1);
             },
             async getQuizName(id){
                var template = await this.$db.ref(`/Quizs/${id}`).once('value');

@@ -76,6 +76,14 @@
         this.correctQuestions = 0;
         this.incorrectQuestions = 0;
         this.password = md5(password);
+        this.profile = {
+            email: true,
+            gamesPlayed: true,
+            questionsAnswered: true,
+            correct: true,
+            incorrect: true,
+            graphs: true
+        }
     };
 
     export default {

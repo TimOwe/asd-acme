@@ -102,22 +102,11 @@
     import editProfileCard from "../components/Edit-Profile-Card"
 
     export default {
-        async beforeMount() {
-            this.$db.ref("/Users/" + this.$route.params.id).on('value', (snap) => {
+        beforeMount() {
+            var route = "/Users/" + this.$route.params.id;
+            this.$db.ref(route).on('value', (snap) => {
                 this.user = snap.val();
             });
-            if (this.user.profile === undefined) {
-                this.$db.ref('/Users/' + this.$route.params.id + '/profile').set(
-                    {
-                        email: true,
-                        gamesPlayed: true,
-                        questionsAnswered: true,
-                        correct: true,
-                        incorrect: true,
-                        graphs: true
-                    }
-                );
-            }
         },
         name: "Profile",
         components: {editProfileCard},
