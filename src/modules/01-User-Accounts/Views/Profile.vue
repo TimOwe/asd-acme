@@ -41,7 +41,7 @@
                                         <v-card-text style="font-size: 25px;">{{user.lname}}</v-card-text>
                                     </v-col>
                                 </v-row>
-                                <v-row v-if="activeUser.profile.email" style="margin-top: -25px">
+                                <v-row v-if="user.profile.email" style="margin-top: -25px">
                                     <v-col  sm="5" style="margin-left: -15px;">
                                         <v-card-text style="font-size: 25px; color: royalblue">Email:</v-card-text>
                                     </v-col>
@@ -49,7 +49,7 @@
                                         <v-card-text style="font-size: 25px;">{{user.email}}</v-card-text>
                                     </v-col>
                                 </v-row>
-                                <v-row v-if="activeUser.profile.gamesPlayed" style="margin-top: -25px">
+                                <v-row v-if="user.profile.gamesPlayed" style="margin-top: -25px">
                                     <v-col sm="5" style="margin-left: -15px;">
                                         <v-card-text style="font-size: 25px; color: royalblue">Games Played:</v-card-text>
                                     </v-col>
@@ -57,7 +57,7 @@
                                         <v-card-text style="font-size: 25px;">{{user.gamesPlayed}}</v-card-text>
                                     </v-col>
                                 </v-row>
-                                <v-row v-if="activeUser.profile.questionsAnswered" style="margin-top: -25px">
+                                <v-row v-if="user.profile.questionsAnswered" style="margin-top: -25px">
                                     <v-col sm="5" style="margin-left: -15px;">
                                         <v-card-text style="font-size: 25px; color: royalblue">Questions Answered:</v-card-text>
                                     </v-col>
@@ -65,7 +65,7 @@
                                         <v-card-text style="font-size: 25px;">{{questionsAnswered}}</v-card-text>
                                     </v-col>
                                 </v-row>
-                                <v-row v-if="activeUser.profile.correct" style="margin-top: -25px">
+                                <v-row v-if="user.profile.correct" style="margin-top: -25px">
                                     <v-col sm="5" style="margin-left: -15px;">
                                         <v-card-text style="font-size: 25px; color: Green">Correct Answers:</v-card-text>
                                     </v-col>
@@ -73,7 +73,7 @@
                                         <v-card-text style="font-size: 25px;">{{user.correctQuestions}}</v-card-text>
                                     </v-col>
                                 </v-row>
-                                <v-row v-if="activeUser.profile.incorrect" style="margin-top: -25px">
+                                <v-row v-if="user.profile.incorrect" style="margin-top: -25px">
                                     <v-col sm="5" style="margin-left: -15px;">
                                         <v-card-text style="font-size: 25px; color: red">Incorrect Answers:</v-card-text>
                                     </v-col>
@@ -86,7 +86,7 @@
                         <v-row style="margin-right:2% ">
                             <div class="flex-grow-1"></div>
                             <v-btn text style="margin-left: 0" @click="editProfile" v-if="this.$cookies.isKey('user') && (this.$route.params.id === this.$cookies.get('user').key)"><v-icon>mdi-pencil</v-icon>Edit</v-btn>
-                            <v-btn text style="margin-left: 15px" color="blue" @click="viewResults(user.key)">View Results<v-icon>mdi-trophy</v-icon></v-btn>
+                            <v-btn class="white--text" style="margin-left: 15px" raised color="blue" @click="viewResults">View Results<v-icon small right color="white">mdi-chart-line</v-icon></v-btn>
                             <v-btn text style="margin-left: 15px" color="orange" @click="viewUserQuizzes(user.key)"><v-icon>mdi-format-list-bulleted-square</v-icon>View your Quizzes</v-btn>
                         </v-row>
                     </v-container>
@@ -100,17 +100,24 @@
 </template>
 
 <script>
-    import {loginUtils} from "../../../main";
     import editProfileCard from "../components/Edit-Profile-Card"
 
     export default {
-        async beforeMount() {
-           this.user = ((await loginUtils.checkUserExistsKey(this.$route.params.id)).user);
+        beforeMount() {
+            var route = "/Users/" + this.$route.params.id;
+            this.$db.ref(route).on('value', (snap) => {
+                this.user = snap.val();
+            });
         },
         name: "Profile",
         components: {editProfileCard},
-        props: {
-            activeUser: Object
+        props: ['activeUser'],
+        watch:{
+            $route(to, from){
+                this.$db.ref("/Users/" + this.$route.params.id).on('value', (snap) => {
+                    this.user = snap.val();
+                });
+            }
         },
         methods:{
             handleBack(){
@@ -119,8 +126,8 @@
             editProfile(){
               this.editProfileCard = true;
             },
-            viewResults(userKey) {
-                this.$router.push({path: `/user-results/${userKey}`});
+            viewResults() {
+                this.$router.push({path: "/user-results/" + this.$route.params.id});
             },
             viewUserQuizzes(userKey) {
                 this.$router.push({path: `/userquizzes/${userKey}`});
@@ -131,7 +138,7 @@
         },
         data(){
             return{
-                user: [],
+                user: {},
                 editProfileCard: false
             }
         },
