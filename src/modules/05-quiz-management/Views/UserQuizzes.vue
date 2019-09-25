@@ -8,11 +8,13 @@
                                 <v-row>
                                     <v-col>
                                         <v-layout justify-center align-center justify-start align-start>
-                                            <v-btn icon @click="toProfile"><v-icon>mdi-arrow-left</v-icon></v-btn> <v-layout pb-2 pl-3 class="text-center, display-1"> Your Quizzes</v-layout>
+                                            <v-btn icon @click="toProfile"><v-icon>mdi-arrow-left</v-icon></v-btn> <v-layout pb-3 pl-2 class="text-center, headline">{{userFullName}}'s Quizzes</v-layout>
                                         </v-layout>
                                     </v-col>
                                     <v-col>
-                                        <v-text-field  hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                                        <v-layout pt-2 justify-center align-center justify-end align-end>
+                                            <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                                        </v-layout>
                                     </v-col>
                                 </v-row>
                             </v-layout>
@@ -47,6 +49,7 @@
         beforeMount: function(){
             this.userKey = this.$route.params.id;
             this.getQuizzes();
+            this.setUser();
         },
 
         methods:{
@@ -74,6 +77,12 @@
             toProfile: function() {//Resets the search term property to nothing, removing all criteria
                 this.$router.push('/profile/'+this.userKey);
             },
+            setUser() {
+                this.$db.ref('/Users/').child(this.userKey).once('value', (snap) => {
+                    this.thisUser = snap.val();
+                    this.userFullName = this.thisUser.fname +" "+ this.thisUser.lname;
+                });
+            },
 
         },
         //Initialised data
@@ -85,6 +94,9 @@
             quizs: [],
             searchTerm: '',
             userKey: "",
+            userFullName: "",
+            thisUser: "",
+
 
             data(){
                 return {
