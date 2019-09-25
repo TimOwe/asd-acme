@@ -11,7 +11,7 @@
             </span>
         </v-card-text>
         <v-card-actions>
-            <v-btn text color="blue" @click="viewLeaderboard(quiz.key)">View Leaderboard</v-btn>
+            <v-btn class="white--text" depressed color="blue" @click="viewLeaderboard(quiz.key)">View Leaderboard</v-btn>
         </v-card-actions>
     </v-card>
 </template>

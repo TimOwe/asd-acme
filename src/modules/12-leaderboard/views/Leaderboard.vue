@@ -2,13 +2,18 @@
     <div>
         <v-layout justify-center fill-height class="pb-12 pt-12">
             <v-card dark elevation="12" width=1000>
-                <v-card-title class="justify-center">{{quiz.quiz_title}} - Leaderboard</v-card-title>
+                <v-card-title class="justify-center">
+                    <v-btn absolute left icon @click="handleBack">
+                        <v-icon>mdi-arrow-left</v-icon>
+                    </v-btn>
+                    {{quiz.quiz_title}} - Leaderboard
+                    </v-card-title>
                 <v-card-text>
                     <v-layout justify-center class="subtitle-1 pb-10">{{quiz.description}}</v-layout>
                     <v-card-actions>
                         <v-layout justify-center>
-                            <v-btn text color="blue" @click="sortResults('asc')">Order Ascending</v-btn>
-                            <v-btn text color="blue" @click="sortResults('desc')">Order Descending</v-btn>
+                            <v-btn depressed color="blue" @click="sortResults('asc')">Order Ascending<v-icon small>mdi-chevron-up</v-icon></v-btn>
+                            <v-btn depressed color="blue" @click="sortResults('desc')">Order Descending<v-icon small>mdi-chevron-down</v-icon></v-btn>
                         </v-layout>
                     </v-card-actions>
                     <v-simple-table fixed>
@@ -91,7 +96,10 @@
             // sort results by descending or ascending
             sortResults(type) {
                 return type === 'asc' ? this.results.sort((a, b) => b.score - a.score) : this.results.sort((a, b) => a.score - b.score);
-            }
+            },
+            handleBack(){
+                this.$router.go(-1);
+            },
         }
     }
 </script>
