@@ -7,8 +7,10 @@
                     <v-layout class="white--text"><span class="headline">Quizzes</span></v-layout>
                     <v-spacer></v-spacer>
                     <v-btn text color="white"><v-icon size="35">mdi-play</v-icon></v-btn>
+                    <div v-if="!!($cookies.isKey('user'))">
                     <v-btn text color="white" @click="triggerEdit()" :quiz="thisQuiz" v-if="this.$cookies.get('user').key===authorKey"><v-icon size="35">mdi-pencil</v-icon></v-btn>
                     <v-btn text color="white" @click="deleteConfirm=true" v-if="this.$cookies.get('user').key===authorKey"><v-icon size="35">mdi-delete</v-icon></v-btn>
+                    </div>
                 </v-toolbar>
                 <v-container grid-list-md>
 
