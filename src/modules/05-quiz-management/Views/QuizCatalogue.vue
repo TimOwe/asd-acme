@@ -1,41 +1,44 @@
 <template>
     <v-container grid-list-md>
-        <div v-if="render === 'quizCatalogue'"> <!--Displays if render is equal to quiCatalogue-->
-            <v-container grid-list-md>
-                <v-layout justify-center align-center>
-                    <v-row>
-                        <v-col>
-                            <v-layout pl-10 justify-start align-start class="text-center, display-1">Quizzes</v-layout>
-                        </v-col>
-                        <v-col>
-                            <v-text-field  hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
-                        </v-col>
-                        <v-col>
-                            <v-layout pr-10 justify-end align-center class="text-right, display-1"><v-btn to="/quiz-creator" color="primary" v-if="!!$cookies.isKey('user')">Create Quiz</v-btn></v-layout>
-                        </v-col>
-                    </v-row>
-                </v-layout>
-            </v-container>
+                <v-card>
+                    <v-toolbar color="primary" dark flat>
+                        <v-container grid-list-md>
+                            <v-layout justify-center align-center>
+                                <v-row>
+                                    <v-col>
+                                        <v-layout justify-start align-start>
+                                            <v-layout pl-5 class="text-center, display-1">Quizzes</v-layout>
+                                        </v-layout>
+                                    </v-col >
+                                    <v-col>
+                                        <v-layout justify-center align-center>
+                                            <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                                        </v-layout>
+                                    </v-col>
+                                    <v-col>
+                                        <v-layout justify-end align-end>
+                                            <v-btn  to="/quiz-creator" color="green" v-if="!!$cookies.isKey('user')">Create Quiz<v-icon right color="white">mdi-plus</v-icon></v-btn>
+                                        </v-layout>
+                                    </v-col>
+
+                                </v-row>
+                            </v-layout>
+                        </v-container>
+                    </v-toolbar>
 
             <v-container>
                 <v-row>
-                    <v-col v-for="quiz in filteredList" :key="quiz.key" cols="4"><!--Generates a quiz card for every quiz object in the database-->
+                    <v-col v-for="quiz in filteredList" :key="quiz.key" cols="12" sm="4"><!--Generates a quiz card for every quiz object in the database-->
                         <quiz-card :quiz="quiz" ></quiz-card>
                     </v-col>
                 </v-row>
             </v-container>
-        </div>
+                    <v-footer class="mt-12"></v-footer>
 
-        <div v-else-if="render === 'quizView'"><!--Displays if render is equal to quizview-->
-            <quiz-view @catalogueView="onCatalogueView" @quizEdit="onQuizEdit" :quiz="this.viewingQuiz" :key="editKey"></quiz-view>
-        </div>
 
-        <div v-if="render === 'editView'"><!--Displays if render is equal to editview-->
-            <edit-card @refresh="onRefresh" :quiz="this.viewingQuiz" ></edit-card>
-        </div>
-
-        <v-footer class="mt-12"></v-footer>
+        </v-card>
     </v-container>
+
 </template>
 
 
@@ -43,20 +46,18 @@
 <script>
 
     import quizCard from "../Components/quiz-card";
-    import quizView from "../Components/quiz-view";
-    import editCard from "../Components/edit-card";
     export default {
         name: "QuizCatalogue",
-        components: {quizCard, quizView, editCard},
+        components: {quizCard},
 
         // grabbing all data on page render
-        beforeMount: function(){
+        async beforeMount(){
             this.getQuizzes();
         },
 
         methods:{
             // getting snapshot of data from firebase
-            getQuizzes: function(){
+            async getQuizzes(){
                 this.$db.ref('/Quizs').on('value', (snap) => {
                     // clear current results array each time method is called
                     this.quizs = [];

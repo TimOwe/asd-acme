@@ -116,13 +116,14 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container grid-md-list>
-                <v-layout justify-center pb-4>
+                        </v-card>
+
+                        <v-container grid-md-list>
+                <v-layout justify-center pt-4 pb-4>
                     <v-btn class="ma-1" color="white" to="/quizcatalogue">Cancel</v-btn>
                     <v-btn class="ma-1" color="primary" @click="confirm=true">Publish Quiz</v-btn>
                 </v-layout>
             </v-container>
-                        </v-card>
                     </v-flex>
                 </v-layout>
             </v-container>
