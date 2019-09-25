@@ -192,7 +192,7 @@
             this.score_decay = this.quiz.score_decay.toString()
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
-            this.owner = this.quiz.owner;
+            this.owner = this.quiz.owner_id;
             this.questionBank = this.quiz.questions;
         },
 
@@ -200,7 +200,7 @@
             saveQuiz: function(){
                 //Calls function which returns true if all fields pass validation
                 if(this.formCheck()) {
-                    this.updateQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, parseFloat(this.score_decay));
+                    this.updateQuiz(this.quizTitle, this.questionBank, this.owner, this.img.url, this.description, parseFloat(this.score_decay));
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
