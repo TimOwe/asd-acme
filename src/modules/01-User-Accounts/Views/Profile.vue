@@ -81,6 +81,14 @@
                                         <v-card-text style="font-size: 25px;">{{user.incorrectQuestions}}</v-card-text>
                                     </v-col>
                                 </v-row>
+                                <v-row v-if="user.profile.wins" style="margin-top: -25px">
+                                    <v-col sm="5" style="margin-left: -15px;">
+                                        <v-card-text style="font-size: 25px; color: royalblue">Wins:</v-card-text>
+                                    </v-col>
+                                    <v-col style="margin-left:-8%">
+                                        <v-card-text style="font-size: 25px;">{{user.wins}}</v-card-text>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                         </v-row>
                         <v-row style="margin-right:2% ">
