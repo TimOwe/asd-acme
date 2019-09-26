@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import {loginUtils} from "../../../main";
+
 export default {
   name: "scoreboard-card",
   props: {
@@ -48,7 +50,7 @@ export default {
   data: () => ({
     players: []
   }),
-  mounted: function() {
+  mounted: async function() {
     let self = this;
     var playersref = this.$db.ref(`/Sessions/${this.game.id}/players/`);
     playersref.on("value", function(snapshot) {
@@ -57,11 +59,18 @@ export default {
         self.players.push({
           id: childSnapshot.key,
           name: childSnapshot.val().nickname,
-          score: childSnapshot.val().score
+          score: childSnapshot.val().score,
+          userId: childSnapshot.val().user
         });
         self.players.sort((a, b) => b.score - a.score);
       });
     });
+    var storeUser = await loginUtils.checkUserExistsKey(self.players[0].userId)
+    if(storeUser !== undefined){
+      this.$db
+        .ref("/Users/" + self.players[0].userId + "/wins")
+        .set((storeUser.user.wins) + 1)
+    }
   },
   methods: {
     add: function(i) {

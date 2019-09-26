@@ -25,6 +25,10 @@
                     <v-btn @click="handleSettingChange('incorrect', true)" v-if="!activeUser.profile.incorrect" color="green" class="white--text">Show Number of Incorrect Answers</v-btn>
                     <v-btn @click="handleSettingChange('incorrect', false)" v-if="activeUser.profile.incorrect" color="red" class="white--text">Hide Number of Incorrect Answers</v-btn>
                 </v-layout>
+                <v-layout style="margin-top: 10px" wrap>
+                    <v-btn @click="handleSettingChange('wins', true)" v-if="!activeUser.profile.wins" color="green" class="white--text">Show Number of Wins</v-btn>
+                    <v-btn @click="handleSettingChange('wins', false)" v-if="activeUser.profile.wins" color="red" class="white--text">Hide Number of Wins</v-btn>
+                </v-layout>
             </v-container>
         </v-card-text>
         <v-card-actions>
@@ -39,20 +43,6 @@
         components: {},
         props: {
             activeUser: Object
-        },
-        beforeMount(){
-            if (this.activeUser.profile === undefined) {
-                this.$db.ref('/Users/' + this.$cookies.get('user').key + '/profile').set(
-                    {
-                        email: true,
-                        gamesPlayed: true,
-                        questionsAnswered: true,
-                        correct: true,
-                        incorrect: true,
-                        graphs: true
-                    }
-                );
-            }
         },
         methods: {
             //Handles the password change
