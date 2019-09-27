@@ -1,9 +1,20 @@
 describe('Creating a Quiz with Advanced Features', function() {
   before(() => {
-    cy.visit('http://localhost:8080/quizcatalogue')
+    cy.visit('http://localhost:8080/login')
   })
+  beforeEach(function () {
+    Cypress.Cookies.preserveOnce('user')
+  })
+  it('Login', function () {
+    cy.get('[name="logemail"]').type('tim@tim.com');
+    cy.get('[name="logpass"]').type('password');
+    cy.get('button').contains('Log-In').click();
+    cy.wait(2000);
+    cy.url().should('eq', 'http://localhost:8080/');;
+  });
 
   it('Open Quiz Creator Page', function() {
+    cy.visit('http://localhost:8080/quizcatalogue')
     cy.get('.v-btn').contains('Create Quiz').click();
   })
 
@@ -16,7 +27,6 @@ describe('Creating a Quiz with Advanced Features', function() {
   })
 
   it('Enters Advanced Quiz Details', function() {
-    cy.get('[name="questiontime"]').type(23)
     cy.get('[name="medbutton"]').click()
   })
 

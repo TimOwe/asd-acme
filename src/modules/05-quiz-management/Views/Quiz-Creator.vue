@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container grid-list-md>
+        <v-container v-if="!!$cookies.isKey('user')" grid-list-md>
             <v-form v-model="valid" ref="quizForm"><!--Assigns all elements with :rule bindings to the quizForm reference-->
 
                 <v-container grid-list-md>
@@ -10,10 +10,10 @@
                                 <v-layout pl-10 justify-start align-start><v-btn icon to="/quizcatalogue"><v-icon>mdi-arrow-left</v-icon></v-btn></v-layout>
                             </v-col>
                             <v-col>
-                                <v-layout justify-center class="display-1">Create a New Quiz</v-layout>
+                                <v-layout pt-2 justify-center align-center class="display-1">Create a New Quiz</v-layout>
                             </v-col>
                             <v-col>
-                                <v-layout pr-10 justify-end align-center class="text-right, display-1"></v-layout>
+                                <v-layout pt-8 pr-10 justify-end align-center class="text-right, display-1"></v-layout>
                             </v-col>
                         </v-row>
                     </v-layout>
@@ -27,10 +27,11 @@
                                     <v-layout justify-center class="headline">Quiz Details</v-layout>
                                 </v-toolbar>
                                     <v-container grid-list-md>
-
+                                    <v-flex>
                             <v-text-field ref="formtitle" v-model="quizTitle" outlined shaped label="Quiz Title" name="quiztitle" :rules="[() => !!quizTitle || 'Required.', () => quizTitle.length > 4 || 'Please enter a title longer than 4 characters', () => quizTitle.length <= 60 || 'Please enter a title shorter than 60 characters']" counter="60"></v-text-field>
                             <v-text-field ref="formdescription" v-model="description" outlined shaped label="Quiz Description" name="quizdescription" :rules="[() => !!description || 'Required.', () => description.length > 4 || 'Please enter a description longer than 4 characters', () => description.length <= 80 || 'Please enter a description shorter than 80 characters']" counter="80"></v-text-field>
                             <v-select ref="formimg" name="quizimage" v-model="img" :items="items" item-text="name" item-value="url" label="Select Theme" return-object single-line :rules="[() => !!img || 'Required.']"></v-select>
+                                    </v-flex>
                                     </v-container>
 
                             </v-card>
@@ -48,12 +49,8 @@
                                 <v-container grid-list-md>
 
                                         <v-layout justify-center>
-                                <v-flex  pt-3 xs6>
-                                    <v-text-field ref="time" v-model.number="time_limit" outlined shaped label="Seconds Per Question" type="number" name="questiontime" :rules="[() => !!time_limit || 'Required.', () => time_limit >= 5 || 'Please enter a time longer than 5 seconds', () => time_limit < 45 || 'Please enter a time less than 45 seconds']"></v-text-field>
-                                </v-flex>
-                                <v-flex xs3></v-flex>
                                 <v-flex xs6>
-                                    <v-layout justify-center align-center class="body-1">Quiz Difficulty</v-layout>
+                                    <v-container grid-list-md>
                                     <v-layout justify-center align-center >
                                         <v-btn-toggle mandatory ref="decay" :rules="[() => !!score_decay || 'Required.']" v-model="score_decay" class="justify-center" name="questiondifficulty">
                                             <v-btn name="easybutton" tile outlined color="green" value="0.1">Easy</v-btn>
@@ -61,6 +58,7 @@
                                             <v-btn name="hardbutton" tile outlined color="red" value="0.3">Hard</v-btn>
                                         </v-btn-toggle>
                                     </v-layout>
+                                    </v-container>
                                 </v-flex>
                             </v-layout>
                                 </v-container>
@@ -118,27 +116,46 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container grid-md-list>
-                <v-layout justify-center pb-4>
+                        </v-card>
+
+                        <v-container grid-md-list>
+                <v-layout justify-center pt-4 pb-4>
                     <v-btn class="ma-1" color="white" to="/quizcatalogue">Cancel</v-btn>
                     <v-btn class="ma-1" color="primary" @click="confirm=true">Publish Quiz</v-btn>
                 </v-layout>
             </v-container>
-                        </v-card>
                     </v-flex>
                 </v-layout>
             </v-container>
 
         </v-container>
 
+        <v-container v-else-if="!($cookies.isKey('user'))" grid-list-md>
+            <v-layout justify-center align-center>
+                <v-card>
+                    <v-toolbar color="red" dark flat>
+                        <v-layout justify-center class="headline">Error!</v-layout>
+                    </v-toolbar>
+                    <v-card-text>You must be logged in to create a quiz! Either log in or return to the Quiz Catalogue</v-card-text>
+                    <v-card-actions>
+                        <v-layout  justify-center>
+                            <v-btn color="green" to="/login"><v-layout justify-center class="white--text">Log In</v-layout></v-btn>
+                            <v-btn color="primary" to="/quizcatalogue">Return to Catalogue</v-btn>
+                        </v-layout>
+                    </v-card-actions>
+                </v-card>
+            </v-layout>
+        </v-container>
+
         <v-dialog width=350 v-model="confirm">
             <v-card>
                 <v-card-title>
-                    Confirm Quiz Publish
+                    <v-layout justify-center align-center>
+                        Confirm Quiz Publish</v-layout>
                 </v-card-title>
-                <v-card-text>Would you like to submit and publish your quiz?</v-card-text>
+                <v-card-text style="text-align: center">Would you like to submit and publish your quiz?</v-card-text>
                 <v-card-actions>
-                    <v-layout  justify-center>
+                    <v-layout  justify-center align-center>
                         <v-btn color="white" @click="confirm = false">Cancel</v-btn>
                         <v-btn color="primary" @click="saveQuiz">Publish</v-btn>
                     </v-layout>
@@ -148,13 +165,13 @@
 
         <v-dialog width=350 v-model="success">
             <v-card>
-                <v-card-title>
-                    Success!
+                <v-card-title><v-layout justify-center align-center>
+                    Success!</v-layout>
                 </v-card-title>
-                <v-card-text>Your new quiz has been successfully created! Click here to view it
+                <v-card-text style="text-align: center">Your new quiz has been successfully created! Click here to view it
                 </v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="primary" @click="redirectToQuiz">Go to Quiz</v-btn>
                     </v-layout>
                 </v-card-actions>
@@ -163,13 +180,13 @@
 
         <v-dialog width=350 v-model="validation"><!--Displays if there are validation errors-->
             <v-card>
-                <v-card-title>
-                    Please Fill Out All Fields Correctly
+                <v-card-title><v-layout justify-center align-center>
+                    Please Fill Out All Fields Correctly</v-layout>
                 </v-card-title>
-                <v-card-text>Please check and ensure that every field has been filled out correctly before publishing
+                <v-card-text style="text-align: center">Please check and ensure that every field has been filled out correctly before publishing
                 </v-card-text>
                 <v-card-actions>
-                    <v-layout justify-center>
+                    <v-layout justify-center align-center>
                         <v-btn color="error" @click="validation = false">Close</v-btn>
                     </v-layout>
                 </v-card-actions>
@@ -185,12 +202,15 @@
 <script>
 
     export default {
+        props:{
+          activeUser: Object
+        },
         methods:{
             //Quiz saving function called by publish button. Operates by calling validation function to check fields, then executes code. Displays loading screens along with calling the newQuiz function
             saveQuiz: function () {
                 //Calls function which returns true if all fields pass validation
                  if(this.formCheck()) {
-                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, 'TestOwner', this.img.url, this.description, this.time_limit, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
+                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, this.$cookies.get('user').key, this.img.url, this.description, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
@@ -242,7 +262,7 @@
                 return titleCheck && questionCheck && imageCheck &&descCheck;
             },
 
-                newQuiz: function(quiz_title, questions, owner_id, img, description, time_limit, score_decay){
+                newQuiz: function(quiz_title, questions, owner_id, img, description, score_decay){
                     var Quiz = {
                         //New quiz object is created with the properties passed from the form
                         quiz_title,
@@ -250,7 +270,6 @@
                         owner_id,
                         img,
                         description,
-                        time_limit,
                         score_decay
                     };
                 var reciept = this.$db.ref('/Quizs').push(Quiz);//The object is then pushed to the quizs table in firebase, adding it as an object
@@ -277,7 +296,6 @@
             valid: true,
             falseCount: 0,
             clicked: false,
-            time_limit: "",
             score_decay: "0.1",
             createdKey: "",
 
@@ -287,7 +305,6 @@
                     quizTitle: "",
                     description: "",
                     img: "",
-                    time_limit: "",
                     score_decay: "0.1",
                 }
             },
