@@ -38,6 +38,15 @@ describe('Register', function () {
         cy.wait(2000);
         cy.get(":nth-child(7) > :nth-child(2) > .v-btn__content").should('have.text','Mamamam Harthartharthart')
     });
+    it('View Profile', function () {
+        cy.get('button').contains('Mamamam Harthartharthart').click();
+        cy.wait(2000);
+        cy.get(':nth-child(3) > .col-sm-5 > .v-card__text').should('have.text', 'Email:')
+        cy.get('button').contains('Edit').click();
+        cy.get('button').contains('Hide Email Address').click();
+        cy.get('button').contains('Close').click();
+        cy.get(':nth-child(3) > .col-sm-5 > .v-card__text').should('not.have.text', 'Email:')
+    });
     it('Delete user', function () {
         cy.get(':nth-child(7) > .v-btn--fab > .v-btn__content > .v-icon').click();
         cy.wait(2000);

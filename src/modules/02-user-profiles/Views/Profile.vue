@@ -3,7 +3,7 @@
         <v-col>
             <v-card class="mx-auto"
                     max-width="70%">
-                <v-toolbar flat>
+                <v-toolbar flat >
                     <v-btn icon @click="handleBack">
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
@@ -46,7 +46,7 @@
                                         <v-card-text style="font-size: 25px; color: royalblue">Email:</v-card-text>
                                     </v-col>
                                     <v-col style="margin-left:-8%">
-                                        <v-card-text style="font-size: 25px;">{{user.email}}</v-card-text>
+                                        <v-card-text name="email" style="font-size: 25px;">{{user.email}}</v-card-text>
                                     </v-col>
                                 </v-row>
                                 <v-row v-if="user.profile.gamesPlayed" style="margin-top: -25px">
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-    import editProfileCard from "../components/Edit-Profile-Card"
+    import editProfileCard from "../Components/Edit-Profile-Card"
 
     export default {
         beforeMount() {
