@@ -69,7 +69,7 @@
     export default {
         name: 'App',
         async created() {
-            var test = (await loginUtils.checkUserExistsKey(this.$cookies.get('user').key));
+            var test = (await loginUtils.checkUserExistsKey(key));
             if (this.$cookies.isKey('user') && (test.user === undefined)) {
                 this.$cookies.remove('user');
                 this.$router.push("/logout");
