@@ -74,8 +74,8 @@
             resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
             },
-            toProfile: function() {//Resets the search term property to nothing, removing all criteria
-                this.$router.push('/profile/'+this.userKey);
+            toProfile: function() {
+                this.$router.go(-1);
             },
             setUser() {
                 this.$db.ref('/Users/').child(this.userKey).once('value', (snap) => {

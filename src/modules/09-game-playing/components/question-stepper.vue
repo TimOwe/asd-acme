@@ -28,7 +28,7 @@ export default {
     session: String
   },
   data: () => ({
-    stepno: 0
+    stepno: 1
   }),
   mounted: function() {
     this.getStep();

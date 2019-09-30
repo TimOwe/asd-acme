@@ -277,10 +277,8 @@ export default {
     },
     checkEnded: function() {
       let self = this;
-      console.log(`gameid ${this.game.id}`)
       let ref = this.$db.ref(`/Sessions/${this.game.id}/`);
       let listener = ref.on("value", function(snapshot) {
-        console.log(`timeend ${snapshot.val().timeend}`);
         if (snapshot.val().timeend !== "null") {
           self.game.eTime = snapshot.val().timeend;
           self.finishQuiz();

@@ -263,6 +263,7 @@
             },
 
                 newQuiz: function(quiz_title, questions, owner_id, img, description, score_decay){
+                var time_created = new Date().getTime();
                     var Quiz = {
                         //New quiz object is created with the properties passed from the form
                         quiz_title,
@@ -270,7 +271,8 @@
                         owner_id,
                         img,
                         description,
-                        score_decay
+                        score_decay,
+                        time_created
                     };
                 var reciept = this.$db.ref('/Quizs').push(Quiz);//The object is then pushed to the quizs table in firebase, adding it as an object
                 return reciept.key;//Its firebase obkect key is returned
