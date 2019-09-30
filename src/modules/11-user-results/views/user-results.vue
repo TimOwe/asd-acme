@@ -21,6 +21,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-btn @click="showAttemptData(attempt)" absolute bottom right depressed color="blue"><v-icon color="white">mdi-eye</v-icon></v-btn>
+                            <v-btn @click="showAttemptByQuiz(attempt)" absolute bottom left depressed color="purple"><v-icon color="white">mdi-watch</v-icon></v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -60,6 +61,17 @@
                         <v-btn class="white--text" color="red" depressed @click="attemptData = false">Close</v-btn>
                     </v-layout>
                 </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog width="800" v-model="chartDataQuiz">
+            <v-card height="400">
+                <v-container class="pa-12">
+                    <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
+                    <v-sheet color="transparent">
+                        <v-sparkline :key="String(chartData.data)" :smooth="16" :gradient="['#6e8bf7', '#d79aff', '#1feaea']" :labels="chartData.time" :line-width="3" :value="chartData.data" auto-draw stroke-linecap="round"></v-sparkline>
+                    </v-sheet>
+                </v-container>
             </v-card>
         </v-dialog>
 
@@ -104,6 +116,21 @@
                 this.currentAttempt = attempt;
                 this.attemptData = true;
             },
+            showAttemptByQuiz(attempt){
+                this.chartData = {
+                    title: '',
+                    data: [],
+                    time: [],
+                };
+                this.chartData.title = attempt.quiz_title;
+               var filteredList = this.attempts.filter(e => e.quiz_title === this.chartData.title);
+               filteredList.sort((a,b) =>  a.time_end - b.time_end);
+               filteredList.forEach(attempt => {
+                   this.chartData.data.push(attempt.score);
+                   this.chartData.time.push(new Date(attempt.time_end).toDateString())
+               });
+               this.chartDataQuiz = true;
+            },
             handleBack(){
                 this.$router.go(-1);
             },
@@ -121,12 +148,18 @@
         data(){
             return {
                 activeUser: {},
-                attempts: {},
+                attempts: [],
+                chartData: {
+                    title: '',
+                    data: [],
+                    time: [],
+                },
                 currentAttempt: {},
                 attemptData: false,
                 loading: false,
                 showError: false,
                 img: '',
+                chartDataQuiz: false
             }
         }
     }
