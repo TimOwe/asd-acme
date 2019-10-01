@@ -97,6 +97,11 @@
                             <v-btn class="white--text" style="margin-left: 15px" raised color="blue" @click="viewResults">View Results<v-icon small right color="white">mdi-chart-line</v-icon></v-btn>
                             <v-btn class="white--text" style="margin-left: 15px" raised color="orange" @click="viewUserQuizzes">View Quizzes<v-icon right color="white">mdi-format-list-bulleted-square</v-icon></v-btn>
                         </v-row>
+                        <v-row>
+                            <div id="chart">
+                                <apexchart type=pie width=380 :options="chartOptions" :series="[user.correctQuestions, user.incorrectQuestions]" />
+                            </div>
+                        </v-row>
                     </v-container>
                         <v-dialog v-model="editProfileCard" persistent max-width="600px">
                             <editProfileCard :activeUser="activeUser" @close="updateEditProfileCard"></editProfileCard>
@@ -109,7 +114,7 @@
 
 <script>
     import editProfileCard from "../Components/Edit-Profile-Card"
-
+    import VueApexCharts from "vue-apexcharts"
     export default {
         beforeMount() {
             var route = "/Users/" + this.$route.params.id;
@@ -118,9 +123,10 @@
             });
         },
         name: "Profile",
-        components: {editProfileCard},
+        components: {editProfileCard, apexchart: VueApexCharts},
         props: ['activeUser'],
         watch:{
+            // eslint-disable-next-line no-unused-vars
             $route(to, from){
                 this.$db.ref("/Users/" + this.$route.params.id).on('value', (snap) => {
                     this.user = snap.val();
@@ -144,10 +150,25 @@
                 this.editProfileCard = e;
             }
         },
-        data(){
-            return{
+        data() {
+            return {
                 user: {},
-                editProfileCard: false
+                editProfileCard: false,
+                chartOptions: {
+                    labels: ['Correct', 'Incorrect'],
+                    colors:['#4CAF50', '#F44336'],
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                }
             }
         },
 
