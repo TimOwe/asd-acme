@@ -22,17 +22,24 @@
     <v-container grid-md-list>
       <v-layout row wrap class="pa-3">
         <v-flex v-for="user in participants" xs4>
-          <v-btn depressed color="blue" class="white--text mb-5">{{user}}</v-btn>
+          <v-btn depressed color="blue" class="white--text mb-5" @click="handleScores(user)">{{user.nickname}}</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
+
+      <v-dialog v-model="activeResults" width="600">
+            <user-session-results :user-key="activeUser" :quiz-key="activeGame"></user-session-results>
+      </v-dialog>
   </div>
 </template>
 
 <script>
+    import UserSessionResults from '../components/UserSessionResults'
+
 export default {
   name: "HostCL",
-  beforeMount() {
+    components: {UserSessionResults},
+    beforeMount() {
     this.sessionKey = this.$route.params.id;
     this.getSessionFromToken(this.sessionKey);
   },
@@ -46,7 +53,10 @@ export default {
       isStarted: null,
       isEnded: null,
       qTime: null,
-      qCount: null
+      qCount: null,
+      activeResults: false,
+        activeUser: '',
+        activeGame: ''
     };
   },
   computed: {
@@ -55,6 +65,13 @@ export default {
     }
   },
   methods: {
+      handleScores(user){
+          if(!!user.user){
+              this.activeUser = user.user;
+              this.activeGame = this.currentSession.quiz_id;
+              this.activeResults = true;
+          }
+      },
     getSessionFromToken(token) {
       let self = this;
       this.$db.ref("/Sessions").once("value", snap => {
@@ -92,7 +109,7 @@ export default {
           .on("value", snap => {
             self.participants = [];
             snap.forEach(user => {
-              self.participants.push(user.val().nickname);
+              self.participants.push(user.val());
             });
             this.startQuiz();
           });
