@@ -97,12 +97,20 @@
                             <v-btn class="white--text" style="margin-left: 15px" raised color="blue" @click="viewResults">View Results<v-icon small right color="white">mdi-chart-line</v-icon></v-btn>
                             <v-btn class="white--text" style="margin-left: 15px" raised color="orange" @click="viewUserQuizzes">View Quizzes<v-icon right color="white">mdi-format-list-bulleted-square</v-icon></v-btn>
                         </v-row>
-                        <v-row>
-                            <div id="chart">
-                                <apexchart type=pie width=380 :options="chartOptions" :series="[user.correctQuestions, user.incorrectQuestions]" />
-                            </div>
-                        </v-row>
                     </v-container>
+                    <div v-if="user.profile.graphs">
+                        <v-divider></v-divider>
+                        <v-row style="margin-left: 8%">
+                            <v-col>
+                                <v-card-title style="margin-left: -50px">Correct/Incorrect Question Ratio</v-card-title>
+                                <apexchart type=pie width=380 :options="correctChartOptions" :series="[user.correctQuestions, user.incorrectQuestions]"/>
+                            </v-col>
+                            <v-col>
+                                <v-card-title style="margin-left: 88px">Wins</v-card-title>
+                                <apexchart type=pie width=418 :options="winsChartOptions" :series="[user.wins, (user.gamesPlayed)-user.wins]"/>
+                            </v-col>
+                        </v-row>
+                    </div>
                         <v-dialog v-model="editProfileCard" persistent max-width="600px">
                             <editProfileCard :activeUser="activeUser" @close="updateEditProfileCard"></editProfileCard>
                         </v-dialog>
@@ -154,7 +162,7 @@
             return {
                 user: {},
                 editProfileCard: false,
-                chartOptions: {
+                correctChartOptions: {
                     labels: ['Correct', 'Incorrect'],
                     colors:['#4CAF50', '#F44336'],
                     responsive: [{
@@ -168,8 +176,24 @@
                             }
                         }
                     }]
+                },
+                winsChartOptions: {
+                    labels: ['Wins', 'GamesPlayed'],
+                    colors:['#7E19D5', '#1976d2'],
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
                 }
             }
+
         },
 
         computed:{
