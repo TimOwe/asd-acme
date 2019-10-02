@@ -29,6 +29,10 @@
                     <v-btn @click="handleSettingChange('wins', true)" id="showWins" v-if="!activeUser.profile.wins" color="green" class="white--text">Show Number of Wins</v-btn>
                     <v-btn @click="handleSettingChange('wins', false)" id="hideWins" v-if="activeUser.profile.wins" color="red" class="white--text">Hide Number of Wins</v-btn>
                 </v-layout>
+                <v-layout style="margin-top: 10px" wrap>
+                    <v-btn @click="handleSettingChange('graphs', true)" v-if="!activeUser.profile.graphs" color="green" class="white--text">Show Graphs</v-btn>
+                    <v-btn @click="handleSettingChange('graphs', false)" v-if="activeUser.profile.graphs" color="red" class="white--text">Hide Graphs</v-btn>
+                </v-layout>
             </v-container>
         </v-card-text>
         <v-card-actions>
