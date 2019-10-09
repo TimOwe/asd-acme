@@ -10,9 +10,10 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-btn depressed large color="red" class="white--text" @click="deleteUser(user.key)">Delete</v-btn>
-                            <v-btn large color="primary" @click="handleShowLogs(user.key)">View Logs</v-btn>
-                            <v-btn v-if="user.isAdmin === false" @click="handleMakeAdmin(user.key, true)" large color="purple" class="white--text">Make Admin</v-btn>
-                            <v-btn v-else @click="handleMakeAdmin(user.key, false)" large color="purple" class="white--text">Remove Admin</v-btn>
+                            <v-btn depressed large color="primary" @click="handleShowLogs(user.key)">View Logs</v-btn>
+                            <v-btn depressed v-if="user.isAdmin === false" @click="handleMakeAdmin(user.key, true)" large color="purple" class="white--text">Make Admin</v-btn>
+                            <v-btn depressed v-else @click="handleMakeAdmin(user.key, false)" large color="purple" class="white--text">Remove Admin</v-btn>
+                            <v-btn depressed large color="cyan" class="white--text" @click="handleShowProfile(user.key)">View Profile</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -77,6 +78,9 @@
             },
             handleMakeAdmin(user, bool){
                 this.$db.ref('/Users/'+ user + '/isAdmin').set(bool);
+            },
+            handleShowProfile(key){
+                this.$router.push({path: `/profile/${key}`})
             }
         }
     }

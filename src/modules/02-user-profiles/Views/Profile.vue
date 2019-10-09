@@ -100,16 +100,21 @@
                     </v-container>
                     <div v-if="user.profile.graphs">
                         <v-divider></v-divider>
-                        <v-row style="margin-left: 8%">
-                            <v-col>
-                                <v-card-title style="margin-left: -50px">Correct/Incorrect Question Ratio</v-card-title>
-                                <apexchart type=pie width=380 :options="correctChartOptions" :series="[user.correctQuestions, user.incorrectQuestions]"/>
-                            </v-col>
-                            <v-col>
-                                <v-card-title style="margin-left: 88px">Wins</v-card-title>
-                                <apexchart type=pie width=418 :options="winsChartOptions" :series="[user.wins, (user.gamesPlayed)-user.wins]"/>
-                            </v-col>
-                        </v-row>
+                        <div v-if="user.gamesPlayed != 0">
+                            <v-row style="margin-left: 8%">
+                                <v-col>
+                                    <v-card-title style="margin-left: -50px">Correct/Incorrect Question Ratio</v-card-title>
+                                    <apexchart type=pie width=380 :options="correctChartOptions" :series="[user.correctQuestions, user.incorrectQuestions]"/>
+                                </v-col>
+                                <v-col>
+                                    <v-card-title style="margin-left: 88px">Wins</v-card-title>
+                                    <apexchart type=pie width=363 :options="winsChartOptions" :series="[user.wins, (user.gamesPlayed)-user.wins]"/>
+                                </v-col>
+                            </v-row>
+                        </div>
+                        <div v-else>
+                            <p style="text-align: center; margin-top: 20px; color: gray">No graphs available - The user has yet to play any games!</p>
+                        </div>
                     </div>
                         <v-dialog v-model="editProfileCard" persistent max-width="600px">
                             <editProfileCard :activeUser="activeUser" @close="updateEditProfileCard"></editProfileCard>
@@ -178,7 +183,7 @@
                     }]
                 },
                 winsChartOptions: {
-                    labels: ['Wins', 'GamesPlayed'],
+                    labels: ['Wins', 'Loses'],
                     colors:['#7E19D5', '#1976d2'],
                     responsive: [{
                         breakpoint: 480,
