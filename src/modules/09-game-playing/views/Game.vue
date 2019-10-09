@@ -1,5 +1,8 @@
 <template>
   <v-app id="inspire">
+    <v-scroll-x-transition>
+      <TempBoard v-bind:game="game" v-if="render === 'question'"></TempBoard>
+    </v-scroll-x-transition>
     <v-content>
       <v-container>
         <span v-if="render ==='lobby' || render === 'question' | render === 'scoreboard'">
@@ -43,11 +46,7 @@
 
         <div v-if="render === 'scoreboard'">
           <v-slide-x-transition mode="out-in">
-            <scoreboard-card
-              v-bind:thisplayer="playerref"
-              v-bind:game="game"
-              @pushScore="pushResults"
-            ></scoreboard-card>
+            <scoreboard-card v-bind:game="game" @pushScore="pushResults"></scoreboard-card>
           </v-slide-x-transition>
         </div>
         <div v-if="render === 'scoreboard'">
@@ -72,6 +71,7 @@ import ScoreboardCard from "../components/scoreboard-card.vue";
 import LobbyCard from "../components/lobby-card.vue";
 import KeepAliveComponent from "../components/keep-alive.vue";
 import QuestionStepper from "../components/question-stepper.vue";
+import TempBoard from "../components/temp-board.vue";
 import { loginUtils } from "../../../main";
 
 export default {
@@ -82,7 +82,8 @@ export default {
     ScoreboardCard,
     LobbyCard,
     KeepAliveComponent,
-    QuestionStepper
+    QuestionStepper,
+    TempBoard
   },
   props: {
     source: String,
