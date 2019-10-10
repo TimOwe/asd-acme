@@ -78,11 +78,11 @@
                 this.updateData();
             }
         },
-        // mounted() {
-        //     this.$db.ref('/CatchError').on('child_added', () => {
-        //         this.catchError = true;
-        //     })
-        // },
+        async beforeMount() {
+           this.$db.ref('/CatchError').on('value', () => {
+                this.catchError = true;
+            });
+        },
         data() {
             return {
                 activeUser: {},
