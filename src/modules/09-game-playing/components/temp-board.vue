@@ -1,12 +1,7 @@
 <template>
-  <v-card class="mx-auto" max-width="344">
-    <v-card-text>
-      <span>Results</span>
-      <br />
-    </v-card-text>
-    <v-spacer></v-spacer>
-
-    <v-list-item v-for="(player, i) in players" :key="player.id">
+  <v-navigation-drawer absolute right permanent>
+    <v-list dense>
+      <v-list-item v-for="(player, i) in players" :key="player.id">
       <v-list-item-avatar>
         <span v-if="i <= 10">
           <v-icon>mdi-numeric-{{add(i)}}-circle</v-icon>
@@ -35,16 +30,18 @@
         </span>
       </v-list-item-action-text>
     </v-list-item>
-  </v-card>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script>
-import {loginUtils} from "../../../main";
+import { loginUtils } from "../../../main";
 
 export default {
-  name: "scoreboard-card",
+  name: "temp-board",
   props: {
-    game: Object
+    game: Object,
+    thisplayer: String,
   },
   data: () => ({
     players: []
@@ -59,17 +56,10 @@ export default {
           id: childSnapshot.key,
           name: childSnapshot.val().nickname,
           score: childSnapshot.val().score,
-          userId: childSnapshot.val().user
         });
         self.players.sort((a, b) => b.score - a.score);
       });
     });
-    var storeUser = await loginUtils.checkUserExistsKey(self.players[0].userId)
-    if(storeUser && storeUser !== undefined){
-      this.$db
-        .ref("/Users/" + self.players[0].userId + "/wins")
-        .set((storeUser.user.wins) + 1)
-    }
   },
   methods: {
     add: function(i) {

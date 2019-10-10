@@ -98,6 +98,24 @@
                             <v-btn class="white--text" style="margin-left: 15px" raised color="orange" @click="viewUserQuizzes">View Quizzes<v-icon right color="white">mdi-format-list-bulleted-square</v-icon></v-btn>
                         </v-row>
                     </v-container>
+                    <div v-if="user.profile.graphs">
+                        <v-divider></v-divider>
+                        <div v-if="user.gamesPlayed != 0">
+                            <v-row style="margin-left: 8%">
+                                <v-col>
+                                    <v-card-title style="margin-left: -50px">Correct/Incorrect Question Ratio</v-card-title>
+                                    <apexchart type=pie width=380 :options="correctChartOptions" :series="[user.correctQuestions, user.incorrectQuestions]"/>
+                                </v-col>
+                                <v-col>
+                                    <v-card-title style="margin-left: 88px">Wins</v-card-title>
+                                    <apexchart type=pie width=363 :options="winsChartOptions" :series="[user.wins, (user.gamesPlayed)-user.wins]"/>
+                                </v-col>
+                            </v-row>
+                        </div>
+                        <div v-else>
+                            <p style="text-align: center; margin-top: 20px; color: gray">No graphs available - The user has yet to play any games!</p>
+                        </div>
+                    </div>
                         <v-dialog v-model="editProfileCard" persistent max-width="600px">
                             <editProfileCard :activeUser="activeUser" @close="updateEditProfileCard"></editProfileCard>
                         </v-dialog>
@@ -109,7 +127,7 @@
 
 <script>
     import editProfileCard from "../Components/Edit-Profile-Card"
-
+    import VueApexCharts from "vue-apexcharts"
     export default {
         beforeMount() {
             var route = "/Users/" + this.$route.params.id;
@@ -118,9 +136,10 @@
             });
         },
         name: "Profile",
-        components: {editProfileCard},
+        components: {editProfileCard, apexchart: VueApexCharts},
         props: ['activeUser'],
         watch:{
+            // eslint-disable-next-line no-unused-vars
             $route(to, from){
                 this.$db.ref("/Users/" + this.$route.params.id).on('value', (snap) => {
                     this.user = snap.val();
@@ -144,11 +163,42 @@
                 this.editProfileCard = e;
             }
         },
-        data(){
-            return{
+        data() {
+            return {
                 user: {},
-                editProfileCard: false
+                editProfileCard: false,
+                correctChartOptions: {
+                    labels: ['Correct', 'Incorrect'],
+                    colors:['#4CAF50', '#F44336'],
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                },
+                winsChartOptions: {
+                    labels: ['Wins', 'Loses'],
+                    colors:['#7E19D5', '#1976d2'],
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                }
             }
+
         },
 
         computed:{
