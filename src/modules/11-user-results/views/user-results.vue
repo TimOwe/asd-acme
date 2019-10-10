@@ -68,9 +68,14 @@
             <v-card height="400">
                 <v-container class="pa-12">
                     <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
-                    <v-sheet color="transparent">
-                        <v-sparkline :key="String(chartData.data)" :smooth="16" :gradient="['#6e8bf7', '#d79aff', '#1feaea']" :labels="chartData.time" :line-width="3" :value="chartData.data" auto-draw stroke-linecap="round"></v-sparkline>
-                    </v-sheet>
+                    <v-layout v-if="chartData.data.length > 0">
+                        <v-sheet color="transparent">
+                            <v-sparkline :key="String(chartData.data)" :smooth="16" :gradient="['#6e8bf7', '#d79aff', '#1feaea']" :labels="chartData.time" :line-width="3" :value="chartData.data" auto-draw stroke-linecap="round"></v-sparkline>
+                        </v-sheet>
+                    </v-layout>
+                    <v-layout v-else>
+                        <v-layout justify-center class="headline">Not Enough Data For Chart</v-layout>
+                    </v-layout>
                 </v-container>
             </v-card>
         </v-dialog>

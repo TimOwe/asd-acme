@@ -78,11 +78,11 @@
                 this.updateData();
             }
         },
-        async beforeMount() {
-           this.$db.ref('/CatchError').on('value', () => {
-                this.catchError = true;
-            });
-        },
+        // async beforeMount() {
+        //    this.$db.ref('/CatchError').on('value', () => {
+        //         this.catchError = true;
+        //     });
+        // },
         data() {
             return {
                 activeUser: {},
