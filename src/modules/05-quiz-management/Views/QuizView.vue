@@ -31,8 +31,6 @@
             onDelete: function(quizKey) {//Deletes the quiz by locating it in firebase using its key
                 this.$db.ref('/Quizs/' + quizKey).remove();
                 this.$router.push('/quizcatalogue/');
-
-
             },
             onRefresh: function () {
                 //this.getQuiz(updQuiz.key);//Collects new and updated data from firebase
@@ -43,19 +41,16 @@
             onQuizEdit: function() {//If called, sets the render as the edit view component, sending the viewingQuiz
                 //this.viewingQuiz = quiz;
                 this.render = "editView";
-
             },
 
             onCatalogueView: function() {//If called, sets render to the quizCatalogue component
                 this.$router.push('/quizcatalogue/');
-
             },
             forceRerender() {
-                //Changes key top notify vuie that a change to the object has occured, forcing an update and re-render
+                //Changes key top notify vue that a change to the object has occured, forcing an update and re-render
                 this.editKey += 1;
                 this.refreshKey += 1;
             }
-
         },
         //Computed properties
         data: () => ({
@@ -87,7 +82,4 @@
     green{
         color:green;
     }
-
-
-
 </style>
