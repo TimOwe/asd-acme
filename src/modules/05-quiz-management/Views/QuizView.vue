@@ -17,8 +17,8 @@
         components: {quizView, editCard},
 
         beforeMount: function(){
-            this.newKey = this.$route.params.id;
-            this.getQuiz(this.newKey)
+            this.newKey = this.$route.params.id;//sets the key of the quiz to the route parameter
+            this.getQuiz(this.newKey)//passes the new key value to source the quiz from the database
         },
 
         methods:{

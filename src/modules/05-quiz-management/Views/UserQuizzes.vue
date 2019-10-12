@@ -138,16 +138,16 @@
         computed: {
             filteredList() {
                 return this.quizs.filter(quiz => {//filters quiz list
-                    if (this.category.value !=='' && this.searchTerm !==''){
-                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase()) && quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    if (this.category.value !=='' && this.searchTerm !==''){//if a search term and category are selected
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase()) && quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title and if category  matches the category field of the quiz
                     }
-                    else if (this.category.value !==''){
-                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase())//adds quiz if search term matches any part of its title
+                    else if (this.category.value !==''){//if just a category is selected
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase())//adds quiz if category  matches the category field of the quiz
                     }
-                    else if (this.searchTerm !==''&& this.category.value =='') {
+                    else if (this.searchTerm !==''&& this.category.value =='') {//if just a search term is entered
                         return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
                     }
-                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//renders full list
                 })
             }
         }

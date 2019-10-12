@@ -71,8 +71,8 @@
         components: {quizCard},
         // grabbing all data on page render
         async beforeMount(){
-            this.getQuizzes();
-            if(this.$route.params.inCategory!==undefined){
+            this.getQuizzes();//gets all quizzes
+            if(this.$route.params.inCategory!==undefined){//if the url route contains parameters from a separate page to pre-fill the category, set the parameter to the filter value and render the quiz list
                 this.setCategory(this.$route.params.inCategory);
             }
         },
@@ -84,14 +84,11 @@
                     this.quizs = [];
                     // convert firebase data entries into json
                     snap.forEach(entry => {
-                        //this.$db.ref('/Quizs/'+entry.key).update({"category": 'generalknowledge'})
-
                         var entryObj = entry.val();
                         entryObj.key = entry.key;
                         // push firebase data into results array
                         this.quizs.push(entryObj);
                     });
-                    // sort results by ascending order of score
                 });
             },
             setCategory: function(category){//As the image is locally defined as an object, but defined in firebase by its url, it will need to be matched to the iobject for it to load into the select component
@@ -103,9 +100,9 @@
             },
             toCreator: function() {
                 if(!(this.$cookies.isKey('user'))){//if the user is logged in
-                    this.creatorAlert=true;//if user not logged in, activate the host alert dialog
+                    this.creatorAlert=true;//if user not logged in, activate the creator alert dialog
                 }
-                else this.$router.push({ name: 'quiz-creator'});//if user is logged in, route to host and send the quiz title as a parameter
+                else this.$router.push({ name: 'quiz-creator'});//if user is logged in, route to quiz creator
             },
             resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
@@ -124,7 +121,7 @@
             quizs: [],
             searchTerm: '',
             category: { category: '', value: '' },
-            categories: [
+            categories: [//list of categories
                 { category: 'Animals', value: 'animals' },
                 { category: 'Business', value: 'business' },
                 { category: 'Cars', value: 'cars' },
@@ -160,16 +157,16 @@
         computed: {//list for search functionality
             filteredList() {
                 return this.quizs.filter(quiz => {//filters quiz list
-                    if (this.category.value !=='' && this.searchTerm !==''){
-                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase()) && quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    if (this.category.value !=='' && this.searchTerm !==''){//if a search term and category are selected
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase()) && quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title and if category  matches the category field of the quiz
                     }
-                    else if (this.category.value !==''){
-                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase())//adds quiz if search term matches any part of its title
+                    else if (this.category.value !==''){//if just a category is selected
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase())//adds quiz if category  matches the category field of the quiz
                     }
-                    else if (this.searchTerm !==''&& this.category.value =='') {
+                    else if (this.searchTerm !==''&& this.category.value =='') {//if just a search term is entered
                         return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
                     }
-                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//renders full list
                 })
             }
         }

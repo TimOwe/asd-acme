@@ -245,7 +245,7 @@
                 var titleCheck = this.quizTitle !== '' && this.quizTitle.length < 60 && this.quizTitle.length > 4;//sets titlecheck to true or false depending on conditions
                 var descCheck = this.description !== '' && this.description.length < 80 && this.description.length > 4;//sets descCheck to true or false depending on conditions
                 var imageCheck = this.img !== '';//sets imageCheck to true or false depending on conditions
-                var cateCheck = this.category !== '';//sets imageCheck to true or false depending on conditions
+                var cateCheck = this.category !== '';//sets cateCheck to true or false depending on conditions
                 var questionCheck = true;
                 this.questionBank.forEach(question => {//iterates through every question made
                     if (question.q !== '' && question.q.length > 4 && question.q.length < 80 && question.c.length !== 4 && question.score > 99 && question.score < 10000 ) {//checks if question name meets criteria
