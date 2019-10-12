@@ -90,7 +90,7 @@
         <v-dialog width=350 v-model="hostAlert">
             <v-card>
 
-                <v-card-title ali>
+                <v-card-title>
                     <v-layout justify-center align-center>Woah Slow Down!</v-layout>
                 </v-card-title>
                 <v-card-text style="text-align: center">You must be logged in to host this quiz, log in below.</v-card-text>
@@ -138,10 +138,10 @@
                     this.setCategory();
                 });
             },
-            handleNameClick(){
+            handleNameClick: function(){
                 this.$router.push({path: `/profile/${this.authorKey}`})//if the creator is clicked, routes to the users profile using the key as a routing parameter
             },
-            handleCatClick(){
+            handleCatClick: function(){
                 this.$router.push({ name: 'quizcatalogue', params: { inCategory: this.thisQuiz.category}});
                 },
             deleteQuiz: function() {//Deletes the quiz by locating it in firebase using its key
@@ -159,10 +159,10 @@
             answerCheck: function(c, a){
                 return parseInt(c)===parseInt(a);//Checks if the correct answer index printed is equal to the answer defined in the question
             },
-            onBackButton() {
+            onBackButton: function() {
                 this.$emit("catalogueView");//Emits quizzEdit to the quizcatalogue to initiate the quiz edit page to render
             },
-            toHost() {
+            toHost: function() {
                 if(!(this.$cookies.isKey('user'))){//if the user is logged in
                     this.hostAlert=true;//if user not logged in, activate the host alert dialog
                 }
@@ -189,7 +189,7 @@
                     this.difficultyColor = "red";
                 }
             },
-            setUser(userKey) {//takes userkey as parameter
+            setUser: function(userKey) {//takes userkey as parameter
                 this.$db.ref('/Users/').child(userKey).once('value', (snap) => {//searches firebase database for child with the key passed by the parameter
                     this.thisUser = snap.val();//sets thisUser property to the child firebase object
                     this.owner = this.thisUser.fname +" "+ this.thisUser.lname;//assignes name property to the values of the user object

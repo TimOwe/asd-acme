@@ -4,7 +4,7 @@
             <v-card>
                 <v-toolbar color="primary" dark flat>
                     <v-container grid-list-md>
-                        <v-layout justify-center align-center>
+                        <v-layout pt-3 justify-center align-center>
                             <v-row>
                                 <v-col>
                                     <v-layout justify-center align-center justify-start align-start>
@@ -14,6 +14,11 @@
                                 <v-col>
                                     <v-layout pt-2 justify-center align-center justify-end align-end>
                                         <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                                    </v-layout>
+                                </v-col>
+                                <v-col>
+                                    <v-layout pt-2 justify-center align-center justify-end align-end>
+                                        <v-select v-model="category" :items="categories" item-text="category" item-value="value" placeholder="Filter Category" prepend-inner-icon="mdi-menu-down" append-icon="mdi-close" @click:append="resetCategory()" return-object single-line></v-select>
                                     </v-layout>
                                 </v-col>
                             </v-row>
@@ -74,6 +79,9 @@
             resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
             },
+            resetCategory: function() {//Resets the search term property to nothing, removing all criteria
+                this.category = { category: '', value: '' };
+            },
             toProfile: function() {//Resets the search term property to nothing, removing all criteria
                 this.$router.push('/profile/'+this.userKey);
             },
@@ -95,6 +103,30 @@
             userKey: "",
             userFullName: "",
             thisUser: "",
+            category: { category: '', value: '' },
+            categories: [
+                { category: 'Animals', value: 'animals' },
+                { category: 'Business', value: 'business' },
+                { category: 'Cars', value: 'cars' },
+                { category: 'Country', value: 'country' },
+                { category: 'Culture', value: 'culture' },
+                { category: 'Economics', value: 'economics' },
+                { category: 'Environment', value: 'environment' },
+                { category: 'Film', value: 'film' },
+                { category: 'Food', value: 'food' },
+                { category: 'General Knowledge', value: 'generalknowledge' },
+                { category: 'History', value: 'history' },
+                { category: 'Literature', value: 'literature' },
+                { category: 'Math', value: 'math' },
+                { category: 'Music', value: 'music' },
+                { category: 'Politics', value: 'politics' },
+                { category: 'Psychology', value: 'psychology' },
+                { category: 'Science', value: 'science' },
+                { category: 'Sport', value: 'sport' },
+                { category: 'Technology', value: 'technology' },
+                { category: 'Television', value: 'television' },
+                { category: 'Video Games', value: 'videogames' },
+            ],
 
             data(){
                 return {
@@ -104,8 +136,17 @@
         }),
 
         computed: {
-            filteredList() {//finds the user in the database with the key passed from the quiz owner id property
-                return this.quizs.filter(quiz => {
+            filteredList() {
+                return this.quizs.filter(quiz => {//filters quiz list
+                    if (this.category.value !=='' && this.searchTerm !==''){
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase()) && quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    }
+                    else if (this.category.value !==''){
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase())//adds quiz if search term matches any part of its title
+                    }
+                    else if (this.searchTerm !==''&& this.category.value =='') {
+                        return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    }
                     return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
                 })
             }

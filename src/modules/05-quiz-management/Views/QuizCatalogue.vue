@@ -22,7 +22,7 @@
                             </v-col>
                             <v-col>
                                 <v-layout justify-end align-end>
-                                    <v-btn  to="/quiz-creator" color="green" v-if="!!$cookies.isKey('user')">Create Quiz<v-icon right color="white">mdi-plus</v-icon></v-btn>
+                                    <v-btn @click="toCreator" color="green">Create Quiz<v-icon right color="white">mdi-plus</v-icon></v-btn>
                                 </v-layout>
                             </v-col>
 
@@ -41,7 +41,26 @@
 
             <v-footer class="mt-12"></v-footer>
         </v-card>
+
+        <v-dialog width=350 v-model="creatorAlert">
+            <v-card>
+
+                <v-card-title>
+                    <v-layout justify-center align-center>Woah Slow Down!</v-layout>
+                </v-card-title>
+                <v-card-text style="text-align: center">You must be logged in to create a quiz, log in below.</v-card-text>
+                <v-card-actions>
+                    <v-layout justify-center align-center>
+                        <v-btn color="white" @click="creatorAlert = false">Back</v-btn>
+                        <v-btn color="primary" to="/login">Log In</v-btn>
+                    </v-layout>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-container>
+
+
+
 </template>
 
 <script>
@@ -82,6 +101,12 @@
                     }
                 }
             },
+            toCreator: function() {
+                if(!(this.$cookies.isKey('user'))){//if the user is logged in
+                    this.creatorAlert=true;//if user not logged in, activate the host alert dialog
+                }
+                else this.$router.push({ name: 'quiz-creator'});//if user is logged in, route to host and send the quiz title as a parameter
+            },
             resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
             },
@@ -94,20 +119,33 @@
             render: "quizCatalogue",
             edit: false,
             deleteConfirm: false,
+            creatorAlert: false,
             loading: false,
             quizs: [],
             searchTerm: '',
             category: { category: '', value: '' },
             categories: [
-                { category: 'General Knowledge', value: 'generalknowledge' },
-                { category: 'Environment', value: 'environment' },
+                { category: 'Animals', value: 'animals' },
+                { category: 'Business', value: 'business' },
                 { category: 'Cars', value: 'cars' },
+                { category: 'Country', value: 'country' },
+                { category: 'Culture', value: 'culture' },
+                { category: 'Economics', value: 'economics' },
+                { category: 'Environment', value: 'environment' },
+                { category: 'Film', value: 'film' },
+                { category: 'Food', value: 'food' },
+                { category: 'General Knowledge', value: 'generalknowledge' },
                 { category: 'History', value: 'history' },
+                { category: 'Literature', value: 'literature' },
+                { category: 'Math', value: 'math' },
+                { category: 'Music', value: 'music' },
+                { category: 'Politics', value: 'politics' },
+                { category: 'Psychology', value: 'psychology' },
+                { category: 'Science', value: 'science' },
                 { category: 'Sport', value: 'sport' },
                 { category: 'Technology', value: 'technology' },
-                { category: 'Country', value: 'country' },
-                { category: 'Animals', value: 'animals' },
-                { category: 'Film', value: 'film' },
+                { category: 'Television', value: 'television' },
+                { category: 'Video Games', value: 'videogames' },
             ],
 
             data(){
