@@ -2,22 +2,28 @@
     <div>
         <v-card>
             <v-img :src="img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
-                <v-card-title class="align-end fill-height">{{quizTitle}}</v-card-title>
+                <v-container class="fill-height" style="padding-bottom: 0; padding-left: 0">
+                    <v-layout class="justify-start, align-end">
+                        <v-card-title class="align-end">{{quizTitle}} </v-card-title>
+                    </v-layout>
+                    <v-layout class="align-start justify-end">
+                        <v-chip :color="difficultyColor"><v-layout class="white--text">{{difficulty}}</v-layout></v-chip>
+                    </v-layout>
+                </v-container>
             </v-img>
 
-            <v-card-text>
-                <span class="text--primary">
-                    <span class="body-1">{{description}}</span><br>
-                    <span class="caption">Created by: {{owner}}</span><br>
-                    <span class="caption">Questions: {{questions.length}}</span><br>
-                </span>
-            </v-card-text>
+            <v-container grid-list-md class="text--primary">
+                    <span class="text--primary">
+                        <span class="body-1">{{description}}</span><br>
+                        <span class="caption"><b>Created by:</b> {{owner}}</span><br>
+                        <span class="caption"><b>Questions: </b>{{questions.length}}</span><br>
+                    </span>
+            </v-container>
 
             <v-card-actions>
                 <v-btn text color="grey darken-2" @click="viewQuiz(quiz.key)"><v-icon large>mdi-view-headline</v-icon>View Quiz</v-btn>
             </v-card-actions>
         </v-card>
-
     </div>
 </template>
 
@@ -33,16 +39,31 @@
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
             this.setUser(this.quiz.owner_id);
-            this.questions = this.quiz.questions
+            this.questions = this.quiz.questions;
+            this.setDifficulty(this.quiz.score_decay);
         },
         methods: {
             viewQuiz: function(key) {//If called, pushes to the view page, sending the quiz key as a parameter
                 this.$router.push('/quizview/'+key);
             },
+            setDifficulty: function(score_decay) {//If called, pushes to the view page, sending the quiz key as a parameter
+                if (score_decay===0.1){//if score decay is 0.1, set colour to green and text to easy
+                    this.difficulty = "Easy";
+                    this.difficultyColor = "green";
+                }
+                else if (score_decay===0.2){//if score decay is 0.2, set colour to orange and text to medium
+                    this.difficulty = "Medium";
+                    this.difficultyColor = "orange";
+                }
+                else if (score_decay===0.3){//if score decay is 0.3, set colour to red and text to hard
+                    this.difficulty = "Hard";
+                    this.difficultyColor = "red";
+                }
+            },
             setUser(userKey) {
-                this.$db.ref('/Users/').child(userKey).once('value', (snap) => {
-                    this.thisUser = snap.val();
-                    this.owner = this.thisUser.fname +" "+ this.thisUser.lname;
+                this.$db.ref('/Users/').child(userKey).once('value', (snap) => {//finds the user in the database with the key passed from the quiz owner id property
+                    this.thisUser = snap.val();//sets user to firebase object
+                    this.owner = this.thisUser.fname +" "+ this.thisUser.lname;//sets full name property to combination of first and last name values from firebase object
                 });
             },
         },
@@ -56,6 +77,8 @@
             owner: '',
             questions: '',
             img: '',
+            difficulty: "",
+            difficultyColor: "",
             key: ''
         }),
     }
