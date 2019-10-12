@@ -12,6 +12,7 @@
     "test:HRTest": "node ./src/modules/07-Host-Game/Utils/Core.js"
   },
   "dependencies": {
+    "apexcharts": "^3.8.6",
     "core-js": "^2.6.5",
     "firebase": "^6.4.0",
     "firebase-admin": "^8.3.0",
@@ -21,6 +22,7 @@
     "js-md5": "^0.7.3",
     "md5": "^2.2.1",
     "vue": "^2.6.10",
+    "vue-apexcharts": "^1.5.0",
     "vue-cookies": "^1.5.13",
     "vue-router": "^3.1.2",
     "vuetify": "^2.0.0"

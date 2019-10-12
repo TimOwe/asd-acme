@@ -7,7 +7,7 @@
         </v-toolbar>
         <v-card-text>
           <v-scale-transition v-if="eText" mode="out-in">
-            <v-alert type="error">{{eText}}</v-alert>
+            <v-alert type="error" name="codeerror">{{eText}}</v-alert>
           </v-scale-transition>
           <v-form>
             <v-text-field placeholder="Game code" name="code" type="text" v-model="code"></v-text-field>

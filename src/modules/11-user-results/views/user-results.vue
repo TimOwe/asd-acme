@@ -7,18 +7,21 @@
                 </v-btn>
                 {{activeUser.fname}}'s Results
             </v-layout>
-            <v-layout row wrap class="mt-10">
-                <v-flex xs3 class="mb-10" v-for="(attempt,ind) in attempts">
-                    <v-card height="220" width="450">
-                        <v-card-title>
+            <v-layout row wrap class="mt-5">
+                <v-flex xs4 v-for="(attempt,ind) in attempts">
+                    <v-card height="350">
+                        <v-img :src="attempt.img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
+                        <v-card-title class="align-end fill-height">
                             Quiz Result {{ind + 1}}: {{attempt.quiz_title}}
                         </v-card-title>
+                        </v-img>
                         <v-card-text>
                             Score: {{attempt.score}} <br>
                             Time: {{new Date(attempt.time_start).toString()}}
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn @click="showAttemptData(attempt)" fab absolute bottom right color="blue"><v-icon color="white">mdi-eye</v-icon></v-btn>
+                            <v-btn @click="showAttemptData(attempt)" absolute bottom right depressed color="blue"><v-icon color="white">mdi-eye</v-icon></v-btn>
+                            <v-btn @click="showAttemptByQuiz(attempt)" absolute bottom left depressed color="purple"><v-icon color="white">mdi-watch</v-icon></v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -55,9 +58,25 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn class="white--text" color="red" raised @click="attemptData = false">Close</v-btn>
+                        <v-btn class="white--text" color="red" depressed @click="attemptData = false">Close</v-btn>
                     </v-layout>
                 </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog width="800" v-model="chartDataQuiz">
+            <v-card height="400">
+                <v-container class="pa-12">
+                    <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
+                    <v-layout v-if="chartData.data.length > 0">
+                        <v-sheet color="transparent">
+                            <v-sparkline :key="String(chartData.data)" :smooth="16" :gradient="['#6e8bf7', '#d79aff', '#1feaea']" :labels="chartData.time" :line-width="3" :value="chartData.data" auto-draw stroke-linecap="round"></v-sparkline>
+                        </v-sheet>
+                    </v-layout>
+                    <v-layout v-else>
+                        <v-layout justify-center class="headline">Not Enough Data For Chart</v-layout>
+                    </v-layout>
+                </v-container>
             </v-card>
         </v-dialog>
 
@@ -86,6 +105,12 @@
                         attempt.quiz_title = data;
                     })
                 });
+                this.attempts = Object.values(this.activeUser.results);
+                this.attempts.forEach(attempt => {
+                    this.getQuizImg(attempt.quizId).then(data => {
+                        attempt.img = data;
+                    })
+                });
             });
             setTimeout(() => {
                 this.loading = false;
@@ -96,6 +121,21 @@
                 this.currentAttempt = attempt;
                 this.attemptData = true;
             },
+            showAttemptByQuiz(attempt){
+                this.chartData = {
+                    title: '',
+                    data: [],
+                    time: [],
+                };
+                this.chartData.title = attempt.quiz_title;
+               var filteredList = this.attempts.filter(e => e.quiz_title === this.chartData.title);
+               filteredList.sort((a,b) =>  a.time_end - b.time_end);
+               filteredList.forEach(attempt => {
+                   this.chartData.data.push(attempt.score);
+                   this.chartData.time.push(new Date(attempt.time_end).toDateString())
+               });
+               this.chartDataQuiz = true;
+            },
             handleBack(){
                 this.$router.go(-1);
             },
@@ -103,16 +143,28 @@
                var template = await this.$db.ref(`/Quizs/${id}`).once('value');
                var title = template.val().quiz_title;
                return title;
+            },
+            async getQuizImg(id){
+                var template = await this.$db.ref(`/Quizs/${id}`).once('value');
+                var img = template.val().img;
+                return img;
             }
         },
         data(){
             return {
                 activeUser: {},
-                attempts: {},
+                attempts: [],
+                chartData: {
+                    title: '',
+                    data: [],
+                    time: [],
+                },
                 currentAttempt: {},
                 attemptData: false,
                 loading: false,
-                showError: false
+                showError: false,
+                img: '',
+                chartDataQuiz: false
             }
         }
     }

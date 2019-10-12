@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-layout justify-center>
+        <v-layout justify-center fill-height>
             <v-btn large color="red" @click="run()">Run Error</v-btn>
         </v-layout>
     </v-container>

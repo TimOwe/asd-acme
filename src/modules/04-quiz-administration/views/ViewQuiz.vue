@@ -1,5 +1,5 @@
 <template>
-    <v-flex>
+    <div>
         <v-container grid-list-md>
             <v-layout row wrap>
                 <v-flex xs3 v-for="quiz in quizs" :key="quiz.key">
@@ -8,13 +8,27 @@
                         <button-card :img="quiz.img" ></button-card>
                         <v-card-actions>
                             <v-btn depressed large color="red" class="white--text" @click="deleteQuiz(quiz.key)">Delete</v-btn>
-                            <v-btn large color="primary" @click="handleShowLogs(quiz.key)">View Logs</v-btn>
+                            <v-btn large color="primary" @click="handleMetaDialog(quiz)">View Logs</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
             </v-layout>
         </v-container>
-    </v-flex>
+        <v-dialog width="350" v-model="metaDialog">
+            <v-card>
+                <v-container>
+                    <v-layout justify-center class="headline">Quiz Metadata</v-layout>
+                    <v-card-text>
+                        ID: {{activeQuiz.key}} <br>
+                        Description: {{activeQuiz.description}}<br>
+                        Date Created: {{activeQuiz.time_created}}<br>
+                        Score Decay: {{activeQuiz.score_decay}}<br>
+                       <span v-if="!!activeQuiz.questions"> Num Questions: {{activeQuiz.questions.length}}</span>
+                    </v-card-text>
+                </v-container>
+            </v-card>
+        </v-dialog>
+    </div>
 </template>
 
 <script>
@@ -35,13 +49,18 @@
         components:{buttonCard},
         data(){
             return {
-                quizs: []
+                quizs: [],
+                metaDialog: false,
+                activeQuiz: {},
             }
         },
         methods: {
             deleteQuiz(quizKey) {
                 this.$db.ref('/Quizs/'+quizKey).remove();
-                // location.reload();
+            },
+            handleMetaDialog(quiz){
+                this.activeQuiz = quiz;
+                this.metaDialog = true;
             }
         },
 
