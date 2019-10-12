@@ -1,30 +1,35 @@
 <template>
     <v-container grid-list-md>
-                <v-card>
-                    <v-toolbar color="primary" dark flat>
-                        <v-container grid-list-md>
-                            <v-layout justify-center align-center>
-                                <v-row>
-                                    <v-col>
-                                        <v-layout justify-start align-start>
-                                            <v-layout pl-5 class="text-center, display-1">Quizzes</v-layout>
-                                        </v-layout>
-                                    </v-col>
-                                    <v-col>
-                                        <v-layout justify-center align-center>
-                                            <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
-                                        </v-layout>
-                                    </v-col>
-                                    <v-col>
-                                        <v-layout justify-end align-end>
-                                            <v-btn  to="/quiz-creator" color="green" v-if="!!$cookies.isKey('user')">Create Quiz<v-icon right color="white">mdi-plus</v-icon></v-btn>
-                                        </v-layout>
-                                    </v-col>
+        <v-card>
+            <v-toolbar color="primary" dark flat>
+                <v-container grid-list-md>
+                    <v-layout pt-5 justify-center align-center>
+                        <v-row>
+                            <v-col>
+                                <v-layout justify-start align-start>
+                                    <v-layout pl-5 class="text-center, display-1">Quizzes</v-layout>
+                                </v-layout>
+                            </v-col>
+                            <v-col>
+                                <v-layout justify-center align-center>
+                                    <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                                </v-layout>
+                            </v-col>
+                            <v-col>
+                                <v-layout justify-center align-center>
+                                    <v-select v-model="category" :items="categories" item-text="category" item-value="value" placeholder="Filter Category" prepend-inner-icon="mdi-menu-down" append-icon="mdi-close" @click:append="resetCategory()" return-object single-line></v-select>
+                                </v-layout>
+                            </v-col>
+                            <v-col>
+                                <v-layout justify-end align-end>
+                                    <v-btn  to="/quiz-creator" color="green" v-if="!!$cookies.isKey('user')">Create Quiz<v-icon right color="white">mdi-plus</v-icon></v-btn>
+                                </v-layout>
+                            </v-col>
 
-                                </v-row>
-                            </v-layout>
-                        </v-container>
-                    </v-toolbar>
+                        </v-row>
+                    </v-layout>
+                </v-container>
+            </v-toolbar>
 
             <v-container>
                 <v-row>
@@ -33,15 +38,11 @@
                     </v-col>
                 </v-row>
             </v-container>
-                    <v-footer class="mt-12"></v-footer>
 
-
+            <v-footer class="mt-12"></v-footer>
         </v-card>
     </v-container>
-
 </template>
-
-
 
 <script>
 
@@ -49,12 +50,13 @@
     export default {
         name: "QuizCatalogue",
         components: {quizCard},
-
         // grabbing all data on page render
         async beforeMount(){
             this.getQuizzes();
+            if(this.$route.params.inCategory!==undefined){
+                this.setCategory(this.$route.params.inCategory);
+            }
         },
-
         methods:{
             // getting snapshot of data from firebase
             async getQuizzes(){
@@ -63,6 +65,8 @@
                     this.quizs = [];
                     // convert firebase data entries into json
                     snap.forEach(entry => {
+                        //this.$db.ref('/Quizs/'+entry.key).update({"category": 'generalknowledge'})
+
                         var entryObj = entry.val();
                         entryObj.key = entry.key;
                         // push firebase data into results array
@@ -71,10 +75,19 @@
                     // sort results by ascending order of score
                 });
             },
+            setCategory: function(category){//As the image is locally defined as an object, but defined in firebase by its url, it will need to be matched to the iobject for it to load into the select component
+                for(var i=0;i<this.categories.length;i++) {//Searches the local list
+                    if (this.categories[i].value === category) {//if the quiz url recieved as a prop equals the url of the local object, it sets the local object to be the result in the select component
+                        this.category = this.categories[i];
+                    }
+                }
+            },
             resetSearch: function() {//Resets the search term property to nothing, removing all criteria
                 this.searchTerm = '';
             },
-
+            resetCategory: function() {//Resets the search term property to nothing, removing all criteria
+                this.category = { category: '', value: '' };
+            },
         },
         //Initialised data
         data: () => ({
@@ -84,6 +97,18 @@
             loading: false,
             quizs: [],
             searchTerm: '',
+            category: { category: '', value: '' },
+            categories: [
+                { category: 'General Knowledge', value: 'generalknowledge' },
+                { category: 'Environment', value: 'environment' },
+                { category: 'Cars', value: 'cars' },
+                { category: 'History', value: 'history' },
+                { category: 'Sport', value: 'sport' },
+                { category: 'Technology', value: 'technology' },
+                { category: 'Country', value: 'country' },
+                { category: 'Animals', value: 'animals' },
+                { category: 'Film', value: 'film' },
+            ],
 
             data(){
                 return {
@@ -94,14 +119,22 @@
         props: {
             activeUser: Object
         },
-        computed: {
+        computed: {//list for search functionality
             filteredList() {
-                return this.quizs.filter(quiz => {
-                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())
+                return this.quizs.filter(quiz => {//filters quiz list
+                    if (this.category.value !=='' && this.searchTerm !==''){
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase()) && quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    }
+                    else if (this.category.value !==''){
+                        return quiz.category.toLowerCase().includes(this.category.value.toLowerCase())//adds quiz if search term matches any part of its title
+                    }
+                    else if (this.searchTerm !==''&& this.category.value =='') {
+                        return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
+                    }
+                    return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())//adds quiz if search term matches any part of its title
                 })
             }
         }
-
     }
 
 </script>
