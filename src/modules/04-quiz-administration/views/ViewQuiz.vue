@@ -1,8 +1,14 @@
 <template>
     <div>
+
         <v-container grid-list-md>
+            <v-layout>
+                <v-flex xs6>
+                    <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a Quiz"></v-text-field>
+                </v-flex>
+            </v-layout>
             <v-layout row wrap>
-                <v-flex xs3 v-for="quiz in quizs" :key="quiz.key">
+                <v-flex xs3 v-for="quiz in filteredList" :key="quiz.key">
                     <v-card>
                         <v-card-title>{{quiz.quiz_title}}</v-card-title>
                         <button-card :img="quiz.img" ></button-card>
@@ -33,8 +39,8 @@
 
 <script>
     import buttonCard from '../components/button-card'
-
     export default {
+
         beforeMount(){
             this.$db.ref('/Quizs').on('value', (snap) => {
                 this.quizs = [];
@@ -42,27 +48,41 @@
                     var quizObj = quiz.val();
                     quizObj.key = quiz.key;
                     this.quizs.push(quizObj);
-                })
+                });
             })
 
         },
+
         components:{buttonCard},
         data(){
             return {
                 quizs: [],
                 metaDialog: false,
                 activeQuiz: {},
+                searchTerm: ''
             }
         },
         methods: {
             deleteQuiz(quizKey) {
-                this.$db.ref('/Quizs/'+quizKey).remove();
+                this.$db.ref('/Quizs/' + quizKey).remove();
             },
-            handleMetaDialog(quiz){
+            handleMetaDialog(quiz) {
                 this.activeQuiz = quiz;
                 this.metaDialog = true;
-            }
+            },
         },
+
+        computed: {
+            filteredList() {
+                if(!!this.searchTerm){
+                    return this.quizs.filter(quiz => {
+                        return quiz.quiz_title.toLowerCase().includes(this.searchTerm.toLowerCase())
+                    })
+                } else {
+                    return this.quizs
+                }
+            }
+        }
 
 
 

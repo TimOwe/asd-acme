@@ -1,8 +1,13 @@
 <template>
     <v-flex>
         <v-container grid-list-md>
+            <v-layout>
+                <v-flex xs6>
+                    <v-text-field hide-details prepend-inner-icon="mdi-magnify" single-line append-icon="mdi-close" v-model="searchTerm" @click:append="resetSearch()" placeholder="Search for a User"></v-text-field>
+                </v-flex>
+            </v-layout>
             <v-layout row wrap>
-                <v-flex xs6 v-for="user in users" :key="user.key">
+                <v-flex xs6 v-for="user in filteredList" :key="user.key">
                     <v-card>
                         <v-card-title>{{user.fname}} {{user.lname}}</v-card-title>
                         <v-card-text>
@@ -48,7 +53,8 @@
                 confirm: false,
                 activeLogs: [],
                 users: [],
-                active: ''
+                active: '',
+                searchTerm: ''
             }
         },
 
@@ -77,6 +83,18 @@
             },
             handleMakeAdmin(user, bool){
                 this.$db.ref('/Users/'+ user + '/isAdmin').set(bool);
+            }
+        },
+        computed: {
+            filteredList() {
+                if(!!this.searchTerm){
+                    return this.users.filter(user => {
+                        return user.fname.toLowerCase().includes(this.searchTerm.toLowerCase()) || user.lname.toLowerCase().includes(this.searchTerm.toLowerCase())
+
+                    })
+                } else {
+                    return this.users
+                }
             }
         }
     }
