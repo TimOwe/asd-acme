@@ -28,7 +28,7 @@
                         ID: {{activeQuiz.key}} <br>
                         Description: {{activeQuiz.description}}<br>
                         Date Created: {{new Date(activeQuiz.time_created).toDateString() + ' ' + new Date(activeQuiz.time_created).toTimeString()}}<br>
-                        Score Decay: {{activeQuiz.score_decay}}<br>
+                        Difficulty: {{activeQuiz.difficulty}}<br>
                        <span v-if="!!activeQuiz.questions"> Num Questions: {{activeQuiz.questions.length}}</span>
                     </v-card-text>
                 </v-container>
