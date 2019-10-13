@@ -134,7 +134,7 @@
                     this.quizTitle = this.thisQuiz.quiz_title;
                     this.description = this.thisQuiz.description;
                     this.questions = this.thisQuiz.questions;
-                    this.setDifficulty(this.thisQuiz.score_decay)
+                    this.setDifficulty(this.thisQuiz.difficulty)
                     this.setCategory();
                 });
             },
@@ -175,16 +175,16 @@
                     }
                 }
             },
-            setDifficulty: function(score_decay) {//sets the colour and text of the difficulty icon
-                if (score_decay===0.1){//if score decay is 0.1, set colour to green and text to easy
+            setDifficulty: function(inDifficulty) {//If called, pushes to the view page, sending the quiz key as a parameter
+                if (inDifficulty === "easy"){//if score decay is 0.1, set colour to green and text to easy
                     this.difficulty = "Easy";
                     this.difficultyColor = "green";
                 }
-                else if (score_decay===0.2){//if score decay is 0.2, set colour to orange and text to medium
+                else if (inDifficulty==="medium"){//if score decay is 0.2, set colour to orange and text to medium
                     this.difficulty = "Medium";
                     this.difficultyColor = "orange";
                 }
-                else if (score_decay===0.3){//if score decay is 0.3, set colour to red and text to hard
+                else if (inDifficulty==="hard"){//if score decay is 0.3, set colour to red and text to hard
                     this.difficulty = "Hard";
                     this.difficultyColor = "red";
                 }

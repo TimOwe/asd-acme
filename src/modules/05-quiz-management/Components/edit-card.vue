@@ -52,10 +52,10 @@
                                     <v-flex xs6>
                                         <v-container grid-list-md>
                                             <v-layout justify-center align-center >
-                                                <v-btn-toggle mandatory ref="decay" v-model="score_decay" class="justify-center" name="questiondifficulty">
-                                                    <v-btn name="easybutton" tile outlined color="green" value=0.1>Easy</v-btn>
-                                                    <v-btn name="medbutton" tile color="orange" outlined value=0.2>Medium</v-btn>
-                                                    <v-btn name="hardbutton" tile outlined color="red" value=0.3>Hard</v-btn>
+                                                <v-btn-toggle mandatory ref="decay" v-model="difficulty" class="justify-center" name="questiondifficulty">
+                                                    <v-btn name="easybutton" tile outlined color="green" value="easy">Easy</v-btn>
+                                                    <v-btn name="medbutton" tile color="orange" outlined value="medium">Medium</v-btn>
+                                                    <v-btn name="hardbutton" tile outlined color="red" value="hard">Hard</v-btn>
                                                 </v-btn-toggle>
                                             </v-layout>
                                         </v-container>
@@ -187,7 +187,7 @@
             this.newImg();
             this.setCategory();
             this.key = this.$route.params.id;
-            this.score_decay = this.quiz.score_decay.toString()
+            this.difficulty = this.quiz.difficulty.toString()
             this.quizTitle = this.quiz.quiz_title;
             this.description = this.quiz.description;
             this.owner = this.quiz.owner_id;
@@ -198,7 +198,7 @@
             saveQuiz: function(){
                 //Calls function which returns true if all fields pass validation
                 if(this.formCheck()) {
-                    this.updateQuiz(this.quizTitle, this.questionBank, this.owner, this.img.url, this.category.value, this.description, parseFloat(this.score_decay));
+                    this.updateQuiz(this.quizTitle, this.questionBank, this.owner, this.img.url, this.category.value, this.description, this.difficulty);
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
@@ -212,8 +212,8 @@
                     this.loading = false;
                 }
             },
-            updateQuiz: function(quiz_title, questions, owner_id, img, category, description, score_decay){//Takes all computed properties from teh form and pushes it to update the ibject in firebase with its identical key. If properties are the same, no changes are made, if they differ, they are updated
-                this.$db.ref('/Quizs/'+this.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "category": category, "description": description, "score_decay": score_decay})
+            updateQuiz: function(quiz_title, questions, owner_id, img, category, description, difficulty){//Takes all computed properties from teh form and pushes it to update the ibject in firebase with its identical key. If properties are the same, no changes are made, if they differ, they are updated
+                this.$db.ref('/Quizs/'+this.key).update({"quiz_title": quiz_title, "questions": questions, "owner_id": owner_id, "img": img, "category": category, "description": description, "difficulty": difficulty})
             },
             removeQuestion: function(index){
                 this.questionBank.splice(index,1);
@@ -295,7 +295,7 @@
             key: '',
             valid: true,
             falseCount: 0,
-            score_decay: '',
+            difficulty: '',
             rules: {
                 //rules for onscreen validation messages
                 required: value => !!value || 'Required.',

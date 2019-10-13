@@ -51,10 +51,10 @@
                                         <v-flex xs6>
                                             <v-container grid-list-md>
                                                 <v-layout justify-center align-center >
-                                                    <v-btn-toggle mandatory ref="decay" v-model="score_decay" class="justify-center" name="questiondifficulty">
-                                                        <v-btn name="easybutton" tile outlined color="green" value="0.1">Easy</v-btn>
-                                                        <v-btn name="medbutton" tile color="orange" outlined value="0.2">Medium</v-btn>
-                                                        <v-btn name="hardbutton" tile outlined color="red" value="0.3">Hard</v-btn>
+                                                    <v-btn-toggle mandatory ref="decay" v-model="difficulty" class="justify-center" name="questiondifficulty">
+                                                        <v-btn name="easybutton" tile outlined color="green" value="easy">Easy</v-btn>
+                                                        <v-btn name="medbutton" tile color="orange" outlined value="medium">Medium</v-btn>
+                                                        <v-btn name="hardbutton" tile outlined color="red" value="hard">Hard</v-btn>
                                                     </v-btn-toggle>
                                                 </v-layout>
                                             </v-container>
@@ -208,7 +208,7 @@
             saveQuiz: function () {
                 //Calls function which returns true if all fields pass validation
                  if(this.formCheck()) {
-                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, this.$cookies.get('user').key, this.img.url, this.category.value, this.description, parseFloat(this.score_decay));//Sends all proeprties of vue elements to be added to new quiz object
+                    this.createdKey = this.newQuiz(this.quizTitle, this.questionBank, this.$cookies.get('user').key, this.img.url, this.category.value, this.description, this.difficulty);//Sends all proeprties of vue elements to be added to new quiz object
                     this.confirm = false;//Removes confirmation dialog
                     this.loading = true;//Displays loading screen
                     //Sets timeout for the loading screen
@@ -261,7 +261,7 @@
                 return titleCheck && questionCheck && imageCheck && cateCheck &&descCheck;//if all conditions are true will return true, if at least one is false, the whole function returns false
             },
 
-                newQuiz: function(quiz_title, questions, owner_id, img, category, description, score_decay){
+                newQuiz: function(quiz_title, questions, owner_id, img, category, description, difficulty){
                 var time_created = new Date().getTime();
                     var Quiz = {
                         //New quiz object is created with the properties passed from the form
@@ -271,7 +271,7 @@
                         img,
                         category,
                         description,
-                        score_decay,
+                        difficulty,
                         time_created
                     };
                 var reciept = this.$db.ref('/Quizs').push(Quiz);//The object is then pushed to the quizs table in firebase, adding it as an object
@@ -310,7 +310,7 @@
             valid: true,
             falseCount: 0,
             clicked: false,
-            score_decay: "0.1",
+            difficulty: "easy",
             createdKey: "",
             rules: {
                 //rules for onscreen validation messages to trigger
@@ -338,7 +338,7 @@
                     description: "",
                     img: "",
                     category: "",
-                    score_decay: "0.1",
+                    difficulty: "easy",
                     rules: {
                         //rules for onscreen validation messages to trigger
                         required: value => !!value || 'Required.',
