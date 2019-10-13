@@ -1,6 +1,5 @@
 <template>
   <v-stepper v-model="stepno" v-bind:value="stepno" vertical>
-    <v-stepper-step v-bind:step="0">Waiting</v-stepper-step>
     <div v-for="(question, i) in questions" v-bind:key="add(i)">
         <v-stepper-step v-bind:step="i+1">Question {{i+1}}</v-stepper-step>
         <v-stepper-content v-bind:step="i+1">
@@ -28,7 +27,7 @@ export default {
     session: String
   },
   data: () => ({
-    stepno: 0
+    stepno: 1
   }),
   mounted: function() {
     this.getStep();
