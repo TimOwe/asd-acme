@@ -68,8 +68,15 @@
             <v-card height="400">
                 <v-container class="pa-12">
                     <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
-                    <v-layout v-if="chartData.data.length > 1">
-                            <trend :data="chartData.data" :gradient="['#6fa8dc', '#42b983', '#2c3e50']" auto-draw smooth></trend>
+                    <v-layout v-if="chartData.data.length > 1" justify-center>
+                            <!--<trend :data="chartData.data" :gradient="['#6fa8dc', '#42b983', '#2c3e50']" auto-draw smooth></trend>-->
+                        <TrendChart
+                                padding="10"
+                                height="400"
+                                :datasets="[{data: chartData.data,smooth: true,fill: true}]"
+                                :grid="{verticalLines: true,horizontalLines: true}"
+                                :labels="{ xLabels: chartData.time, yLabels: chartData.data.length }" :min="0">
+                        </TrendChart>
                     </v-layout>
                     <v-layout v-else justify-center class="mt-12">
                         <v-layout justify-center class="headline mt-12">Not Enough Data For Chart</v-layout>

@@ -25,8 +25,8 @@
     "vue-apexcharts": "^1.5.0",
     "vue-cookies": "^1.5.13",
     "vue-router": "^3.1.2",
-    "vuetify": "^2.0.0",
-    "vuetrend": "^0.3.4"
+    "vue-trend-chart": "^0.14.6",
+    "vuetify": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
