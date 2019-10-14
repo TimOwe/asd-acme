@@ -8,7 +8,7 @@
                 {{activeUser.fname}}'s Results
             </v-layout>
             <v-layout row wrap class="mt-5">
-                <v-flex xs4 v-for="(attempt,ind) in attempts">
+                <v-flex xs4 v-for="(attempt,ind) in attempts" :key="JSON.stringify(attempt)">
                     <v-card height="350">
                         <v-img :src="attempt.img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
                         <v-card-title class="align-end fill-height">
@@ -47,7 +47,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="question in currentAttempt.questions">
+                            <tr v-for="question in currentAttempt.questions"">
                                 <td class="text-left">{{ question.q }}</td>
                                 <td class="text-center">{{ question.a[question.c] }}</td>
                                 <td class="text-center">{{ !question.a[question.selected] ? 'Not Selected' : question.a[question.selected]}}</td>
@@ -69,10 +69,10 @@
                 <v-container class="pa-12">
                     <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
                     <v-layout v-if="chartData.data.length > 1">
-                        <v-sparkline :key="String(chartData)" :smooth="16" :gradient="['#6e8bf7', '#d79aff', '#1feaea']" :labels="chartData.time" :line-width="3" :value="chartData.data" auto-draw stroke-linecap="round"></v-sparkline>
+                            <trend :data="chartData.data" :gradient="['#6fa8dc', '#42b983', '#2c3e50']" auto-draw smooth></trend>
                     </v-layout>
-                    <v-layout v-else>
-                        <v-layout justify-center class="headline">Not Enough Data For Chart</v-layout>
+                    <v-layout v-else justify-center class="mt-12">
+                        <v-layout justify-center class="headline mt-12">Not Enough Data For Chart</v-layout>
                     </v-layout>
                 </v-container>
             </v-card>
