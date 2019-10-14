@@ -10,7 +10,7 @@
             <v-layout row wrap class="mt-5">
                 <v-flex xs4 v-for="(attempt,ind) in attempts" :key="JSON.stringify(attempt)">
                     <v-card height="350">
-                        <v-img :src="attempt.img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
+                        <v-img :eager="imageload" :src="attempt.img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
                         <v-card-title class="align-end fill-height">
                             Quiz Result {{ind + 1}}: {{attempt.quiz_title}}
                         </v-card-title>
@@ -71,11 +71,12 @@
                     <v-layout v-if="chartData.data.length > 1" justify-center>
                             <!--<trend :data="chartData.data" :gradient="['#6fa8dc', '#42b983', '#2c3e50']" auto-draw smooth></trend>-->
                         <TrendChart
-                                padding="10"
-                                height="400"
+                                padding="20"
+                                height="500"
+                                width="700"
                                 :datasets="[{data: chartData.data,smooth: true,fill: true}]"
-                                :grid="{verticalLines: true,horizontalLines: true}"
-                                :labels="{ xLabels: chartData.time, yLabels: chartData.data.length }" :min="0">
+                                :grid="{verticalLines: true, horizontalLines: true}"
+                                :labels="{ xLabels: chartData.time, yLabels: 5 }" :min="0">
                         </TrendChart>
                     </v-layout>
                     <v-layout v-else justify-center class="mt-12">
@@ -121,6 +122,9 @@
                 this.loading = false;
             }, 500)
         },
+        mounted(){
+            setTimeout(() => this.imageload = true,200);
+        },
         methods: {
             showAttemptData(attempt) {
                 this.currentAttempt = attempt;
@@ -165,6 +169,7 @@
                     data: [],
                     time: [],
                 },
+                imageload: false,
                 currentAttempt: {},
                 attemptData: false,
                 loading: false,
