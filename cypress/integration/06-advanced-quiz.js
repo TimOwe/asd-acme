@@ -23,6 +23,8 @@ describe('Creating a Quiz with Advanced Features', function() {
     cy.get('[name="quizdescription"]').type('For an acceptance test for feature 06!');
     cy.get('[name="quizimage"]').click({force: true})
     cy.get('[role="listbox"]').contains('Light').click()
+    cy.get('[name="quizcategory"]').click({force: true})
+    cy.get('[role="listbox"]').contains('General Knowledge').click()
     cy.wait(500)
   })
 

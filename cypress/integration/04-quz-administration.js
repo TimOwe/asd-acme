@@ -24,6 +24,8 @@ describe('Qui Administration', function() {
         cy.get('[name="quizdescription"]').type('test test test test');
         cy.get('[name="quizimage"]').click({force: true})
         cy.get('[role="listbox"]').contains('Light').click()
+        cy.get('[name="quizcategory"]').click({force: true})
+        cy.get('[role="listbox"]').contains('General Knowledge').click()
         cy.wait(500)
     })
 
