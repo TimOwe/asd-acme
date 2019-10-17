@@ -104,7 +104,7 @@
             userFullName: "",
             thisUser: "",
             category: { category: '', value: '' },
-            categories: [
+            categories: [//categories
                 { category: 'Animals', value: 'animals' },
                 { category: 'Business', value: 'business' },
                 { category: 'Cars', value: 'cars' },
