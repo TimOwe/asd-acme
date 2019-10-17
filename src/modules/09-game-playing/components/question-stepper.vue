@@ -29,17 +29,21 @@ export default {
   data: () => ({
     stepno: 1
   }),
+  // When the page is loaded check what question number we start on
   mounted: function() {
     this.getStep();
   },
   methods: {
+    // Used for iterating UI elements with numbers
     add: function(i) {
       return i + 1;
     },
+    // Call the answer function in Game.Vue with these args when we select an answer
     onAnswer: function(correct, points, qText, ans) {
       this.$emit("answer", correct, points, qText, ans);
     },
     getStep: function() {
+      // DB listener for the current question number in the database
       let self = this;
       this.$db
         .ref(`/Sessions/${this.session}/`)

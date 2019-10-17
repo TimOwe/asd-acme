@@ -50,6 +50,7 @@ export default {
     players: []
   }),
   mounted: async function() {
+    // When the page is loaded get all of the players names, scores and IDs
     let self = this;
     var playersref = this.$db.ref(`/Sessions/${this.game.id}/players/`);
     playersref.on("value", function(snapshot) {
@@ -61,11 +62,14 @@ export default {
           score: childSnapshot.val().score,
           userId: childSnapshot.val().user
         });
+        // Order them
         self.players.sort((a, b) => b.score - a.score);
       });
     });
+    // Check for logged in user
     var storeUser = await loginUtils.checkUserExistsKey(self.players[0].userId)
     if(storeUser && storeUser !== undefined){
+      // If logged in, add a 'win'
       this.$db
         .ref("/Users/" + self.players[0].userId + "/wins")
         .set((storeUser.user.wins) + 1)

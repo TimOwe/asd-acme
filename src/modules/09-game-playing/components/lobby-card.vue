@@ -5,7 +5,7 @@
       <br />
       <span class="text--primary">
         You are waiting to play
-        <span class="font-italic">{{quizTitle}}</span>
+        <span class="font-italic" name="quizTitle">{{quizTitle}}</span>
       </span>
       <br />
       <div class="text-center">
@@ -20,11 +20,6 @@
       </div>
     </v-card-text>
     <v-card-text class="text-center">
-      <!-- <v-chip class="ma-2" color="indigo" text-color="white">
-            <v-avatar left>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-avatar>Host
-      </v-chip>-->
       <v-chip class="ma-2" color="indigo" text-color="white">
         <v-avatar left>
           <v-icon>mdi-account-supervisor-circle</v-icon>
@@ -55,14 +50,17 @@ export default {
     quizTitle: null
   }),
   mounted: function() {
+    //O On page mount get the nicknames of the players in the game
     let self = this;
     var playersref = this.$db.ref(`/Sessions/${this.sessionId}/players/`);
     playersref.on("value", function(snapshot) {
       self.players = [];
       snapshot.forEach(function(childSnapshot) {
+        // Add to array
         self.players.push({ name: childSnapshot.val().nickname });
       });
     });
+    // Get the Quiz Title
     this.$db.ref(`/Quizs/${this.qId}/`).once("value", function(snapshot) {
       self.quizTitle = snapshot.val().quiz_title;
     });
