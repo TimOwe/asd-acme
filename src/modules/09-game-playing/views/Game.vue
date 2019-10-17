@@ -108,6 +108,7 @@ export default {
     storeUser: []
   }),
   beforeMount: async function() {
+    // Check if user is logged in
     if (this.$cookies.isKey("user")) {
       this.storeUser = (await loginUtils.checkUserExistsKey(
         this.$cookies.get("user").key
@@ -273,17 +274,22 @@ export default {
       }
     },
     feedback: function(text) {
+      // Display feedback text
       this.feedbackText = text;
       this.showFeedback = true;
     },
     checkEnded: function() {
+      // Call DB and check if game has ended
       let self = this;
       let ref = this.$db.ref(`/Sessions/${this.game.id}/`);
       let listener = ref.on("value", function(snapshot) {
-        if (snapshot.val().timeend !== "null") {
+        if (snapshot.val()) {
+          if (snapshot.val().timeend !== "null") {
           self.game.eTime = snapshot.val().timeend;
+          // if so, update the local game data and finish the quiz, and turn off the listener
           self.finishQuiz();
           ref.off();
+        }
         }
       });
     },
@@ -294,6 +300,7 @@ export default {
       }
     },
     pushResults: function() {
+      // After the quiz is done, push user results if they're logged in
       const ref = this.$db.ref(
         "Users/" + this.$cookies.get("user").key + "/results/"
       );
@@ -306,9 +313,11 @@ export default {
       });
     },
     add: function(i) {
+      // Used for iterating UI elements
       return i + 1;
     },
     keepAlive: function() {
+      // Update a val on the server for each user who is connected every 10 seconds
       const ref = this.$db.ref(
         `/Sessions/${this.game.id}/players/${this.playerref}`
       );
@@ -317,18 +326,21 @@ export default {
       });
     },
     updateDBVals: function() {
+      // Update player game played counts
       this.storeUser.gamesPlayed++;
       this.$db
         .ref("/Users/" + this.$cookies.get("user").key + "/gamesPlayed")
         .set(this.storeUser.gamesPlayed);
     },
     updateCorrectAnswers: function() {
+      // Update player correct q counts
       this.storeUser.correctQuestions++;
       this.$db
         .ref("/Users/" + this.$cookies.get("user").key + "/correctQuestions")
         .set(this.storeUser.correctQuestions);
     },
     updateIncorrectAnswers: function() {
+      // Update player incorrect q counts
       this.storeUser.incorrectQuestions++;
       this.$db
         .ref("/Users/" + this.$cookies.get("user").key + "/incorrectQuestions")

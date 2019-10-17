@@ -47,6 +47,7 @@ export default {
     players: []
   }),
   mounted: async function() {
+    // On page load get all of the players and their scores
     let self = this;
     var playersref = this.$db.ref(`/Sessions/${this.game.id}/players/`);
     playersref.on("value", function(snapshot) {
@@ -57,6 +58,7 @@ export default {
           name: childSnapshot.val().nickname,
           score: childSnapshot.val().score,
         });
+        //S Sort them
         self.players.sort((a, b) => b.score - a.score);
       });
     });
