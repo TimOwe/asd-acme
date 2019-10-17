@@ -6,8 +6,7 @@
         <v-card-text>
             <span class="text--primary">
                 <span class="body-1">{{description}}</span><br>
-                <span class="caption">Created by: {{owner}}</span><br>
-                <span class="caption">Questions: {{questions.length}}</span><br>
+                <span class ="body-2">Click below to see the rankings for this quiz!</span>
             </span>
         </v-card-text>
         <v-card-actions>
@@ -34,7 +33,6 @@
             setUser(userKey) {
                 this.$db.ref('/Users/').child(userKey).once('value', (snap) => {
                     this.thisUser = snap.val();
-                    this.owner = this.thisUser.fname +" "+ this.thisUser.lname;
                 });
             },
         },
@@ -44,8 +42,6 @@
         data: () => ({
             quizTitle: '',
             description: '',
-            owner: '',
-            questions: '',
             img: '',
             key: ''
         })
