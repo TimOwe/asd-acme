@@ -67,7 +67,12 @@
         <v-dialog width="800" v-model="chartDataQuiz">
             <v-card height="400">
                 <v-container class="pa-12">
+                    <v-layout>
+                    <v-btn icon @click="chartDataQuiz = false">
+                        <v-icon>mdi-arrow-left</v-icon>
+                    </v-btn>
                     <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
+                    </v-layout>
                     <v-layout v-if="chartData.data.length > 1" justify-center>
                             <!--<trend :data="chartData.data" :gradient="['#6fa8dc', '#42b983', '#2c3e50']" auto-draw smooth></trend>-->
                         <TrendChart
@@ -96,6 +101,7 @@
 <script>
     export default {
         name: "user-results",
+        // gets user data for the currently viewed user by their userKey in the route
         beforeMount() {
             this.loading = true;
             var userKey = this.$route.params.id;
@@ -105,12 +111,14 @@
                     this.showError = true;
                     return;
                 }
+                // gets the title of each of their quiz results
                 this.attempts = Object.values(this.activeUser.results);
                 this.attempts.forEach(attempt => {
                     this.getQuizName(attempt.quizId).then(data => {
                         attempt.quiz_title = data;
                     })
                 });
+                // gets the image of each of their quiz results
                 this.attempts = Object.values(this.activeUser.results);
                 this.attempts.forEach(attempt => {
                     this.getQuizImg(attempt.quizId).then(data => {
@@ -126,16 +134,19 @@
             setTimeout(() => this.imageload = true,200);
         },
         methods: {
+            // shows the quiz result when results button is pressed
             showAttemptData(attempt) {
                 this.currentAttempt = attempt;
                 this.attemptData = true;
             },
+            // shows a score graph for a set of quiz attempts when button is pressed
             showAttemptByQuiz(attempt){
                 this.chartData = {
                     title: '',
                     data: [],
                     time: [],
                 };
+                // gets quiz title, score for each attempt of that quiz, time of each attempt to populate the graph
                 this.chartData.title = attempt.quiz_title;
                var filteredList = this.attempts.filter(e => e.quiz_title === this.chartData.title);
                filteredList.sort((a,b) =>  a.time_end - b.time_end);
@@ -146,6 +157,7 @@
                console.log(this.chartData);
                this.chartDataQuiz = true;
             },
+            // back button functionality
             handleBack(){
                 this.$router.go(-1);
             },
