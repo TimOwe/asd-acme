@@ -47,15 +47,15 @@
                 this.$router.push('/quizview/'+key);
             },
             setDifficulty: function(inDifficulty) {//If called, pushes to the view page, sending the quiz key as a parameter
-                if (inDifficulty === "easy"){//if score decay is 0.1, set colour to green and text to easy
+                if (inDifficulty === "easy"){//if difficulty is hard, set colour to green and text to easy
                     this.difficulty = "Easy";
                     this.difficultyColor = "green";
                 }
-                else if (inDifficulty==="medium"){//if score decay is 0.2, set colour to orange and text to medium
+                else if (inDifficulty==="medium"){//if difficulty is hard, set colour to orange and text to medium
                     this.difficulty = "Medium";
                     this.difficultyColor = "orange";
                 }
-                else if (inDifficulty==="hard"){//if score decay is 0.3, set colour to red and text to hard
+                else if (inDifficulty==="hard"){//if difficulty is hard, set colour to red and text to hard
                     this.difficulty = "Hard";
                     this.difficultyColor = "red";
                 }

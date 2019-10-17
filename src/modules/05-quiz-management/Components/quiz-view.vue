@@ -168,23 +168,23 @@
                 }
                 else this.$router.push({ name: 'Host', params: { name: this.quizTitle}});//if user is logged in, route to host and send the quiz title as a parameter
             },
-            setCategory: function(){//As the image is locally defined as an object, but defined in firebase by its url, it will need to be matched to the iobject for it to load into the select component
+            setCategory: function(){//As the category  is locally defined as an object, but defined in firebase by its value, it will need to be matched to the object for it to load into the select component
                 for(var i=0;i<this.categories.length;i++) {//Searches the local list
-                    if (this.categories[i].value === this.thisQuiz.category) {//if the quiz url recieved as a prop equals the url of the local object, it sets the local object to be the result in the select component
+                    if (this.categories[i].value === this.thisQuiz.category) {//if the category value recieved as a prop equals the value of the local object, it sets the local object to be the result in the select component
                         this.category = this.categories[i].category;
                     }
                 }
             },
             setDifficulty: function(inDifficulty) {//If called, pushes to the view page, sending the quiz key as a parameter
-                if (inDifficulty === "easy"){//if score decay is 0.1, set colour to green and text to easy
+                if (inDifficulty === "easy"){//if difficulty is hard, set colour to green and text to easy
                     this.difficulty = "Easy";
                     this.difficultyColor = "green";
                 }
-                else if (inDifficulty==="medium"){//if score decay is 0.2, set colour to orange and text to medium
+                else if (inDifficulty==="medium"){//if difficulty is hard, set colour to orange and text to medium
                     this.difficulty = "Medium";
                     this.difficultyColor = "orange";
                 }
-                else if (inDifficulty==="hard"){//if score decay is 0.3, set colour to red and text to hard
+                else if (inDifficulty==="hard"){//if difficulty is hard, set colour to red and text to hard
                     this.difficulty = "Hard";
                     this.difficultyColor = "red";
                 }

@@ -225,9 +225,9 @@
                     }
                 }
             },
-            setCategory: function(){//As the image is locally defined as an object, but defined in firebase by its url, it will need to be matched to the iobject for it to load into the select component
+            setCategory: function(){//As the category  is locally defined as an object, but defined in firebase by its value, it will need to be matched to the object for it to load into the select component
                 for(var i=0;i<this.categories.length;i++) {//Searches the local list
-                    if (this.categories[i].value === this.quiz.category) {//if the quiz url recieved as a prop equals the url of the local object, it sets the local object to be the result in the select component
+                    if (this.categories[i].value === this.quiz.category) {//if the category value recieved as a prop equals the value of the local object, it sets the local object to be the result in the select component
                         this.category = this.categories[i];
                     }
                 }
