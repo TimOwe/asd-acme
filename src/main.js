@@ -131,6 +131,9 @@ Vue.prototype.$Test = function(){
     };
 };
 
+import TrendChart from 'vue-trend-chart'
+Vue.use(TrendChart);
+
 Vue.config.productionTip = false;
 Vue.use(VueCookies);
 

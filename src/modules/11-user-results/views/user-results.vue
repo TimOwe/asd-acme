@@ -8,9 +8,9 @@
                 {{activeUser.fname}}'s Results
             </v-layout>
             <v-layout row wrap class="mt-5">
-                <v-flex xs4 v-for="(attempt,ind) in attempts">
+                <v-flex xs4 v-for="(attempt,ind) in attempts" :key="JSON.stringify(attempt)">
                     <v-card height="350">
-                        <v-img :src="attempt.img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
+                        <v-img :eager="imageload" :src="attempt.img" class="white--text" height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)">
                         <v-card-title class="align-end fill-height">
                             Quiz Result {{ind + 1}}: {{attempt.quiz_title}}
                         </v-card-title>
@@ -47,7 +47,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="question in currentAttempt.questions">
+                            <tr v-for="question in currentAttempt.questions"">
                                 <td class="text-left">{{ question.q }}</td>
                                 <td class="text-center">{{ question.a[question.c] }}</td>
                                 <td class="text-center">{{ !question.a[question.selected] ? 'Not Selected' : question.a[question.selected]}}</td>
@@ -67,12 +67,25 @@
         <v-dialog width="800" v-model="chartDataQuiz">
             <v-card height="400">
                 <v-container class="pa-12">
+                    <v-layout>
+                    <v-btn icon @click="chartDataQuiz = false">
+                        <v-icon>mdi-arrow-left</v-icon>
+                    </v-btn>
                     <v-card-title>All Attempts For {{chartData.title}}</v-card-title>
-                    <v-layout v-if="chartData.data.length > 1">
-                        <v-sparkline :key="String(chartData)" :smooth="16" :gradient="['#6e8bf7', '#d79aff', '#1feaea']" :labels="chartData.time" :line-width="3" :value="chartData.data" auto-draw stroke-linecap="round"></v-sparkline>
                     </v-layout>
-                    <v-layout v-else>
-                        <v-layout justify-center class="headline">Not Enough Data For Chart</v-layout>
+                    <v-layout v-if="chartData.data.length > 1" justify-center>
+                            <!--<trend :data="chartData.data" :gradient="['#6fa8dc', '#42b983', '#2c3e50']" auto-draw smooth></trend>-->
+                        <TrendChart
+                                padding="20"
+                                height="500"
+                                width="700"
+                                :datasets="[{data: chartData.data,smooth: true,fill: true}]"
+                                :grid="{verticalLines: true, horizontalLines: true}"
+                                :labels="{ xLabels: chartData.time, yLabels: 5 }" :min="0">
+                        </TrendChart>
+                    </v-layout>
+                    <v-layout v-else justify-center class="mt-12">
+                        <v-layout justify-center class="headline mt-12">Not Enough Data For Chart</v-layout>
                     </v-layout>
                 </v-container>
             </v-card>
@@ -88,6 +101,7 @@
 <script>
     export default {
         name: "user-results",
+        // gets user data for the currently viewed user by their userKey in the route
         beforeMount() {
             this.loading = true;
             var userKey = this.$route.params.id;
@@ -97,12 +111,14 @@
                     this.showError = true;
                     return;
                 }
+                // gets the title of each of their quiz results
                 this.attempts = Object.values(this.activeUser.results);
                 this.attempts.forEach(attempt => {
                     this.getQuizName(attempt.quizId).then(data => {
                         attempt.quiz_title = data;
                     })
                 });
+                // gets the image of each of their quiz results
                 this.attempts = Object.values(this.activeUser.results);
                 this.attempts.forEach(attempt => {
                     this.getQuizImg(attempt.quizId).then(data => {
@@ -114,17 +130,23 @@
                 this.loading = false;
             }, 500)
         },
+        mounted(){
+            setTimeout(() => this.imageload = true,200);
+        },
         methods: {
+            // shows the quiz result when results button is pressed
             showAttemptData(attempt) {
                 this.currentAttempt = attempt;
                 this.attemptData = true;
             },
+            // shows a score graph for a set of quiz attempts when button is pressed
             showAttemptByQuiz(attempt){
                 this.chartData = {
                     title: '',
                     data: [],
                     time: [],
                 };
+                // gets quiz title, score for each attempt of that quiz, time of each attempt to populate the graph
                 this.chartData.title = attempt.quiz_title;
                var filteredList = this.attempts.filter(e => e.quiz_title === this.chartData.title);
                filteredList.sort((a,b) =>  a.time_end - b.time_end);
@@ -135,6 +157,7 @@
                console.log(this.chartData);
                this.chartDataQuiz = true;
             },
+            // back button functionality
             handleBack(){
                 this.$router.go(-1);
             },
@@ -158,6 +181,7 @@
                     data: [],
                     time: [],
                 },
+                imageload: false,
                 currentAttempt: {},
                 attemptData: false,
                 loading: false,

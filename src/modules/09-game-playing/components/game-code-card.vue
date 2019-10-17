@@ -53,6 +53,7 @@ export default {
     const ref = this.$db.ref("/Sessions");
     ref.orderByValue().once("value", function(snapshot) {
       snapshot.forEach(function(data) {
+        // If the game hasn't ended, dad this token to the list
         if (data.child("timeend").val() == "null") {
           gs.push(data.child("token").val());
         }
