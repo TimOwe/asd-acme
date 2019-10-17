@@ -21,7 +21,7 @@
             </v-container>
 
             <v-card-actions>
-                <v-btn text color="grey darken-2" @click="viewQuiz(quiz.key)"><v-icon large>mdi-view-headline</v-icon>View Quiz</v-btn>
+                <v-btn :name="quiz.key+'viewQuizBtn'" text color="grey darken-2" @click="viewQuiz(quiz.key)"><v-icon large>mdi-view-headline</v-icon>View Quiz</v-btn>
             </v-card-actions>
         </v-card>
     </div>

@@ -14,7 +14,6 @@ describe("Creator Card", () => {
                 $cookies,
             }}
         );
-
         wrapper.vm.quizTitle = "Unit Test";
         wrapper.vm.description = "This is a quiz for a unit test";
         wrapper.vm.img = { name: 'Colourful', url: 'https://imgur.com/zmxFPdu.jpg' };
@@ -31,7 +30,6 @@ describe("Creator Card", () => {
                 $cookies,
             }}
         );
-
         wrapper.vm.quizTitle = "Unit Test";
         wrapper.vm.description = "This is a quiz for a unit test";
         wrapper.vm.img = { name: 'Colourful', url: 'https://imgur.com/zmxFPdu.jpg' };
