@@ -49,15 +49,19 @@
         },
         methods:{
             setSessionCodes(){
+                //gets a list of session codes
                 var sessions = [];
+                //updates on value
                 this.$db.ref("/Sessions").on("value", (snap) => {
                     snap.forEach(session => {
                         sessions.push(session.val().token);
                     });
+                    //sets sessions
                     this.sessions = sessions;
                 });
             },
             checkCode(){
+                //checks the code
                 this.loading = true;
                 if(this.sessions.indexOf(this.code) !== -1){
                     setTimeout(() => {

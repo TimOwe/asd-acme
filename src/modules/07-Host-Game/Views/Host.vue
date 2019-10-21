@@ -53,19 +53,24 @@
     export default {
         name: "Host",
         async beforeMount(){
+            //get all quizes
+            //set listener for firebase
             this.$db.ref('/Quizs').on('value', (snap) => {
                 this.names = [];
                 this.keys = [];
                 snap.forEach(quiz => {
                     var quizObj = quiz.val();
                     quizObj.key = quiz.key;
+                    //get object value regardless of latency
                     this.names.push(quizObj.quiz_title);
                     this.keys.push(quizObj.key);
                 })
             });
+            //get auth user key from cookie
             var key = this.$cookies.get('user').key;
             var template = await this.$db.ref(`/Users/${key}`).once('value');
             this.activeUser = template.val();
+            //if the key exists or is valid
             if(!!key){
                 this.host = key;
             }
@@ -75,12 +80,16 @@
         },
         methods:{
             Session(quizkey,host,meta){
+                //session constructor
+                //generate a new token, does a check for existing tokens
                 this.lastToken = this.newToken();
                 var quiz;
+                //set the quiz value on change
                 this.$db.ref('/Quizs/'+quizkey).once('value', (snap) => {
                     quiz = snap.val();
                 });
                 return {
+                    //total object returned to get pushed
                     owner_id: host,
                     quiz_id: quizkey,
                     quiz: quiz,
@@ -93,8 +102,10 @@
                 }
             },
             handleStart(){
+                //take the selected quiz
                 var index = this.names.indexOf(this.selected);
                 if(this.isValid(index)){
+                    //start the live session
                     this.startSession(this.keys[index], this.host, {
                         max: this.maxppl,
                         tlimit: this.tlimit
